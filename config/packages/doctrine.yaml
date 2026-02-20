@@ -2,7 +2,7 @@ doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
         server_version: '15'
-        schema_filter: '~^(?!auth\.|storage\.|realtime\.|supabase_)~'
+        schema_filter: '~^(?!auth\.|storage\.|realtime\.|supabase_|graphql\.|graphql_public\.)~'
         profiling_collect_backtrace: '%kernel.debug%'
     orm:
         validate_xml_mapping: true
