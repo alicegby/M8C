@@ -1,0 +1,435 @@
+h1 {
+    display: none;
+}
+
+/* SECTIONS */
+section {
+    width: 100%;
+    padding: 80px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+/* HERO */
+.hero {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #F5F5F5;
+    margin-top: 0; /* pas d'espace au-dessus pour coller au header */
+}
+
+main > .hero {
+    margin-top: -100px; /* = hauteur du header fixe */
+}
+
+/* Image de fond avec opacité faible sans toucher au texte */
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../images/home_background.jpg') center/cover no-repeat;
+    opacity: 0.3; /* opacité du background seulement */
+    z-index: 1;
+}
+
+/* Contenu au-dessus du background */
+.hero-content {
+    position: relative;
+    z-index: 2; /* texte et bouton au-dessus de l'overlay */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 0;
+}
+
+.hero-content h2 {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+}
+
+.hero-content p {
+    font-family: 'Arimo', serif;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    max-width: 600px;
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    text-decoration: none;
+    font-family: 'Arimo', serif;
+    color: #F5F5F5;
+    font-weight: bold;
+    background-color: #541826;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #9D2137;
+    color: #F5F5F5;
+    transform: scale(1.05);
+}
+
+/* CONCEPT */
+.concept {
+    background-color: #0E0E0E;
+    color: #F5F5F5;
+}
+
+.concept h2 {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.concept p {
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    max-width: 700px;
+    margin: 0 auto 40px;
+}
+
+/* SCENARIOS */
+.scenarios {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 40px;
+    flex-direction: row; 
+}
+
+.scenario {
+    background-color: #CCCCCC;
+    color: #000000;
+    padding: 50px; 
+    border-radius: 12px;
+    width: 450px; 
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.scenario:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.scenario h3 {
+    font-family: 'Arimo', serif;
+    margin-bottom: 15px;
+    font-size: 1.5rem; 
+    text-align: center;
+}
+
+.scenario-duree-joueurs {
+    font-size: 1rem;
+    font-family: 'Arimo', serif;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #541826;
+}
+
+.scenario-note {
+    font-size: 0.95rem;
+    margin-bottom: 20px !important;
+    font-weight: bold;
+    color: #541826;
+}
+
+.scenario p {
+    font-family: 'Arimo', serif;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.scenario p:not(.scenario-note):not(.scenario-duree-joueurs) {
+    margin-bottom: 10px;
+}
+
+/* Bouton sous la grille */
+.scenario-btn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.scenario-btn a {
+    display: inline-block;
+    padding: 12px 30px;
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    text-decoration: none;
+    color: #f5f5f5;
+    background-color: #541826;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.scenario-btn a:hover {
+    background-color: #9D2137;
+    color: #F5F5F5;
+    transform: scale(1.05); 
+}
+
+/* TÉLÉCHARGEMENT */
+.telechargement {
+    background-color: #1a1a1a;
+}
+
+.telechargement-container h2 {
+    font-family: 'Anton', serif;
+    color: #F5F5F5;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.telechargement-container p {
+    font-family: 'Arimo', serif;
+    color: #F5F5F5;
+    max-width: 600px;
+    margin: 0 auto 30px;
+}
+
+.telechargement-container a {
+    text-decoration: none; 
+    outline: none;         
+    display: inline-block; 
+}
+
+.telechargement-container a img {
+    height: 40px;
+    margin: 0 10px;
+    transition: transform 0.3s;
+}
+
+.telechargement-container a img:hover {
+    transform: scale(1.4);
+}
+
+/* AVIS */
+.avis {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 40px;
+    background-color: #000000;
+    color: #F5F5F5;
+}
+
+.avis-container h2 {
+    font-family: 'Anton', serif;
+    color: #F5F5F5;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.avis-container p {
+    font-family: 'Arimo', serif;
+    color: #F5F5F5;
+    max-width: 600px;
+    margin: 0 auto 30px;
+}
+
+.avis-valide {
+    background-color: #CCCCCC;
+    color: #000000;
+    padding: 20px;
+    border-radius: 12px;
+    flex: 1 1 280px;
+    max-width: 350px;
+    text-align: center;
+    box-sizing: border-box;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.avis-valide:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+}
+
+.avis-valide h3 {
+    font-family: 'Anton', serif;
+    color: #541826;
+    margin-bottom: 10px;
+}
+
+.avis-valide p {
+    font-family: 'Arimo', serif;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.voir-avis {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.voir-avis a {
+    display: inline-block;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-decoration: none;
+    font-family: 'Arimo', serif;
+    color: #F5F5F5;
+    background-color: #541826;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.voir-avis a:hover {
+    background-color: #9D2137;
+    color: #F5F5F5;
+    transform: scale(1.05);
+}
+
+/* MEDIA QUERY */
+@media (max-width: 1024px) {
+
+    section {
+        padding: 60px 20px;
+    }
+
+    .hero-content h2 {
+        font-size: 2.4rem;
+    }
+
+    .hero-content p {
+        font-size: 1.3rem;
+        max-width: 500px;
+    }
+
+    .concept h2 {
+        font-size: 2.4rem;
+    }
+
+    .scenarios {
+        gap: 20px;
+    }
+
+    .scenario {
+        width: 100%;
+        max-width: 400px;
+        padding: 40px;
+    }
+
+    .telechargement-container h2,
+    .avis-container h2 {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+
+    section {
+        padding: 50px 15px;
+    }
+
+    .hero {
+        min-height: 70vh;
+    }
+
+    .hero-content h2 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+        max-width: 90%;
+    }
+
+    .btn-primary {
+        font-size: 0.95rem;
+        padding: 10px 25px;
+    }
+
+    .concept h2 {
+        font-size: 2rem;
+    }
+
+    .concept p {
+        font-size: 0.95rem;
+    }
+
+    .scenarios {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .scenario {
+        width: 100%;
+        max-width: 100%;
+        padding: 30px;
+    }
+
+    .scenario h3 {
+        font-size: 1.3rem;
+    }
+
+    .scenario-duree-joueurs,
+    .scenario-note {
+        font-size: 0.9rem;
+    }
+
+    .telechargement-container h2,
+    .avis-container h2 {
+        font-size: 1.8rem;
+    }
+
+    .avis {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .avis-valide {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .hero-content h2 {
+        font-size: 1.6rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .btn-primary {
+        width: 100%;
+        text-align: center;
+    }
+
+    .concept h2 {
+        font-size: 1.6rem;
+    }
+
+    .telechargement-container h2,
+    .avis-container h2 {
+        font-size: 1.5rem;
+    }
+
+    .telechargement-container a img {
+        height: 35px;
+    }
+}

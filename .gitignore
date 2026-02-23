@@ -12,7 +12,6 @@
 /phpunit.xml
 /.phpunit.cache/
 
-/public/assets/
 /assets/vendor/
 
 .DS_Store

@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+
+<section class="hero">
+    <div class="hero-content">
+        <h2>Entrez dans l'histoire</h2>
+        <p>Chaque détail compte. Chaque regard cache un secret.</p>
+        <a href="#" class="btn-primary">Découvrir les scénarios</a>
+    </div>
+</section>
+
+<section class="concept">
+    <div class="container">
+        <h2>Un jeu immersif d'enquête</h2>
+        <p>
+            Incarnez un personnage. <br> 
+            Enquêtez sur les alibis et les mobiles des suspects. <br>
+            Démasquez le coupable avant qu’il ne soit trop tard.
+        </p>
+    </div>
+    <div class="scenarios">
+        {% for scenario in topScenarios %}
+        <div class="scenario">
+            <h3>{{ scenario.title }}</h3>
+            <p class="scenario-duree-joueurs">{{ scenario.duree }} minutes | {{ scenario.nbPlayers }} joueurs</p>
+            <p class="scenario-note">Note : {{ scenario.averageRating }}/5</p>
+            <p>{{ scenario.synopsis }}</p>
+        </div>
+        {% endfor %}
+        <div class="scenario-btn">
+            <a href="#">Voir toutes les Murder Parties</a>
+        </div>
+    </div>
+</section>
+
+<section class="telechargement">
+    <div class="telechargement-container">
+        <h2>Télécharger Meurtre à Huis Clos</h2>
+        <p>
+            Téléchargez le jeu sur votre téléphone et commencez votre enquête. <br> Qui dans vos proches est le coupable ? 
+        </p>
+        <a href="#">
+            <img src="{{ asset('icones/apple_white.png') }}" alt="Téléchargement Apple">
+        </a>
+        <a href="#">
+            <img src="{{ asset('icones/android_white.png') }}" alt="Téléchargement Android">
+        </a>
+    </div>
+</section>
+
+<section class="avis">
+    <div class="avis-container">
+        <h2>Les joueurs ont adoré</h2>
+        <p>Faites-leur confiance et lancez-vous dans votre enquête !</p>
+        {% for avis in recentAvis %}
+        <div class="avis-valide">
+            <h3>{{ avis.authorPrenom }} {{ avis.authorNom|slice(0,1) }}.</h3>
+            <p>{{ avis.content }}</p>
+        </div>
+        {% endfor %}
+        <div class="voir-avis">
+            <a href="#">
+                Voir tous les avis
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script></script>
+{% endblock %}
