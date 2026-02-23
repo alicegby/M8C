@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ scenario.title }} — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/scenario.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2 class="scenario-show">{{ scenario.title }}</h2>
+
+<section class="scenario-detail">
+    <div class="scenario-container">
+        <p class="meta">{{ scenario.duree }} min | {{ scenario.nbPlayers }} joueurs | {{ scenario.averageRating }}/5</p>
+        <p class="tarif">
+            {% if scenario.price == '0.00' %}
+                Gratuit
+            {% else %}
+                {{ scenario.price }} €
+            {% endif %}
+        </p>
+        <h2>Synopsis</h2>
+        <p>{{ scenario.synopsis }}</p>
+        <a href="{{ path('rules') }}">Voir les règles du jeu</a>
+    </div>
+    <div class="btn-play">
+        <p><a href="{{ path('telechargement') }}">Téléchargez</a> l'application pour jouer à cette Murder Party</p>
+        <div class="download-buttons">
+            <a href="#">
+                <img src="{{ asset('icones/apple_darkred.png') }}" alt="Téléchargement Apple">
+            </a>
+            <a href="#">
+                <img src="{{ asset('icones/android_darkred.png') }}" alt="Téléchargement Android">
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

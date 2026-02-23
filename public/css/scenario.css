@@ -1,0 +1,309 @@
+h1 {
+    display: none;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1; /* force le contenu à pousser le footer vers le bas */
+}
+
+.scenarios-hero {
+    background-color: #000000;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.scenarios-hero h2 {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    color: #F5F5F5;
+}
+
+.scenarios-hero p {
+    font-family: 'Arimo', serif;
+    color: #F5F5F5;
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* SCENARIO GRID */
+.scenario-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+    margin-bottom: 100px;
+}
+
+.scenario-card {
+    background-color: #1C1C1C;
+    border-radius: 16px;
+    overflow: hidden;
+    width: 400px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.scenario-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.scenario-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.scenario-content h3 {
+    font-family: 'Anton', serif;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #F5F5F5;
+}
+
+.scenario-meta {
+    font-family: 'Arimo', serif;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    color: #AAAAAA;
+}
+
+.scenario-synopsis {
+    font-size: 1rem;
+    font-family: 'Arimo', serif;
+    margin-bottom: 20px;
+    color: #F5F5F5;
+}
+
+/* BTN PRIMARY */
+.btn-primary {
+    display: inline-block;
+    padding: 12px 30px;
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    text-decoration: none;
+    color: #F5F5F5;
+    background-color: #541826;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #9D2137;
+    transform: scale(1.05); 
+}
+
+/* CONTAINER UTILITY */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* SCENARIO SHOW */
+.scenario-detail {
+    padding: 50px 50px;
+}
+.scenario-show {
+    color: #F5F5F5;
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    margin-top: 40px;
+    text-align: center;
+}
+.scenario-container {
+    background-color: #1C1C1C;
+    color: #F5F5F5;
+    border-radius: 15px;
+    padding: 30px 30px;
+}
+.meta {
+    text-align: center;
+    font-size: 1.3rem;
+    font-family: 'Arimo', serif;
+    color: #AAAAAA;
+}
+.tarif {
+    text-align: center;
+    font-family: 'Anton', serif;
+    color: #9D2137;
+    font-size: 1.5rem;
+    margin-top: 15px;
+}
+.scenario-container h2 {
+    font-family: 'Anton', serif;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align: center;
+}
+.scenario-container p {
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    text-align: center;
+}
+.scenario-container a {
+    display: block;
+    width: fit-content;
+    margin: 20px auto;
+    padding: 12px 30px;
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    text-decoration: none;
+    color: #F5F5F5;
+    background-color: #541826;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+.scenario-container a:hover {
+    background-color: #9D2137;
+    transform: scale(1.05); 
+}
+.btn-play {
+    text-align: center;
+    display: flex;
+    flex-direction: column;  /* garde le texte au-dessus */
+    align-items: center;     /* centre horizontalement tout le bloc */
+    gap: 15px;               /* espace entre le texte et la ligne de boutons */
+    margin: 40px 0;
+}
+.btn-play p {
+    color: #F5F5F5;
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    text-align: center;
+    margin: 0;  /* pas besoin de margin-top ici, gap s'en occupe */
+}
+.btn-play p a {
+    color: #F5F5F5;
+    text-decoration: none;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+.btn-play p a:hover {
+    color: #541826;
+    text-decoration: underline;
+}
+.btn-play .download-buttons {
+    display: flex;
+    gap: 20px;            /* espace entre les boutons */
+    justify-content: center; /* centre horizontalement les boutons */
+}
+.btn-play .download-buttons a img {
+    height: 50px;
+    transition: transform 0.3s ease;
+}
+.btn-play .download-buttons a img:hover {
+    transform: scale(1.2);
+}
+
+/* MEDIA QUERY */
+@media (max-width: 992px) {
+    .scenarios-hero h2 {
+        font-size: 2.5rem;
+    }
+    .scenarios-hero p {
+        font-size: 1.1rem;
+        max-width: 600px;
+    }
+    .scenario-card {
+        width: 350px;
+    }
+    .scenario-content h3 {
+        font-size: 1.3rem;
+    }
+    .scenario-meta {
+        font-size: 0.85rem;
+    }
+    .scenario-synopsis {
+        font-size: 0.95rem;
+    }
+    .scenario-container {
+        padding: 25px 20px;
+    }
+    .scenario-container h2 {
+        font-size: 1.3rem;
+    }
+    .scenario-container p {
+        font-size: 1rem;
+    }
+    .scenario-container a {
+        padding: 10px 25px;
+        font-size: 1rem;
+    }
+}
+
+/* MOBILE - max-width 768px */
+@media (max-width: 768px) {
+    .scenarios-hero h2 {
+        font-size: 2rem;
+    }
+    .scenarios-hero p {
+        font-size: 1rem;
+        max-width: 90%;
+    }
+    .scenario-card {
+        width: 90%;
+    }
+    .scenario-content h3 {
+        font-size: 1.2rem;
+    }
+    .scenario-meta {
+        font-size: 0.8rem;
+    }
+    .scenario-synopsis {
+        font-size: 0.9rem;
+    }
+    .scenario-container {
+        padding: 20px 15px;
+    }
+    .scenario-container h2 {
+        font-size: 1.2rem;
+    }
+    .scenario-container p {
+        font-size: 0.95rem;
+    }
+    .scenario-container a {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+    .btn-play .download-buttons {
+        flex-direction: row;
+        gap: 15px;
+    }
+}
+
+/* PETIT MOBILE - max-width 480px */
+@media (max-width: 480px) {
+    .scenarios-hero h2 {
+        font-size: 1.7rem;
+    }
+    .scenarios-hero p {
+        font-size: 0.95rem;
+    }
+    .scenario-content h3 {
+        font-size: 1.1rem;
+    }
+    .scenario-meta {
+        font-size: 0.75rem;
+    }
+    .scenario-synopsis {
+        font-size: 0.85rem;
+    }
+    .scenario-container h2 {
+        font-size: 1.1rem;
+    }
+    .scenario-container p {
+        font-size: 0.9rem;
+    }
+    .scenario-container a {
+        padding: 8px 15px;
+        font-size: 0.95rem;
+    }
+}

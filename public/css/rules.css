@@ -1,0 +1,127 @@
+h1 {
+    display: none;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1; /* force le contenu à pousser le footer vers le bas */
+}
+
+/* HERO */
+.rules-hero {
+    background-color: #000000;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.rules-hero h2 {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    color: #F5F5F5;
+    margin-bottom: 20px;
+}
+
+.rules-hero p {
+    font-family: 'Arimo', serif;
+    color: #F5F5F5;
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* CONTENT */
+.rules-content {
+    padding: 50px 50px;
+    text-align: center;
+}
+
+.rules-content h2 {
+    font-family: 'Anton', serif;
+    font-size: 1.8rem;
+    margin-top: 40px;
+    margin-bottom: 15px;
+    color: #541826;
+}
+
+.rules-content p, .rules-content li {
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    color: #F5F5F5;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.rules-content ul {
+    list-style: disc inside;
+    padding-left: 0;
+    margin-bottom: 30px;
+}
+
+/* BTN PRIMARY */
+.rules-content .btn-primary {
+    display: block;
+    width: fit-content;
+    margin: 40px auto 0 auto;
+    padding: 12px 30px;
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    text-decoration: none;
+    color: #F5F5F5;
+    background-color: #541826;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.rules-content .btn-primary:hover {
+    background-color: #9D2137;
+    transform: scale(1.05);
+}
+
+/* CONTAINER UTILITY */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* MEDIA QUERIES */
+@media (max-width: 1024px) {
+    .rules-hero h2 {
+        font-size: 2.5rem;
+    }
+    .rules-hero p {
+        font-size: 1.1rem;
+    }
+    .rules-content h2 {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .rules-hero {
+        padding: 60px 20px;
+    }
+    .rules-content {
+        padding: 40px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .rules-hero h2 {
+        font-size: 2rem;
+    }
+    .rules-hero p {
+        font-size: 1rem;
+    }
+    .rules-content h2 {
+        font-size: 1.4rem;
+    }
+    .rules-content p, .rules-content li {
+        font-size: 1rem;
+    }
+}

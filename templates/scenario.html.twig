@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Murder Parties — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/scenario.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+
+<section class="scenarios-hero">
+    <div class="container">
+        <h2>Découvrez nos Murder Parties</h2>
+        <p>Choisissez votre scénario et plongez dans l’enquête. Chaque partie est unique !</p>
+    </div>
+</section>
+
+<section class="scenarios-list">
+    <div class="container">
+        <div class="scenario-grid">
+            {% for scenario in scenarios %}
+                <div class="scenario-card">
+                    <div class="scenario-content">
+                        <h3>{{ scenario.title }}</h3>
+                        <p class="scenario-meta">
+                            {{ scenario.duree }} minutes | {{ scenario.nbPlayers }} joueurs | {{ scenario.averageRating }}/5
+                        </p>
+                        <p class="scenario-synopsis">{{ scenario.synopsis }}</p>
+                        <a href="{{ path('scenario_show', {'slug': scenario.slug}) }}" class="btn-primary">Voir la Murder Party</a>
+                    </div>
+                </div>
+            {% else %}
+                <p>Aucun scénario publié pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

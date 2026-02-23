@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Télécharger Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/telechargement.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+
+<section class="telechargement-hero">
+    <div class="telechargement-hero-content">
+        <h2>Commencez votre enquête maintenant !</h2>
+        <p>Disponible sur <a href="#">iOS</a> et <a href="#">Android</a>. Jouez où vous voulez, quand vous voulez.</p>
+        <div class="download-buttons">
+            <a href="#">
+                <img src="{{ asset('icones/apple_red.png') }}" alt="Téléchargement Apple">
+            </a>
+            <a href="#">
+                <img src="{{ asset('icones/android_red.png') }}" alt="Téléchargement Android">
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature-container">
+        <h2>Pourquoi jouer à Meurtre à Huis Clos ?</h2>
+        <div class="feature-grid">
+            <div class="feature">
+                <img src="#" alt="Scénario">
+                <h3>Choisissez votre Murder Pary</h3>
+                <p>Trouvez le meilleur scénario pour votre soirée entre amis, selon le nombre de joueurs et les différents thèmes.</p>
+            </div>
+            <div class="feature">
+                <img src="#" alt="Personnages">
+                <h3>Incarnez un personnage</h3>
+                <p>Votre personnage vous est attribué aléatoirement, imprégnez vous de son histoire, et soyez bon acteur pour cacher votre secret.</p>
+            </div>
+            <div class="feature">
+                <img src="#" alt="Enquête">
+                <h3>Résolvez le mystère</h3>
+                <p>Analysez les alibis, découvrez les secrets, démasquez le coupable.</p>
+            </div>
+            <div class="feature">
+                <img src="#" alt="Vote">
+                <h3>Votez pour le coupable</h3>
+                <p>Votez pour votre coupable préféré, et découvrez si votre travail d'équipe à fonctionné !</p>
+            </div>
+        </div>
+        <p class="feature-conclusion">Alors, êtes vous un bon coupable ou un bon enquêteur ?</p>
+    </div>
+</section>
+
+<section class="screenshots">
+    <div class="container">
+        <h2>Aperçu du jeu</h2>
+        <div class="screenshot-grid">
+            <img src="#" alt="Capture 1">
+            <img src="#" alt="Capture 2">
+            <img src="#" alt="Capture 3">
+        </div>
+    </div>
+</section>
+
+<section class="download-final">
+    <h2>Prêt à jouer ?</h2>
+    <div class="download-buttons">
+        <a href="#">
+            <img src="{{ asset('icones/apple_darkred.png') }}" alt="Téléchargement Apple">
+        </a>
+        <a href="#">
+            <img src="{{ asset('icones/android_darkred.png') }}" alt="Téléchargement Android">
+        </a>
+    </div>
+</section>
+
+{% endblock %}

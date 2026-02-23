@@ -13,7 +13,7 @@
     <div class="hero-content">
         <h2>Entrez dans l'histoire</h2>
         <p>Chaque détail compte. Chaque regard cache un secret.</p>
-        <a href="#" class="btn-primary">Découvrir les scénarios</a>
+        <a href="{{ path('scenarios_list') }}" class="btn-primary">Découvrir les Murder Parties</a>
     </div>
 </section>
 
@@ -30,13 +30,12 @@
         {% for scenario in topScenarios %}
         <div class="scenario">
             <h3>{{ scenario.title }}</h3>
-            <p class="scenario-duree-joueurs">{{ scenario.duree }} minutes | {{ scenario.nbPlayers }} joueurs</p>
-            <p class="scenario-note">Note : {{ scenario.averageRating }}/5</p>
+            <p class="scenario-meta">{{ scenario.duree }} minutes | {{ scenario.nbPlayers }} joueurs | {{ scenario.averageRating }}/5</p>
             <p>{{ scenario.synopsis }}</p>
         </div>
         {% endfor %}
         <div class="scenario-btn">
-            <a href="#">Voir toutes les Murder Parties</a>
+            <a href="{{ path('scenarios_list') }}">Voir toutes les Murder Parties</a>
         </div>
     </div>
 </section>
@@ -74,9 +73,4 @@
     </div>
 </section>
 
-{% endblock %}
-
-
-{% block javascripts %}
-    <script></script>
 {% endblock %}
