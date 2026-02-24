@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Se connecter</h2>
+
+<div class="auth-container">
+    <div class="auth-box">
+
+        <div class="auth-logo">
+            <img src="{{ asset('images/logo.JPG') }}" alt="Meurtre à Huis Clos">
+        </div>
+
+        <h2>Connexion</h2>
+        <p class="auth-subtitle">Accédez à votre espace joueur</p>
+
+        {% for message in app.flashes('error') %}
+            <div class="flash-error">{{ message }}</div>
+        {% endfor %}
+
+        {% if error %}
+            <div class="flash-error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {% for message in app.flashes('success') %}
+            <div class="flash-success">{{ message }}</div>
+        {% endfor %}
+
+        {% for message in app.flashes('warning') %}
+            <div class="flash-warning">{{ message }}</div>
+        {% endfor %}
+
+        <form method="post" action="{{ path('app_login') }}" class="auth-form">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <div class="form-group">
+                <label for="email">Adresse email</label>
+                <input type="email" id="email" name="_username"
+                       value="{{ last_username }}"
+                       placeholder="votre@email.com"
+                       autocomplete="email"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <div class="input-password">
+                    <input type="password" id="password" name="_password"
+                           placeholder="Votre mot de passe"
+                           autocomplete="current-password"
+                           required>
+                    <button type="button" class="toggle-password" aria-label="Afficher / Masquer le mot de passe">
+                        <!-- œil ouvert -->
+                        <svg class="eye eye-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 5C5 5 1 12 1 12s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                            <circle cx="12" cy="12" r="2.5"/>
+                        </svg>
+                        <!-- œil barré -->
+                        <svg class="eye eye-closed" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M2 2l20 20M12 5c-7 0-11 7-11 7s4 7 11 7c1.75 0 3.38-.42 4.87-1.16M12 19c7 0 11-7 11-7s-4-7-11-7c-1.75 0-3.38.42-4.87 1.16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-auth">Se connecter</button>
+        </form>
+
+        <div class="auth-links">
+            <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
+            <span>—</span>
+            <a href="{{ path('app_register') }}">Créer un compte</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/auth.js') }}"></script>
+{% endblock %}

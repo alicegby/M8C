@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vérification en attente — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/login.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Vérification de votre compte</h1>
+
+<div class="auth-container">
+    <div class="auth-box">
+        {# Affiche les messages flash success #}
+        {% for message in app.flashes('success') %}
+            <div class="flash-success">{{ message }}</div>
+        {% endfor %}
+
+        {# Affiche les messages flash error #}
+        {% for message in app.flashes('error') %}
+            <div class="flash-error">{{ message }}</div>
+        {% endfor %}
+
+        <p>Bonjour {{ user.prenom }},</p>
+        <p>Votre compte n'a pas encore été vérifié. Veuillez confirmer votre adresse email pour accéder à votre compte.</p>
+        <p>Un email de confirmation vous a été envoyé lors de votre inscription.</p>
+
+        <div class="auth-links">
+            <form method="post" action="{{ path('app_resend_verification_email') }}">
+                <button type="submit" class="btn-auth">Renvoyer le mail de confirmation</button>
+            </form>
+            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

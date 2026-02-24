@@ -12,6 +12,7 @@ h2 {
 
 /* Conteneur principal des avis */
 .reviews-section {
+    flex: 1;
     max-width: 900px;
     margin: 40px auto;
     padding: 25px 30px;
@@ -92,6 +93,7 @@ h2 {
 
 /* LAISSER UN AVIS */
 .review-form-container {
+    flex: 1;
     max-width: 1200px;
     margin: 60px auto;
     padding: 60px;

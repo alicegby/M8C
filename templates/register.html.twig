@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/register.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>S'inscrire</h2>
+
+<div class="auth-container">
+    <div class="auth-box auth-box--wide">
+
+        <div class="auth-logo">
+            <img src="{{ asset('images/logo.JPG') }}" alt="Meurtre à Huis Clos">
+        </div>
+
+        <h2>Créer un compte</h2>
+        <p class="auth-subtitle">Rejoignez la communauté des enquêteurs</p>
+
+        {% for message in app.flashes('error') %}
+            <div class="flash-error">{{ message }}</div>
+        {% endfor %}
+
+        {% for message in app.flashes('success') %}
+            <div class="flash-success">{{ message }}</div>
+        {% endfor %}
+
+        {{ form_start(registrationForm, {'attr': {'class': 'auth-form'}}) }}
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(registrationForm.prenom) }}
+                    {{ form_widget(registrationForm.prenom) }}
+                    {{ form_errors(registrationForm.prenom) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(registrationForm.nom) }}
+                    {{ form_widget(registrationForm.nom) }}
+                    {{ form_errors(registrationForm.nom) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.email) }}
+                {{ form_widget(registrationForm.email) }}
+                {{ form_errors(registrationForm.email) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.dob) }}
+                {{ form_widget(registrationForm.dob) }}
+                {{ form_errors(registrationForm.dob) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.plainPassword.first) }}
+                <div class="input-password">
+                    {{ form_widget(registrationForm.plainPassword.first) }}
+                    <button type="button" class="toggle-password" aria-label="Afficher / Masquer le mot de passe">
+                        <!-- œil ouvert -->
+                        <svg class="eye eye-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 5C5 5 1 12 1 12s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                            <circle cx="12" cy="12" r="2.5"/>
+                        </svg>
+                        <!-- œil barré -->
+                        <svg class="eye eye-closed" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M2 2l20 20M12 5c-7 0-11 7-11 7s4 7 11 7c1.75 0 3.38-.42 4.87-1.16M12 19c7 0 11-7 11-7s-4-7-11-7c-1.75 0-3.38.42-4.87 1.16"/>
+                        </svg>
+                    </button>
+                </div>
+                {{ form_errors(registrationForm.plainPassword.first) }}
+                <div class="password-strength" id="password-strength"></div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.plainPassword.second) }}
+                <div class="input-password">
+                    {{ form_widget(registrationForm.plainPassword.second) }}
+                    <button type="button" class="toggle-password" aria-label="Afficher / Masquer le mot de passe">
+                        <!-- œil ouvert -->
+                        <svg class="eye eye-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 5C5 5 1 12 1 12s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                            <circle cx="12" cy="12" r="2.5"/>
+                        </svg>
+                        <!-- œil barré -->
+                        <svg class="eye eye-closed" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M2 2l20 20M12 5c-7 0-11 7-11 7s4 7 11 7c1.75 0 3.38-.42 4.87-1.16M12 19c7 0 11-7 11-7s-4-7-11-7c-1.75 0-3.38.42-4.87 1.16"/>
+                        </svg>
+                    </button>
+                </div>
+                {{ form_errors(registrationForm.plainPassword.second) }}
+            </div>
+
+            <div class="form-group form-group--checkbox">
+                {{ form_widget(registrationForm.newsletter) }}
+                {{ form_label(registrationForm.newsletter) }}
+                {{ form_errors(registrationForm.newsletter) }}
+            </div>
+
+            <div class="form-group form-group--checkbox">
+                {{ form_widget(registrationForm.agreeTerms) }}
+                <label>
+                    J'accepte les
+                    <a href="{{ path('cgv') }}" target="_blank">Conditions Générales d'Utilisation</a>
+                </label>
+                {{ form_errors(registrationForm.agreeTerms) }}
+            </div>
+
+            <button type="submit" class="btn-auth">Créer mon compte</button>
+
+        {{ form_end(registrationForm) }}
+
+        <div class="auth-links">
+            <span>Déjà un compte ?</span>
+            <a href="{{ path('app_login') }}">Se connecter</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/auth.js') }}"></script>
+{% endblock %}

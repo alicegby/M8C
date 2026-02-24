@@ -12,6 +12,7 @@ h2 {
 
 /* CONTENEUR PRINCIPAL */
 .contact-container {
+    flex: 1;
     max-width: 1200px;
     margin: 60px auto;
     padding: 60px;

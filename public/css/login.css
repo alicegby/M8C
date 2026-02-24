@@ -1,0 +1,210 @@
+h1 {
+    display: none;
+}
+
+h2 {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    color: #F5F5F5;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.auth-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+}
+
+/* BOX FORMULAIRE */
+.auth-box {
+    background-color: #0E0E0E;
+    padding: 50px 40px;
+    border-radius: 15px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+}
+
+/* LOGO */
+.auth-logo img {
+    width: 120px;
+    border-radius: 10px;
+}
+
+/* TITRE & SOUS-TITRE */
+.auth-box h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #9D2137;
+}
+
+.auth-box p {
+    color: #F5F5F5;
+    font-family: 'Arimo', serif;
+}
+
+.auth-subtitle {
+    font-size: 1rem;
+    font-family: 'Arimo', serif;
+    color: #AAAAAA;
+    margin-bottom: 25px;
+}
+
+/* FLASH MESSAGES */
+.flash-error, .flash-success, .flash-warning {
+    font-family: 'Arimo', serif;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.flash-error { background-color: #9D2137; color: #F5F5F5; }
+.flash-success { background-color: #541826; color: #F5F5F5; }
+.flash-warning { background-color: #C48C6A; color: #000000; }
+
+/* FORMULAIRE */
+.auth-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-family: 'Anton', sans-serif;
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+    color: #F5F5F5;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    background-color: #2A2A2A;
+    color: #F5F5F5;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    box-shadow: 0 0 5px #9D2137;
+}
+
+/* CHAMP MOT DE PASSE AVEC BOUTON */
+.input-password {
+    position: relative;
+}
+
+.input-password input {
+    width: 100%;
+    padding: 15px 50px 15px 20px; /* espace pour le bouton */
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-family: 'Arimo', serif;
+    background-color: #2A2A2A;
+    color: #F5F5F5;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.toggle-password svg {
+    width: 24px;
+    height: 24px;
+    fill: #F5F5F5;
+}
+
+.toggle-password .eye-closed {
+    display: none;
+}
+
+.toggle-password.show .eye-open {
+    display: none;
+}
+
+.toggle-password.show .eye-closed {
+    display: block;
+}
+
+/* BOUTON SE CONNECTER */
+.btn-auth {
+    width: 100%;
+    padding: 15px;
+    font-family: 'Anton', sans-serif;
+    font-size: 1.1rem;
+    background-color: #541826;
+    border: none;
+    border-radius: 8px;
+    color: #F5F5F5;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-auth:hover {
+    background-color: #9D2137;
+    transform: scale(1.03);
+}
+
+/* LIENS CONNEXION / INSCRIPTION */
+.auth-links {
+    font-family: 'Arimo', serif;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #AAAAAA;
+}
+
+.auth-links a {
+    color: #F5F5F5;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.auth-links a:hover {
+    color: #9D2137;
+}
+
+.auth-links span {
+    margin: 0 8px;
+    color: #AAAAAA;
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+    .auth-box {
+        padding: 35px 25px;
+    }
+
+    .auth-box h2 {
+        font-size: 1.6rem;
+    }
+
+    .btn-auth {
+        padding: 12px;
+        font-size: 1rem;
+    }
+}

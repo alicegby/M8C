@@ -20,11 +20,14 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
-                default_target_path: /admin
+                # Redirection gérée dans SecurityController selon le rôle
+                default_target_path: app_account
+                always_use_default_target_path: false
                 enable_csrf: true
             logout:
                 path: app_logout
-                target: /
+                target: app_home
 
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/mon-compte, roles: ROLE_USER }

@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/account.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Bonjour {{ user.prenom }}</h2>
+
+<div class="account-container">
+
+    <div class="account-header">
+        <div class="account-avatar">
+            {% if user.avatarUrl %}
+                <img src="{{ user.avatarUrl }}" alt="Avatar">
+            {% else %}
+                <div class="account-avatar__placeholder">
+                    {{ user.prenom|slice(0,1)|upper }}{{ user.nom|slice(0,1)|upper }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="account-header__info">
+            <h2>{{ user.prenom }} {{ user.nom }}</h2>
+            <p class="account-email">{{ user.email }}</p>
+            <p class="account-since">Membre depuis {{ user.createdAt|date('d/m/Y') }}</p>
+        </div>
+    </div>
+
+    {# Section Préférences juste sous le header #}
+    <div class="account-preferences account-card" style="margin: 20px 10px;">
+        <h3>Préférences</h3>
+        <ul class="account-info-list">
+            <li>
+                <span>Newsletter</span>
+                <strong>{{ user.newsletter ? 'Activée' : 'Désactivée' }}</strong>
+            </li>
+            <li>
+                <span>Notifications</span>
+                <strong>{{ user.notifications ? 'Activées' : 'Désactivées' }}</strong>
+            </li>
+        </ul>
+        <a href="{{ path('avis_new') }}" class="btn-primary">Laisser un avis</a>
+    </div>
+
+    <div class="account-grid">
+
+        <div class="account-card">
+            <h3>Mes informations 
+                <a href="#" class="btn-edit">Modifier</a>
+            </h3>
+            <ul class="account-info-list">
+                <li><span>Prénom</span><strong>{{ user.prenom }}</strong></li>
+                <li><span>Nom</span><strong>{{ user.nom }}</strong></li>
+                <li><span>Email</span><strong>{{ user.email }}</strong></li>
+                {% if user.dob %}
+                <li><span>Date de naissance</span><strong>{{ user.dob|date('d/m/Y') }}</strong></li>
+                {% endif %}
+                {% if user.pseudo %}
+                <li><span>Pseudo</span><strong>{{ user.pseudo }}</strong></li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="account-card">
+            <h3>Mes Murder Parties achetées</h3>
+            {% if user.purchases is empty %}
+                <p class="account-empty">Vous n'avez pas encore acheté de scénario.</p>
+                <a href="{{ path('scenarios_list') }}" class="btn-primary">Découvrir les scénarios</a>
+            {% else %}
+                <ul class="account-purchases-list">
+                    {% for purchase in user.purchases %}
+                        <li>
+                            <strong>{{ purchase.murderParty.title }}</strong>
+                            <span>{{ purchase.createdAt|date('d/m/Y') }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="account-card">
+            <h3>Murder Parties jouées</h3>
+            {% if user.playedMurderParties is empty %}
+                <p class="account-empty">Vous n'avez encore participé à aucune partie.</p>
+            {% else %}
+                <ul class="account-purchases-list">
+                    {% for played in user.playedMurderParties %}
+                        <li>
+                            <strong>{{ played.getMurderParty().title }}</strong>
+                            <span>{{ played.getUnlockedAt()|date('d/m/Y') }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="account-footer">
+        <div class="app-access">
+            <h4>Accéder à l'application</h4>
+            <div class="app-buttons">
+                <a href="#" class="btn-app">
+                    <img src="{{ asset('icones/apple_white.png') }}" alt="Apple">
+                </a>
+                <a href="#" class="btn-app">
+                    <img src="{{ asset('icones/android_white.png') }}" alt="Android">
+                </a>
+            </div>
+        </div>
+
+        <a href="{{ path('app_logout') }}" class="btn-logout">Se déconnecter</a>
+    </div>
+
+</div>
+{% endblock %}

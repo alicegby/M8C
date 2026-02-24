@@ -3,7 +3,6 @@ h1 {
 }
 /* FORCE MAIN-CONTENT À PRENDRE TOUT L'ESPACE RESTANT */
 main.main-content {
-    flex: 1;
     display: flex;
     flex-direction: column;
 }

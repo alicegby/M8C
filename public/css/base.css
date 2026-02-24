@@ -14,13 +14,13 @@ body {
 }
 
 .main-content {
-    flex: 1; /* pousse le footer vers le bas si le contenu est court */
+    flex: 1;
     display: flex;
     flex-direction: column;
 }
 
 .site-footer {
-    flex-shrink: 0; /* ne pas rétrécir */
+    flex-shrink: 0;
 }
 
 /* FONTS */
@@ -78,9 +78,7 @@ body {
     border-radius: 5px;
 }
 
-.logo a:hover {
-    opacity: 0.7;
-}
+.logo a:hover { opacity: 0.7; }
 
 /* NAVIGATION */
 .menu-links {
@@ -150,9 +148,7 @@ body {
     text-decoration: underline;
 }
 
-.cookie-content a:hover {
-    color: #F5F5F5;
-}
+.cookie-content a:hover { color: #F5F5F5; }
 
 #accept-cookies,
 #reject-cookies {
@@ -167,20 +163,11 @@ body {
 }
 
 #accept-cookies:hover,
-#reject-cookies:hover {
-    background: #74182A;
-}
+#reject-cookies:hover { background: #74182A; }
 
-/* Animation */
 @keyframes fadeInCookie {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 /* FOOTER */
@@ -252,22 +239,13 @@ body {
     text-align: right;
 }
 
-.cookie-credit a {
-    color: #AAAAAA;
-}
+.cookie-credit a { color: #AAAAAA; }
 
 /* ===========================
    MEDIA QUERIES TABLETTE
 =========================== */
 @media (max-width: 1024px) {
 
-    /* MAIN CONTENT */
-    .main-content {
-        flex: 1;
-
-    }
-
-    /* MENU */
     .menu-links {
         position: fixed;
         top: 0;
@@ -286,22 +264,11 @@ body {
         box-shadow: -4px 0 10px rgba(0,0,0,0.5);
     }
 
-    .menu-links.active {
-        right: 0;
-    }
+    .menu-links.active { right: 0; }
+    .menu-links a { font-size: 1.2rem; color: #F5F5F5; }
 
-    .menu-links a {
-        font-size: 1.2rem;
-        color: #F5F5F5;
-    }
-
-    .burger {
-        display: flex;
-    }
-
-    .burger.active {
-        display: none;
-    }
+    .burger { display: flex; }
+    .burger.active { display: none; }
 
     .menu-close {
         position: absolute;
@@ -314,11 +281,8 @@ body {
         display: none;
     }
 
-    .menu-links.active .menu-close {
-        display: block;
-    }
+    .menu-links.active .menu-close { display: block; }
 
-    /* FOOTER */
     .footer-container {
         flex-direction: column;
         align-items: center;
@@ -350,14 +314,9 @@ body {
         padding-left: 15px;
     }
 
-    .menu-links a {
-        font-size: 1.1rem;
-    }
+    .menu-links a { font-size: 1.1rem; }
 
-    .burger {
-        width: 22px;
-        height: 18px;
-    }
+    .burger { width: 22px; height: 18px; }
 
     .menu-close {
         font-size: 2rem;
