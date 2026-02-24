@@ -9,7 +9,7 @@
 {% block body %}
 <h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
 
-<section class="about-hero">
+<section class="about-hero animate-block">
     <div class="about-container">
         <h2>À propos</h2>
         <p>
@@ -28,7 +28,7 @@
     </div>
 </section>
 
-<section class="about-content">
+<section class="about-content animate-block">
     <div class="container">
         <h2>La mission</h2>
         <p>
@@ -44,7 +44,7 @@
     </div>
 </section>
 
-<section class="histoire">
+<section class="histoire animate-block">
     <div class="histoire-container">
         <h2>L’histoire du projet</h2>
 
@@ -79,4 +79,8 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
 {% endblock %}

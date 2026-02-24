@@ -10,7 +10,7 @@
 <h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
 <h2 class="scenario-show">{{ scenario.title }}</h2>
 
-<section class="scenario-detail">
+<section class="scenario-detail animate-block">
     <div class="scenario-container">
         <p class="meta">{{ scenario.duree }} min | {{ scenario.nbPlayers }} joueurs | {{ scenario.averageRating }}/5</p>
         <p class="tarif">
@@ -36,4 +36,8 @@
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
 {% endblock %}

@@ -10,7 +10,7 @@
 <h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
 <h2>Nous contacter</h2>
 
-<div class="contact-container">
+<div class="contact-container animate-block">
     {% for message in app.flashes('success') %}
         <div class="flash-success">{{ message }}</div>
     {% endfor %}
@@ -84,5 +84,6 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
     <script src="{{ asset('js/contact.js') }}"></script>
 {% endblock %}

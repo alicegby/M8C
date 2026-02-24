@@ -10,7 +10,7 @@
 <h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
 <h2>Politique de Confidentialité</h2>
 
-<section class="confidentialite-section">
+<section class="confidentialite-section animate-block">
     <h3>Collecte des données personnelles</h3>
     <p>
        Nous collections et traitons différentes données personnelles selon l'utilisation du site et de l'application :
@@ -101,6 +101,9 @@
         Pour toute question relative à la protection de vos données personnelles, vous pouvez nous contacter : <a href="mailto:meurtrehuisclos@gmail.com">meurtrehuisclos@gmail.com</a>.
     </p>
 
-    
 </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
 {% endblock %}

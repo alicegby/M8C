@@ -9,14 +9,14 @@
 {% block body %}
 <h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
 
-<section class="scenarios-hero">
+<section class="scenarios-hero animate-block">
     <div class="container">
         <h2>Découvrez nos Murder Parties</h2>
         <p>Choisissez votre scénario et plongez dans l’enquête. Chaque partie est unique !</p>
     </div>
 </section>
 
-<section class="scenario-devis">
+<section class="scenario-devis animate-block">
     <div class="container">
         <h2>Murder Party personnalisé ?</h2>
         <p>
@@ -26,7 +26,7 @@
     </div>
 </section>
 
-<section class="scenarios-list">
+<section class="scenarios-list animate-block">
     <div class="container">
         <div class="scenario-grid">
             {% for scenario in scenarios %}
@@ -47,4 +47,8 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
 {% endblock %}

@@ -10,11 +10,11 @@
 <h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
 <h2>Avis des joueurs</h2>
 
-<div class="btn-container">
+<div class="btn-container animate-block">
     <a href="{{ path('avis_new') }}" class="btn-leave-review">Laisser un avis</a>
 </div>
 
-<section class="reviews-section">
+<section class="reviews-section animate-block">
     {% if reviews is empty %}
         <p>Aucun avis pour le moment.</p>
     {% else %}
@@ -31,4 +31,8 @@
         </ul>
     {% endif %}
 </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
 {% endblock %}

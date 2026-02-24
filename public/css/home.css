@@ -329,6 +329,18 @@ section {
     font-family: 'Arimo', sans-serif;
 }
 
+/* ANIMATIONS JS */
+.animate-block {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease-out;
+}
+
+.animate-block.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* MEDIA QUERY */
 @media (max-width: 1024px) {
 

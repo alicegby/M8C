@@ -10,7 +10,7 @@
 <h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
 <h2>Laisser un avis</h2>
 
-<div class="review-form-container">
+<div class="review-form-container animate-block">
 
     {{ form_start(form, {'attr': {'class': 'review-form'}}) }}
 
@@ -42,4 +42,8 @@
 
     {{ form_end(form) }}
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
 {% endblock %}

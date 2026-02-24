@@ -9,7 +9,7 @@
 {% block body %}
 <h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
 
-<section class="telechargement-hero">
+<section class="telechargement-hero animate-block">
     <div class="telechargement-hero-content">
         <h2>Commencez votre enquête maintenant !</h2>
         <p>Disponible sur <a href="#">iOS</a> et <a href="#">Android</a>. Jouez où vous voulez, quand vous voulez.</p>
@@ -24,7 +24,7 @@
     </div>
 </section>
 
-<section class="features">
+<section class="features animate-block">
     <div class="feature-container">
         <h2>Comment jouer à Meurtre à Huis Clos ?</h2>
         <div class="feature-grid">
@@ -53,7 +53,7 @@
     </div>
 </section>
 
-<section class="screenshots">
+<section class="screenshots animate-block">
     <div class="container">
         <h2>Aperçu du jeu</h2>
         <div class="screenshot-grid">
@@ -64,7 +64,7 @@
     </div>
 </section>
 
-<section class="download-final">
+<section class="download-final animate-block">
     <h2>Prêt à jouer ?</h2>
     <div class="download-buttons">
         <a href="#">
@@ -76,4 +76,8 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
 {% endblock %}

@@ -126,6 +126,18 @@ p.small {
     margin: 0 auto;
 }
 
+/* ANIMATIONS JS */
+.animate-block {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease-out;
+}
+
+.animate-block.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* RESPONSIVE  */
 
 /* Tablette */

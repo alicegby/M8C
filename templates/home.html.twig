@@ -9,7 +9,7 @@
 {% block body %}
 <h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
 
-<section class="hero">
+<section class="hero animate-block">
     <div class="hero-content">
         <h2>Entrez dans l'histoire</h2>
         <p>Chaque détail compte. Chaque regard cache un secret.</p>
@@ -17,7 +17,7 @@
     </div>
 </section>
 
-<section class="concept">
+<section class="concept animate-block">
     <div class="container">
         <h2>Un jeu immersif d'enquête</h2>
         <p>
@@ -26,7 +26,7 @@
             Démasquez le coupable avant qu’il ne soit trop tard.
         </p>
     </div>
-    <div class="scenarios">
+    <div class="scenarios animate-block">
         {% for scenario in topScenarios %}
         <div class="scenario">
             <h3>{{ scenario.title }}</h3>
@@ -40,7 +40,7 @@
     </div>
 </section>
 
-<section class="telechargement">
+<section class="telechargement animate-block">
     <div class="telechargement-container">
         <h2>Télécharger Meurtre à Huis Clos</h2>
         <p>
@@ -55,7 +55,7 @@
     </div>
 </section>
 
-<section class="avis">
+<section class="avis animate-block">
     <div class="avis-container">
         <h2>Les joueurs ont adoré</h2>
         <p>Faites-leur confiance et lancez-vous dans votre enquête !</p>
@@ -67,7 +67,7 @@
     </div>
 </section>
 
-<section class="newsletter">
+<section class="newsletter animate-block">
     <div class="newsletter-container">
         <h2>Inscrivez-vous à notre newsletter</h2>
         <p>Recevez les informations des dernières Murder Parties, promos et contenus exclusifs directement dans votre boîte mail.</p>
@@ -83,4 +83,8 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
 {% endblock %}

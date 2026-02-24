@@ -122,7 +122,7 @@ h2 {
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 15px 20px;
+    padding: 15px 70px;
     border-radius: 8px;
     border: none;
     font-size: 1rem;
@@ -135,6 +135,7 @@ h2 {
 .form-group input::placeholder,
 .form-group textarea::placeholder {
     color: #AAAAAA;
+    text-align: left;
 }
 
 .form-group input:focus,
@@ -188,6 +189,18 @@ button.btn-leave-review:hover {
     border-radius: 8px;
     margin-bottom: 25px;
     font-family: 'Arimo', serif;
+}
+
+/* ANIMATIONS JS */
+.animate-block {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease-out;
+}
+
+.animate-block.active {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* Responsive */
