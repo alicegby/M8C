@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon compte — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/account.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Modifier mes informations</h2>
+
+<div class="account-edit-container animate-block">
+
+    {{ form_start(form, {'attr': {'class': 'account-form'}}) }}
+
+    <div class="form-group">
+        {{ form_label(form.prenom) }}
+        {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.prenom) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.nom) }}
+        {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.nom) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.pseudo) }}
+        {{ form_widget(form.pseudo, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.pseudo) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.email) }}
+    </div>
+
+    {# Gestion de l'avatar #}
+    <div class="form-group">
+        <label>Avatar actuel</label>
+        {% if app.user.avatarUrl %}
+            <div class="current-avatar">
+                <img src="{{ app.user.avatarUrl }}" alt="Avatar" style="width:80px; height:80px; border-radius:50%;">
+            </div>
+        {% else %}
+            <p>Aucun avatar défini</p>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.avatarFile) }}
+        {{ form_widget(form.avatarFile, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.avatarFile) }}
+    </div>
+
+    <div class="form-group--checkbox">
+        {{ form_widget(form.removeAvatar) }}
+        {{ form_label(form.removeAvatar) }}
+        {{ form_errors(form.removeAvatar) }}
+    </div>
+
+    <button type="submit" class="btn-primary">Mettre à jour</button>
+    <a href="{{ path('app_account') }}" class="btn-logout">Annuler</a>
+
+    {{ form_end(form) }}
+
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
+{% endblock %}

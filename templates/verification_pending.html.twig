@@ -7,9 +7,10 @@
 {% endblock %}
 
 {% block body %}
-<h1>Vérification de votre compte</h1>
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Vérification de votre compte</h2>
 
-<div class="auth-container">
+<div class="auth-container animate-block">
     <div class="auth-box">
         {# Affiche les messages flash success #}
         {% for message in app.flashes('success') %}
@@ -33,4 +34,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
 {% endblock %}

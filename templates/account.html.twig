@@ -12,7 +12,7 @@
 
 <div class="account-container">
 
-    <div class="account-header">
+    <div class="account-header animate-block">
         <div class="account-avatar">
             {% if user.avatarUrl %}
                 <img src="{{ user.avatarUrl }}" alt="Avatar">
@@ -30,26 +30,33 @@
     </div>
 
     {# Section Préférences juste sous le header #}
-    <div class="account-preferences account-card" style="margin: 20px 10px;">
+    <div class="account-preferences account-card animate-block" style="margin: 20px 10px;">
         <h3>Préférences</h3>
         <ul class="account-info-list">
             <li>
                 <span>Newsletter</span>
-                <strong>{{ user.newsletter ? 'Activée' : 'Désactivée' }}</strong>
-            </li>
-            <li>
-                <span>Notifications</span>
-                <strong>{{ user.notifications ? 'Activées' : 'Désactivées' }}</strong>
+                {% if isSubscribed %}
+                    <strong>Activée</strong>
+                    <form action="{{ path('account_toggle_newsletter') }}" method="post" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('newsletter_toggle') }}">
+                        <button type="submit" class="btn-primary" style="margin-left:10px; padding:5px 15px; font-size:0.85rem;">Se désinscrire</button>
+                    </form>
+                {% else %}
+                    <form action="{{ path('account_toggle_newsletter') }}" method="post" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('newsletter_toggle') }}">
+                        <button type="submit" class="btn-primary" style="padding:5px 15px; font-size:0.85rem;">S'inscrire</button>
+                    </form>
+                {% endif %}
             </li>
         </ul>
-        <a href="{{ path('avis_new') }}" class="btn-primary">Laisser un avis</a>
+        <a href="{{ path('avis_new') }}" class="btn-primary">Laisser un avis sur Meurtre à Huis Clos</a>
     </div>
 
-    <div class="account-grid">
+    <div class="account-grid animate-block">
 
         <div class="account-card">
             <h3>Mes informations 
-                <a href="#" class="btn-edit">Modifier</a>
+                <a href="{{ path('account_edit') }}" class="btn-edit">Modifier</a>
             </h3>
             <ul class="account-info-list">
                 <li><span>Prénom</span><strong>{{ user.prenom }}</strong></li>
@@ -113,7 +120,16 @@
         </div>
 
         <a href="{{ path('app_logout') }}" class="btn-logout">Se déconnecter</a>
+
+        <form action="{{ path('account_delete') }}" method="post" onsubmit="return confirm('Êtes-vous sûr(e) de vouloir supprimer votre compte ? Cette action est irréversible.');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete_account') }}">
+            <button type="submit" class="btn-suppr">Supprimer mon compte</button>
+        </form>
     </div>
 
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
 {% endblock %}
