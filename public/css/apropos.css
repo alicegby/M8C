@@ -9,15 +9,6 @@ h1 {
     font-display: swap;
 }
 
-/* MAIN */
-.container,
-.about-container,
-.histoire-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
 /* HERO */
 
 .about-hero {
@@ -76,6 +67,8 @@ h1 {
 
 .histoire-container {
     max-width: 900px;
+    margin: 0 auto; /* CENTRAGE HORIZONTAL */
+    text-align: center; /* CENTRAGE DU TEXTE SI VOULU */
 }
 
 .histoire h2 {

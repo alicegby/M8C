@@ -30,6 +30,7 @@ h1 {
 
 .telechargement-hero a {
     color: #F5F5F5;
+    font-family: 'Arimo', serif;
     text-decoration: none;
     transition: transform 0.3s ease;
 }

@@ -60,10 +60,26 @@
         <h2>Les joueurs ont adoré</h2>
         <p>Faites-leur confiance et lancez-vous dans votre enquête !</p>
         <div class="voir-avis">
-            <a href="#">
+            <a href="{{ path('avis') }}">
                 Voir tous les avis
             </a>
         </div>
+    </div>
+</section>
+
+<section class="newsletter">
+    <div class="newsletter-container">
+        <h2>Inscrivez-vous à notre newsletter</h2>
+        <p>Recevez les informations des dernières Murder Parties, promos et contenus exclusifs directement dans votre boîte mail.</p>
+
+        <form action="{{ path('newsletter_subscribe') }}" method="POST" class="newsletter-form">
+            <input type="email" name="email" placeholder="Votre email" required>
+            <button type="submit">S’inscrire</button>
+        </form>
+
+        {% if newsletter_success is defined %}
+            <p class="newsletter-success">{{ newsletter_success }}</p>
+        {% endif %}
     </div>
 </section>
 

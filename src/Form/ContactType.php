@@ -18,17 +18,18 @@ class ContactType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom', TextType::class, ['constraints' => [new Assert\NotBlank()]])
-            ->add('prenom', TextType::class, ['constraints' => [new Assert\NotBlank()]])
-            ->add('email', EmailType::class, ['constraints' => [new Assert\NotBlank(), new Assert\Email()]])
+            ->add('nom', TextType::class, ['constraints' => [new Assert\NotBlank()], 'label' => 'Nom'])
+            ->add('prenom', TextType::class, ['constraints' => [new Assert\NotBlank()], 'label' => 'Prénom'])
+            ->add('email', EmailType::class, ['constraints' => [new Assert\NotBlank(), new Assert\Email()], 'label' => 'Email'])
             ->add('sujet', ChoiceType::class, [
                 'choices' => [
                     'Demande d\'informations' => 'Demande d\'informations',
                     'Demande de Murder Party personnalisée' => 'Demande de Murder Party personnalisée',
                     'Autre' => 'Autre'
                 ],
-                'placeholder' => 'Sélectionnez un sujet',
-                'constraints' => [new Assert\NotBlank()]
+                'placeholder' => 'Sélectionnez un objet',
+                'constraints' => [new Assert\NotBlank()],
+                'label' => 'Objet'
             ])
             ->add('sousMenu', ChoiceType::class, [
                 'choices' => [

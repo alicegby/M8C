@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mentions légales — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/pages.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Mentions légales</h2>
+
+<section class="legal-section">
+    <h3>Éditeur du site</h3>
+    <p>
+        Éditeur du site : Alice Gruby, auto-entrepreneuse.<br>
+        Contact : <a href="mailto:meurtrehuisclos@gmail.com">meurtrehuisclos@gmail.com</a><br>
+        Directeur de publication : Alice Gruby.<br>
+        Numéro SIRET : 984 198 945 00029
+    </p>
+
+    <h3>Hébergement</h3>
+    <p>
+        Hébergement du site : Odoo SA, 1 Boulevard du Général de Gaulle, 92100 Boulogne-Billancourt, France.<br>
+        Nom de domaine enregistré chez : OVH.
+    </p>
+
+    <h3>Propriété intellectuelle</h3>
+    <p>
+        Tous les contenus présents sur ce site, y compris les textes, images, vidéos et les œuvres originales des Murder Parties, 
+        sont protégés par le droit d’auteur. <strong>Toute reproduction, représentation ou utilisation, totale ou partielle, 
+        de ces contenus sans autorisation écrite de l’éditeur est strictement interdite, et peut être passible de poursuites judiciaires.</strong> <br>
+        <strong>Toute ressemblance avec des événements réels, des personnes existantes ou des œuvres préexistantes serait purement fortuite et non intentionnelle.</strong>
+    </p>
+
+    <h3>Limitation de responsabilité</h3>
+    <p>
+        L’éditeur ne peut être tenu responsable des dommages directs ou indirects pouvant résulter de l’utilisation du site, 
+        ni des informations provenant de sites tiers vers lesquels le site pourrait contenir des liens.
+    </p>
+
+    <h3>Données personnelles</h3>
+    <p>
+        Les informations collectées via le formulaire de contact sont utilisées uniquement pour répondre aux messages 
+        des utilisateurs et ne seront en aucun cas transmises à des tiers. Pour en savoir plus, consultez notre 
+        <a href="{{ path('confidentialite') }}">Politique de confidentialité</a> et <a href="{{ path('cgv') }}">CGV</a>.
+    </p>
+
+    <h3>Cookies</h3>
+    <p>
+        Le site utilise des cookies conformément à la réglementation en vigueur. 
+        Pour en savoir plus sur leur utilisation et vos droits, consultez la 
+        <a href="{{ path('confidentialite') }}">Politique de confidentialité</a>.
+    </p>
+</section>
+{% endblock %}

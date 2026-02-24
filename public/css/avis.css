@@ -1,0 +1,239 @@
+h1 {
+    display: none;
+}
+
+h2 {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    color: #F5F5F5;
+    margin-top: 40px;
+    text-align: center;
+}
+
+/* Conteneur principal des avis */
+.reviews-section {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 25px 30px;
+    background-color: #0E0E0E;
+    border-radius: 12px;
+    color: #F5F5F5;
+    font-family: 'Arimo', sans-serif;
+}
+
+/* Titre de la section */
+.reviews-section h3 {
+    font-family: 'Anton', sans-serif;
+    font-size: 1.6rem;
+    color: #9D2137;
+    margin-bottom: 20px;
+}
+
+/* Liste des avis */
+.reviews-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap; /* pour passer à la ligne si ça déborde */
+    gap: 20px; /* espace entre les avis */
+}
+
+/* Chaque avis */
+.review-item {
+    background-color: #0E0E0E; /* box individuelle */
+    border-radius: 10px;
+    padding: 20px;
+    flex: 1 1 calc(33.333% - 20px); /* 3 par ligne max, avec gap pris en compte */
+    box-sizing: border-box;
+    min-width: 250px; /* pour responsive */
+}
+
+.review-meta {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.review-meta .review-date {
+    font-weight: normal;
+    color: #AAAAAA;
+    margin-left: 10px;
+}
+
+.review-content {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #F5F5F5;
+}
+
+.btn-container {
+    text-align: center; /* centre le bouton */
+    margin-bottom: 20px; /* espace sous le bouton */
+}
+
+.btn-leave-review {
+    display: inline-block; /* prend la largeur du texte seulement */
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    text-decoration: none;
+    font-family: 'Arimo', serif;
+    color: #F5F5F5;
+    font-weight: bold;
+    background-color: #541826;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-leave-review:hover {
+    background-color: #9D2137;
+    transform: scale(1.05);
+}
+
+/* LAISSER UN AVIS */
+.review-form-container {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 60px;
+    background-color: #1C1C1C;
+    border-radius: 15px;
+    color: #F5F5F5;
+    font-family: 'Arimo', serif;
+    min-height: 700px; /* évite le redimensionnement au scroll */
+    box-sizing: border-box;
+}
+
+/* GROUPE DE CHAMPS */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+/* LABEL */
+.form-group label {
+    font-family: 'Anton', serif;
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+    color: #F5F5F5;
+}
+
+/* INPUT & TEXTAREA */
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-family: 'Arimo', serif;
+    background-color: #2A2A2A;
+    color: #F5F5F5;
+    transition: all 0.3s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #AAAAAA;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(157,33,55,0.5);
+}
+
+/* TEXTAREA FIXE */
+.form-group textarea {
+    resize: none;
+    height: 200px;
+}
+
+/* BOUTON SUBMIT */
+button.btn-leave-review {
+    display: inline-block;
+    padding: 12px 35px;
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    color: #F5F5F5;
+    background-color: #541826;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+button.btn-leave-review:hover {
+    background-color: #9D2137;
+    transform: scale(1.05);
+}
+
+/* FLASH MESSAGES */
+.flash-success {
+    background-color: #1a3a1a;
+    color: #F5F5F5;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    font-family: 'Arimo', serif;
+}
+
+.flash-error {
+    background-color: #661616;
+    color: #F5F5F5;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    font-family: 'Arimo', serif;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .review-item {
+        flex: 1 1 calc(50% - 20px); /* 2 par ligne sur tablettes */
+    }
+     .review-form-container {
+        max-width: 90%;
+        padding: 25px;
+        min-height: 600px;
+    }
+}
+@media (max-width: 768px) {
+    .reviews-section {
+        padding: 15px 20px;
+        margin: 20px 10px;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    .review-item {
+        flex: 1 1 100%; /* 1 par ligne sur mobile */
+    }
+
+    .reviews-section h3 {
+        font-size: 1.4rem;
+    }
+
+    .review-content {
+        font-size: 0.95rem;
+    }
+
+    .btn-leave-review {
+        padding: 10px 20px;
+    }
+    .review-form-container {
+        padding: 20px;
+        margin: 40px 15px;
+        min-height: unset;
+    }
+
+    button.btn-leave-review {
+        width: 100%;
+        padding: 12px 0;
+    }
+}

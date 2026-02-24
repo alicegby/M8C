@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Laisser un avis — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/avis.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Laisser un avis</h2>
+
+<div class="review-form-container">
+
+    {{ form_start(form, {'attr': {'class': 'review-form'}}) }}
+
+        <div class="form-group">
+            {{ form_label(form.authorPrenom) }}
+            {{ form_widget(form.authorPrenom, {'attr': {'placeholder': 'Votre prénom'}}) }}
+            {{ form_errors(form.authorPrenom) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.authorNom) }}
+            {{ form_widget(form.authorNom, {'attr': {'placeholder': 'Votre nom'}}) }}
+            {{ form_errors(form.authorNom) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.authorEmail) }}
+            {{ form_widget(form.authorEmail, {'attr': {'placeholder': 'Votre email'}}) }}
+            {{ form_errors(form.authorEmail) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.content) }}
+            {{ form_widget(form.content, {'attr': {'placeholder': 'Votre avis'}}) }}
+            {{ form_errors(form.content) }}
+        </div>
+
+        <button type="submit" class="btn-leave-review">Envoyer</button>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}

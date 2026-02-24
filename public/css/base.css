@@ -1,6 +1,4 @@
-/* ===========================
-   RÉINITIALISATION
-=========================== */
+/* RÉINITIALISATION */
 * {
     margin: 0;
     padding: 0;
@@ -25,9 +23,7 @@ body {
     flex-shrink: 0; /* ne pas rétrécir */
 }
 
-/* ===========================
-   FONTS
-=========================== */
+/* FONTS */
 @font-face {
     font-family: 'Anton';
     src: url('../fonts/Anton/Anton-Regular.ttf') format('truetype');
@@ -40,18 +36,14 @@ body {
     font-display: swap;
 }
 
-/* ===========================
-   CONTAINER
-=========================== */
+/* CONTAINER */
 .container {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* ===========================
-   HEADER
-=========================== */
+/* HEADER */
 .site-header {
     background-color: #0E0E0E;
     top: 0;
@@ -99,7 +91,7 @@ body {
 .menu-links a {
     font-family: 'Arimo', serif;
     text-decoration: none;
-    color: #CCCCCC;
+    color: #AAAAAA;
     font-size: 0.85rem;
     text-transform: uppercase;
     transition: color 0.3s ease, opacity 0.3s ease;
@@ -126,18 +118,76 @@ body {
     display: block;
     height: 3px;
     width: 100%;
-    background-color: #CCCCCC;
+    background-color: #AAAAAA;
     border-radius: 2px;
     transition: all 0.3s ease;
 }
 
-/* ===========================
-   FOOTER
-=========================== */
+/* COOKIES */
+.cookie-banner {
+    position: fixed;
+    bottom: 50px;
+    left: 20px;
+    max-width: 350px;
+    background: #1C1C1C;
+    color: #F5F5F5;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    z-index: 9999;
+    font-family: 'Arimo', sans-serif;
+    animation: fadeInCookie 0.4s ease-out;
+}
+
+.cookie-content p {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.cookie-content a {
+    color: #9D2137;
+    text-decoration: underline;
+}
+
+.cookie-content a:hover {
+    color: #F5F5F5;
+}
+
+#accept-cookies,
+#reject-cookies {
+    background: #9D2137;
+    color: #F5F5F5;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+#accept-cookies:hover,
+#reject-cookies:hover {
+    background: #74182A;
+}
+
+/* Animation */
+@keyframes fadeInCookie {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* FOOTER */
 .site-footer {
     width: 100%;
     background-color: #0E0E0E;
-    color: #CCCCCC;
+    color: #AAAAAA;
     padding: 30px 0;
     margin-top: 0;
 }
@@ -163,7 +213,7 @@ body {
 .footer-left a {
     font-family: 'Arimo', serif;
     text-decoration: none;
-    color: #CCCCCC;
+    color: #AAAAAA;
     font-size: 0.85rem;
     text-transform: uppercase;
     transition: color 0.3s ease, opacity 0.3s ease;
@@ -177,7 +227,7 @@ body {
 .footer-credit {
     font-family: 'Arimo';
     font-size: 0.75rem;
-    color: #777;
+    color: #AAAAAA;
     letter-spacing: 1px;
     text-transform: uppercase;
     text-align: center;
@@ -194,6 +244,16 @@ body {
 .footer-credit a:hover {
     color: #9D2137;
     opacity: 0.8;
+}
+
+.cookie-credit {
+    margin-top: 8px;
+    font-size: 0.6rem;
+    text-align: right;
+}
+
+.cookie-credit a {
+    color: #AAAAAA;
 }
 
 /* ===========================
@@ -270,7 +330,8 @@ body {
         align-items: center;
     }
 
-    .footer-credit {
+    .footer-credit,
+    .cookie-credit {
         order: 2;
         margin-top: 30px;
         width: 100%;
@@ -315,7 +376,8 @@ body {
         align-items: center;
     }
 
-    .footer-credit {
+    .footer-credit,
+    .cookie-credit {
         order: 2;
         margin-top: 30px;
         font-size: 0.6rem;

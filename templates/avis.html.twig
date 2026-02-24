@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avis des joueurs — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/avis.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Avis des joueurs</h2>
+
+<div class="btn-container">
+    <a href="{{ path('avis_new') }}" class="btn-leave-review">Laisser un avis</a>
+</div>
+
+<section class="reviews-section">
+    {% if reviews is empty %}
+        <p>Aucun avis pour le moment.</p>
+    {% else %}
+        <ul class="reviews-list">
+            {% for review in reviews %}
+                <li class="review-item">
+                    <p class="review-meta">
+                        <strong>{{ review.authorPrenom }} {{ review.authorNom|slice(0,1) }}.</strong>
+                        <span class="review-date">{{ review.createdAt|date('d/m/Y') }}</span>
+                    </p>
+                    <p class="review-content">{{ review.content }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</section>
+{% endblock %}

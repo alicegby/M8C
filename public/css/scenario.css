@@ -12,8 +12,6 @@ main.main-content {
     flex: 1;
 }
 
-
-
 .scenarios-hero {
     background-color: #000000;
     margin-top: 40px;
@@ -49,6 +47,7 @@ main.main-content {
     font-size: 1rem;
 }
 .scenario-devis a {
+    font-family: 'Arimo', serif;
     color: #AAAAAA;
     text-decoration: none;
     transition: transform 0.3s ease, box-shadow 0.3s ease;

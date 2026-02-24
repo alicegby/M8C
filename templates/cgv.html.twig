@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conditions Générales de Vente — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/pages.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Conditions Générales de Vente (CGV)</h2>
+
+<section class="cgv-section">
+    <h3>Objet</h3>
+    <p>
+        Les présentes Conditions Générales de Vente (CGV) définissent les droits et obligations des utilisateurs et de l’éditeur concernant la vente de Murder Parties (MP) 
+        via l’application <strong>Meurtre à Huis Clos</strong>. Elles s’appliquent à toutes les ventes de MP standards ou personnalisées.
+    </p>
+
+    <h3>Produits</h3>
+    <ul>
+        <li><strong>Murder Parties standards</strong> : une fois achetées, les MP sont conservées par les clients pour y jouer quand ils le souhaitent.</li>
+        <li><strong>Murder Parties personnalisées</strong> : proposées sur devis après contact avec l’éditeur. La prestation est adaptée au nombre de participants, à la date et aux besoins spécifiques.</li>
+    </ul>
+
+    <h3>Prix &amp; paiement</h3>
+    <ul>
+        <li>Le paiement s’effectue directement sur l’application via CB, PayPal, Apple Pay ou Google Pay.</li>
+        <li>Les prix indiqués sont en euros et incluent toutes taxes applicables.</li>
+    </ul>
+
+    <h3>Droit de rétractation</h3>
+    <ul>
+        <li>Conformément à la législation française, les clients disposent d’un droit de rétractation de 15 jours après l’achat des MP.</li>
+        <li><strong>Exception </strong>: si le client commence à jouer directement à la partie dans l’application, le droit de rétractation est réputé renoncé et aucun remboursement ne pourra être effectué.</li>
+    </ul>
+
+    <h3>Limitation de responsabilité &amp; avertissement</h3>
+    <ul>
+        <li>Le jeu est une expérience narrative et ne comporte pas d’incitation à la violence réelle. Les participants sont seuls responsables de leurs actions.</li>
+        <li><strong>Avertissement </strong>: certaines Murder Parties peuvent contenir du contenu explicite, incluant meurtres fictifs, agressions, agressions sexuelles, troubles psychologiques ou thèmes sensibles.</li>
+        <li>L’éditeur ne pourra en aucun cas être tenu responsable de dommages directs ou indirects résultant de l’utilisation des MP ou de la participation aux jeux.</li>
+    </ul>
+
+    <h3>Propriété intellectuelle</h3>
+    <ul>
+        <li>Tous les contenus (textes, images, vidéos, œuvres originales des MP) sont protégés par le droit d’auteur.</li>
+        <li><strong>Toute reproduction, représentation ou utilisation, totale ou partielle, de ces contenus sans autorisation écrite de l’éditeur est strictement interdite, et peut être passible de poursuites judiciaires.</strong></li>
+    </ul>
+
+    <h3>Modification des CGV</h3>
+    <p>
+        L’éditeur se réserve le droit de modifier les présentes CGV à tout moment. Les nouvelles conditions s’appliqueront automatiquement aux achats futurs.
+    </p>
+
+    <h3>Données personnelles</h3>
+    <ul>
+        <li>Les informations collectées via le formulaire de contact ou lors de l’achat sont utilisées uniquement pour la gestion des commandes et ne sont pas communiquées à des tiers.</li>
+        <li>Pour plus d'informations, consultez la <a href="{{ path('confidentialite') }}">Politique de confidentialité</a>.</li>
+    </ul>
+
+    <h3>Acceptation</h3>
+    <p>
+        En achetant une Murder Party, le client déclare avoir lu, compris et accepté l’ensemble des présentes Conditions Générales de Vente.
+    </p>
+</section>
+{% endblock %}

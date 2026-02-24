@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenue chez Meurtre à Huis Clos !</title>
+</head>
+<body style="font-family: 'Arimo', serif; background-color: #000000; padding: 20px; margin: 0;">
+
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td align="center">
+                <table width="600" cellpadding="20" cellspacing="0" style="background-color: #0E0E0E; border-radius: 12px;">
+
+                    <!-- Logo -->
+                    <tr>
+                        <td align="center">
+                            <img src="{{ absolute_url(asset('images/logo.JPG')) }}" alt="Meurtre à Huis Clos" width="140" style="display:block; margin-bottom: 20px;">
+                        </td>
+                    </tr>
+
+                    <!-- Contenu -->
+                    <tr>
+                        <td>
+                            <h2 style="color: #F5F5F5; font-family: 'Anton', serif; font-size: 1.8rem; margin-bottom: 15px;">Bienvenue,</h2>
+                            <p style="color: #F5F5F5; font-size: 1rem; line-height: 1.5; margin-bottom: 15px;">
+                                Vous êtes maintenant inscrit à notre newsletter. Voici votre code promo exclusif :
+                            </p>
+                            <p style="color: #F5F5F5; background-color: #541826; display: inline-block; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 1.2rem; margin-bottom: 20px;">
+                                {{ promoCode }}
+                            </p>
+                            <p style="color: #F5F5F5; font-size: 1rem; line-height: 1.5; margin-bottom: 20px;">
+                                Utilisez-le lors de votre prochaine commande ou téléchargement pour profiter de votre avantage.
+                            </p>
+                            <p>
+                                <a href="{{ app_url }}" style="color: #9D2137; text-decoration: none; font-weight: bold;">Visitez notre site pour en savoir plus</a>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Désinscription -->
+                    <tr>
+                        <td style="padding-top: 30px; border-top: 1px solid #333; text-align: center;">
+                            <p style="color: #AAAAAA; font-size: 0.85rem; line-height: 1.4; margin: 0;">
+                                Vous ne souhaitez plus recevoir nos emails ? 
+                                <a href="{{ absolute_url(path('newsletter_unsubscribe', {'token': unsubscribeToken})) }}" 
+                                style="color: #9D2137; text-decoration: none; font-weight: bold;">
+                                    Se désinscrire
+                                </a>
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
