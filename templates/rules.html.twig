@@ -11,26 +11,44 @@
 <section class="rules-hero">
     <div class="container">
         <h2>Règles du jeu</h2>
-        <p>Plongez dans l’univers de Meurtre à Huis Clos, un jeu d’enquête et de rôle où chaque joueur peut être complice, suspect ou détective. Collaborez avec vos amis pour démasquer le coupable… ou réussirez-vous à le cacher ?</p>
+        <p>
+            Plongez dans l’univers de Meurtre à Huis Clos, un jeu d’enquête et de rôle où chaque joueur peut être complice, suspect ou détective. Collaborez avec vos amis pour démasquer le coupable… ou réussirez-vous à le cacher ?
+        </p>
+        <p class="small">
+            Le minimum de joueurs pour jouer à une Murder Party est de 4 joueurs.
+        </p>
     </div>
 </section>
 
 <section class="rules-content">
     <div class="container">
-        <h2>Préparation</h2>
-        <p>Un joueur lance la partie et génère un code unique pour que les autres puissent la rejoindre. Chaque participant choisit son pseudo et son avatar (ou prend une photo temporaire pour le jeu).</p>
+        <div class="preparation">
+            <h2>1. Préparation</h2>
+            <ol>
+                <li>Un joueur choisit une Murder Party dans notre liste, selon le nombre de joueurs ou un thème.</li>
+                <li>Il génère un code unique pour que les autres puissent la rejoindre.</li>
+                <li>Chaque participant choisit son pseudo et son avatar (ou prend une photo temporaire pour le jeu).</li>
+            </ol>
+        </div>
+        <div class="deroulement">
+            <h2>2. Déroulement de la partie</h2>
+            <ol>
+                <li>Les personnages sont distribués aléatoirement. Prenez 15 minutes pour découvrir votre rôle et vous imprégner de votre personnage.</li>
+                <li>Chaque joueur incarne son rôle : mentez (mais soyez cohérent avec les informations de votre fiche personnage), manipulez ou collaborez pour démasquer le vrai coupable.</li>
+                <li>Le chronomètre intégré indique le temps qu’il vous reste pour enquêter. Prenez des notes, échangez des indices, observez les autres joueurs… et percez les secrets pour résoudre le mystère.</li>
+            </ol>
+        </div>
+        <div class="vote">
+            <h2>3. Votes et épilogue</h2>
+            <ol>
+                <li>Lorsque le temps est écoulé, votez pour celui que vous pensez être le coupable.</li>
+                <li>Découvrez ensuite si votre équipe a réussi, ou si le coupable a réussi à s'en tirer.</li>
+                <li>Lisez l’épilogue captivant qui conclut votre enquête.</li>
+            </ol>
+        </div>
 
-        <h2>Déroulement de la partie</h2>
-        <ol>
-            <li>Les personnages sont distribués aléatoirement. Prenez 15 minutes pour découvrir votre rôle et vous imprégner de votre personnage.</li>
-            <li>Chaque joueur incarne son rôle : mentez (mais soyez cohérent avec les informations de votre fiche personnage), manipulez ou collaborez pour démasquer le vrai coupable.</li>
-            <li>Le chronomètre intégré indique le temps qu’il vous reste pour enquêter. Prenez des notes, échangez des indices, observez les autres joueurs… et percez les secrets pour résoudre le mystère.</li>
-        </ol>
-
-        <h2>Votes et épilogue</h2>
-        <p>Lorsque le temps est écoulé, votez pour celui que vous pensez être le coupable. Découvrez ensuite si votre équipe a réussi, ou si le coupable a réussi à s'en tirer, et lisez l’épilogue captivant qui conclut votre enquête.</p>
-
-        <a href="{{ path('telechargement') }}" class="btn-primary">Télécharger l'application</a>
+            <a href="{{ path('telechargement') }}" class="btn-primary">Télécharger l'application</a>
+        
     </div>
 </section>
 {% endblock %}

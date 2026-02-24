@@ -1,0 +1,149 @@
+h1 {
+    display: none;
+}
+
+h2 {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    color: #F5F5F5;
+    margin-top: 40px;
+    text-align: center;
+}
+
+/* CONTENEUR PRINCIPAL */
+.contact-container {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 60px;
+    background-color: #1C1C1C;
+    border-radius: 15px;
+    color: #F5F5F5;
+    font-family: 'Arimo', serif;
+    min-height: 700px; /* évite le redimensionnement au scroll */
+}
+
+/* FORM GROUP */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+/* LABEL */
+.form-group label {
+    font-family: 'Anton', serif;
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+    color: #F5F5F5;
+}
+
+/* INPUT & TEXTAREA */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-family: 'Arimo', serif;
+    background-color: #2A2A2A;
+    color: #F5F5F5;
+    transition: all 0.3s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #AAAAAA;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(157,33,55,0.5);
+}
+
+/* TEXTAREA FIXE */
+.form-group textarea {
+    resize: none;
+    height: 200px;
+}
+
+/* ================================
+   SOUS-MENU MURDER PARTY
+   ================================ */
+#sous-menu-container {
+    background-color: #000000;
+    border-left: 3px solid #541826;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 25px;
+}
+
+.sous-menu-text {
+    font-family: 'Arimo', serif;
+    font-size: 0.95rem;
+    color: #AAAAAA;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    font-style: italic;
+}
+
+/* BOUTON SUBMIT */
+button.btn-primary {
+    display: inline-block;
+    padding: 12px 35px;
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    color: #F5F5F5;
+    background-color: #541826;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+button.btn-primary:hover {
+    background-color: #9D2137;
+    transform: scale(1.05);
+}
+
+/* FLASH SUCCESS */
+.flash-success {
+    background-color: #1a3a1a;
+    color: #F5F5F5;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    font-family: 'Arimo', serif;
+}
+
+/* MEDIA QUERIES */
+@media (max-width: 1024px) {
+    .contact-container {
+        max-width: 90%;
+        padding: 25px;
+        min-height: 600px;
+    }
+}
+
+@media (max-width: 768px) {
+    .contact-container {
+        padding: 20px;
+        margin: 40px 15px;
+        min-height: unset;
+    }
+
+    button.btn-primary {
+        width: 100%;
+        padding: 12px 0;
+    }
+
+    #sous-menu-container {
+        padding: 20px;
+    }
+}

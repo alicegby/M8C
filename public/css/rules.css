@@ -1,21 +1,14 @@
+/* RESET TITRE SEO */
 h1 {
     display: none;
 }
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
 
-.main-content {
-    flex: 1; /* force le contenu à pousser le footer vers le bas */
-}
+/* HERO  */
 
-/* HERO */
 .rules-hero {
-    background-color: #000000;
-    margin-top: 40px;
+    margin-top: 60px;
     text-align: center;
+    padding: 40px 20px;
 }
 
 .rules-hero h2 {
@@ -29,52 +22,96 @@ body {
     font-family: 'Arimo', serif;
     color: #F5F5F5;
     font-size: 1.2rem;
-    max-width: 700px;
+    max-width: 750px;
     margin: 0 auto;
+    line-height: 1.6;
+}
+p.small {
+    color: #AAAAAA;
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-top: 10px;
 }
 
 /* CONTENT */
+
 .rules-content {
-    padding: 50px 50px;
-    text-align: center;
+    padding: 80px 20px;
 }
 
-.rules-content h2 {
+/* GRID */
+.rules-content .container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    align-items: stretch; /* IMPORTANT */
+}
+
+/* BLOCS */
+.preparation,
+.deroulement,
+.vote {
+    background-color: #1C1C1C;
+    padding: 35px;
+    border-radius: 18px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    height: 100%; /* IMPORTANT */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.preparation:hover,
+.deroulement:hover,
+.vote:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+}
+
+/* TITRES BLOCS */
+.preparation h2,
+.deroulement h2,
+.vote h2 {
     font-family: 'Anton', serif;
-    font-size: 1.8rem;
-    margin-top: 40px;
-    margin-bottom: 15px;
-    color: #541826;
-}
-
-.rules-content p, .rules-content li {
-    font-family: 'Arimo', serif;
-    font-size: 1.1rem;
-    color: #F5F5F5;
+    font-size: 1.6rem;
+    color: #9D2137;
     margin-bottom: 20px;
-    text-align: center;
+    margin-top: 0; 
 }
 
-.rules-content ul {
-    list-style: disc inside;
-    padding-left: 0;
-    margin-bottom: 30px;
+/* LISTES */
+.rules-content ol {
+    padding-left: 20px;
+    margin: 0;
 }
 
-/* BTN PRIMARY */
+.rules-content li {
+    font-family: 'Arimo', serif;
+    font-size: 1.05rem;
+    color: #F5F5F5;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+/* BOUTON */
 .rules-content .btn-primary {
-    display: block;
-    width: fit-content;
-    margin: 40px auto 0 auto;
-    padding: 12px 30px;
+    grid-column: 1 / -1; /* prend toute la largeur sous la grid */
+    justify-self: center;
+
+    margin-top: 50px;
+    padding: 14px 35px;
+
     font-family: 'Arimo', serif;
     font-size: 1.1rem;
     text-decoration: none;
     color: #F5F5F5;
     background-color: #541826;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: bold;
-    text-align: center;
+
     transition: all 0.3s ease;
 }
 
@@ -83,45 +120,55 @@ body {
     transform: scale(1.05);
 }
 
-/* CONTAINER UTILITY */
+/* CONTAINER */
 .container {
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* MEDIA QUERIES */
+/* RESPONSIVE  */
+
+/* Tablette */
 @media (max-width: 1024px) {
+    .rules-content .container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .rules-hero h2 {
         font-size: 2.5rem;
     }
-    .rules-hero p {
-        font-size: 1.1rem;
-    }
-    .rules-content h2 {
-        font-size: 1.6rem;
-    }
 }
 
+/* Mobile */
 @media (max-width: 768px) {
-    .rules-hero {
-        padding: 60px 20px;
+    .rules-content .container {
+        grid-template-columns: 1fr;
     }
-    .rules-content {
-        padding: 40px 20px;
-    }
-}
 
-@media (max-width: 480px) {
     .rules-hero h2 {
-        font-size: 2rem;
+        font-size: 2.1rem;
     }
+
     .rules-hero p {
         font-size: 1rem;
     }
-    .rules-content h2 {
-        font-size: 1.4rem;
+}
+
+/* Petit mobile */
+@media (max-width: 480px) {
+    .preparation,
+    .deroulement,
+    .vote {
+        padding: 25px;
     }
-    .rules-content p, .rules-content li {
-        font-size: 1rem;
+
+    .preparation h2,
+    .deroulement h2,
+    .vote h2 {
+        font-size: 1.3rem;
+    }
+
+    .rules-content li {
+        font-size: 0.95rem;
     }
 }

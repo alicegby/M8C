@@ -22,16 +22,8 @@ class HomeController extends AbstractController
             3
         );
 
-        // Récupérer les 5 derniers avis approuvés
-        $recentAvis = $reviewRepo->findBy(
-            ['status' => 'approved'],
-            ['createdAt' => 'DESC'],
-            5
-        );
-
         return $this->render('home.html.twig', [
             'topScenarios' => $topScenarios,
-            'recentAvis' => $recentAvis,
         ]);
     }
 }

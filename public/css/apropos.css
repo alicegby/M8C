@@ -1,0 +1,175 @@
+/* RESET TITRE SEO */
+h1 {
+    display: none;
+}
+
+@font-face {
+    font-family: 'Amoresa';
+    src: url('../fonts/Amoresa/Amoresa_Regular.otf') format('opentype');
+    font-display: swap;
+}
+
+/* MAIN */
+.container,
+.about-container,
+.histoire-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* HERO */
+
+.about-hero {
+    padding: 100px 20px 80px;
+    text-align: center;
+    background-color: #000000;
+}
+
+.about-hero h2 {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    color: #F5F5F5;
+    margin-bottom: 30px;
+}
+
+.about-hero p {
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto 20px;
+    color: #F5F5F5;
+}
+
+/* MISSION / VISION */
+
+.about-content {
+    padding: 80px 20px;
+    background-color: #0E0E0E;
+}
+
+.about-content .container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 60px;
+}
+
+.about-content h2 {
+    font-family: 'Anton', serif;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #9D2137;
+}
+
+.about-content p {
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    color: #F5F5F5;
+}
+
+/* HISTOIRE */
+
+.histoire {
+    padding: 100px 20px;
+    background-color: #000000;
+}
+
+.histoire-container {
+    max-width: 900px;
+}
+
+.histoire h2 {
+    font-family: 'Anton', serif;
+    font-size: 2.2rem;
+    margin-bottom: 40px;
+    color: #9D2137;
+    text-align: center;
+}
+
+.histoire p {
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    text-align: justify;
+    margin-bottom: 25px;
+    color: #F5F5F5;
+}
+
+p.signature {
+    font-family: 'Amoresa', serif;
+    font-size: 1.5rem;
+    color: #AAAAAA;
+}
+
+/* Roman link */
+.histoire a {
+    display: inline-block;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    text-decoration: none;
+    font-family: 'Arimo', serif;
+    color: #F5F5F5;
+    font-weight: bold;
+    background-color: #541826;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.histoire a:hover {
+    background-color: #9D2137;
+    color: #F5F5F5;
+    transform: scale(1.05);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1024px) {
+
+    .about-hero h2 {
+        font-size: 2.5rem;
+    }
+
+    .about-content .container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .histoire h2 {
+        font-size: 1.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .about-hero {
+        padding: 80px 20px 60px;
+    }
+
+    .about-hero h2 {
+        font-size: 2.1rem;
+    }
+
+    .about-hero p {
+        font-size: 1.05rem;
+    }
+
+    .about-content {
+        padding: 60px 20px;
+    }
+
+    .histoire {
+        padding: 70px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .about-hero h2 {
+        font-size: 1.8rem;
+    }
+
+    .about-hero p,
+    .about-content p,
+    .histoire p {
+        font-size: 1rem;
+    }
+}

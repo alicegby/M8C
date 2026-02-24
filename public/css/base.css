@@ -1,27 +1,33 @@
-/* RÉINITIALISATION */
+/* ===========================
+   RÉINITIALISATION
+=========================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html, body {
-    height: 100%;
-}
-
 body {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* prend toute la hauteur de la fenêtre */
+    min-height: 100vh;
     background-color: #000000;
     margin: 0;
 }
 
 .main-content {
     flex: 1; /* pousse le footer vers le bas si le contenu est court */
+    display: flex;
+    flex-direction: column;
 }
 
-/* FONTS */
+.site-footer {
+    flex-shrink: 0; /* ne pas rétrécir */
+}
+
+/* ===========================
+   FONTS
+=========================== */
 @font-face {
     font-family: 'Anton';
     src: url('../fonts/Anton/Anton-Regular.ttf') format('truetype');
@@ -34,14 +40,18 @@ body {
     font-display: swap;
 }
 
-/* CONTAINER */
+/* ===========================
+   CONTAINER
+=========================== */
 .container {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* HEADER */
+/* ===========================
+   HEADER
+=========================== */
 .site-header {
     background-color: #0E0E0E;
     top: 0;
@@ -108,8 +118,8 @@ body {
     width: 25px;
     height: 20px;
     cursor: pointer;
-    margin-right: 15px; /* <-- Décalage depuis le bord droit */
-    z-index: 1100; /* Au-dessus du panneau */
+    margin-right: 15px;
+    z-index: 1100;
 }
 
 .burger span {
@@ -121,7 +131,9 @@ body {
     transition: all 0.3s ease;
 }
 
-/* FOOTER */
+/* ===========================
+   FOOTER
+=========================== */
 .site-footer {
     width: 100%;
     background-color: #0E0E0E;
@@ -140,7 +152,6 @@ body {
     flex-wrap: wrap;
 }
 
-/* Colonne gauche */
 .footer-left {
     display: flex;
     font-size: 1rem;
@@ -149,7 +160,6 @@ body {
     gap: 10px;
 }
 
-/* Liens du footer */
 .footer-left a {
     font-family: 'Arimo', serif;
     text-decoration: none;
@@ -178,7 +188,7 @@ body {
 .footer-credit a {
     text-decoration: none;
     color: #F5F5F5;
-     transition: color 0.3s ease, opacity 0.3s ease;
+    transition: color 0.3s ease, opacity 0.3s ease;
 }
 
 .footer-credit a:hover {
@@ -186,33 +196,25 @@ body {
     opacity: 0.8;
 }
 
-
-/* MEDIA QUERY */
-/* Tablette : 1024px et moins */
+/* ===========================
+   MEDIA QUERIES TABLETTE
+=========================== */
 @media (max-width: 1024px) {
-    body {
-        flex-direction: column; /* toujours vertical */
-    }
 
+    /* MAIN CONTENT */
     .main-content {
-        flex: 1; /* continue à pousser le footer vers le bas */
+        flex: 1;
+
     }
 
-    .footer-container {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    /* HEADER */
+    /* MENU */
     .menu-links {
         position: fixed;
         top: 0;
         right: -100%;
         height: 100vh;
-        width: 300px; /* largeur par défaut */
-        background-color: #000000 !important; /* noir opaque total */
-        opacity: 1 !important;
-        backdrop-filter: none !important;
+        width: 300px;
+        background-color: #000000 !important;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
@@ -231,20 +233,20 @@ body {
     .menu-links a {
         font-size: 1.2rem;
         color: #F5F5F5;
-        text-decoration: none;
-        text-transform: uppercase;
-        font-family: 'Arimo', serif;
-        transition: color 0.3s;
     }
 
-    .menu-links a:hover {
-        color: #9D2137;
+    .burger {
+        display: flex;
+    }
+
+    .burger.active {
+        display: none;
     }
 
     .menu-close {
         position: absolute;
         top: 50px;
-        right: 40px; 
+        right: 40px;
         font-size: 2.2rem;
         color: #F5F5F5;
         cursor: pointer;
@@ -254,21 +256,6 @@ body {
 
     .menu-links.active .menu-close {
         display: block;
-    }
-
-    .burger {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        width: 25px;
-        height: 20px;
-        cursor: pointer;
-        margin-right: 15px;
-        z-index: 2600;
-    }
-
-    .burger.active {
-        display: none;
     }
 
     /* FOOTER */
@@ -291,22 +278,11 @@ body {
     }
 }
 
-/* Mobile : 768px et moins */
+/* ===========================
+   MEDIA QUERIES MOBILE
+=========================== */
 @media (max-width: 768px) {
-    body {
-        flex-direction: column;
-    }
 
-    .main-content {
-        flex: 1;
-    }
-
-    .footer-container {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    /* HEADER */
     .menu-links {
         width: 250px;
         padding-top: 120px;
@@ -325,10 +301,9 @@ body {
     .menu-close {
         font-size: 2rem;
         top: 50px;
-        right: 30px; /* ajustement pour petits écrans */
+        right: 30px;
     }
 
-    /* FOOTER */
     .footer-container {
         flex-direction: column;
         align-items: center;

@@ -1,15 +1,18 @@
 h1 {
     display: none;
 }
-body {
+/* FORCE MAIN-CONTENT À PRENDRE TOUT L'ESPACE RESTANT */
+main.main-content {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
 }
 
-.main-content {
-    flex: 1; /* force le contenu à pousser le footer vers le bas */
+.scenarios-list {
+    flex: 1;
 }
+
+
 
 .scenarios-hero {
     background-color: #000000;
@@ -31,6 +34,30 @@ body {
     margin: 0 auto;
 }
 
+/* DEVIS */
+.scenario-devis {
+    padding: 20px 20px;
+    color: #AAAAAA;
+    text-align: center;
+}
+.scenario-devis h2 {
+    font-family: 'Anton', serif;
+    font-size: 1.5rem;
+}
+.scenario-devis p {
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+}
+.scenario-devis a {
+    color: #AAAAAA;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.scenario-devis a:hover {
+    color: #9D2137;
+    transform: scale(1.05); 
+}
+
 /* SCENARIO GRID */
 .scenario-grid {
     display: flex;
@@ -38,7 +65,7 @@ body {
     justify-content: center;
     gap: 40px;
     margin-top: 20px;
-    margin-bottom: 100px;
+    margin-bottom: 40px;
 }
 
 .scenario-card {
@@ -204,6 +231,12 @@ body {
 }
 
 /* MEDIA QUERY */
+@media (max-width: 1024px) {
+    main.main-content {
+        flex: 1;
+    }
+}
+
 @media (max-width: 992px) {
     .scenarios-hero h2 {
         font-size: 2.5rem;

@@ -39,16 +39,16 @@
             <span class="menu-close">&times;</span>
             <a href="{{ path('telechargement') }}">Télécharger le jeu</a>
             <a href="{{ path('scenarios_list') }}">Murder Parties</a>
-            <a href="{{ path('rules') }}">Règle du jeu</a>
-            <a href="#">À propos</a>
-            <a href="#">Contact</a>
+            <a href="{{ path('rules') }}">Règles du jeu</a>
+            <a href="{{ path('about') }}">À propos</a>
+            <a href="{{ path('contact') }}">Contact</a>
             <a href="#">Connexion</a>
             </ul>
         </nav>
     </div>
 </header>
 
-<main>
+<main class="main-content">
     {% block body %}{% endblock %}
 </main>
 
@@ -69,6 +69,7 @@
     </div>
 </footer>
 
+{% block javascripts %}{% endblock %}
 <script src="{{ asset('js/base.js') }}"></script>
 </body>
 </html>

@@ -59,12 +59,6 @@
     <div class="avis-container">
         <h2>Les joueurs ont adoré</h2>
         <p>Faites-leur confiance et lancez-vous dans votre enquête !</p>
-        {% for avis in recentAvis %}
-        <div class="avis-valide">
-            <h3>{{ avis.authorPrenom }} {{ avis.authorNom|slice(0,1) }}.</h3>
-            <p>{{ avis.content }}</p>
-        </div>
-        {% endfor %}
         <div class="voir-avis">
             <a href="#">
                 Voir tous les avis
