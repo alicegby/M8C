@@ -1,0 +1,91 @@
+<h3>
+    Liste des avis
+    <button id="review-filter-toggle" class="filter-btn">
+        <img src="{{ asset('icones/filter_white.png') }}" alt="Filter">
+    </button>
+</h3>
+
+<div id="review-filter-menu" class="filter-menu hidden">
+    <label>
+        Statut :
+        <select id="review-status-filter">
+            <option value="">Tous</option>
+            <option value="pending">En attente</option>
+            <option value="approved">Accepté</option>
+            <option value="rejected">Rejeté</option>
+        </select>
+    </label>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Utilisateur</th>
+            <th>Avis</th>
+            <th>Statut</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="review-table-body">
+        {% for review in pending %}
+            <tr data-status="pending">
+                <td>
+                    {% if review.user %}
+                        {{ review.user.prenom }} {{ review.user.nom }}
+                    {% else %}
+                        {{ review.authorPrenom }} {{ review.authorNom }}
+                    {% endif %}
+                </td>
+                <td>{{ review.content }}</td>
+                <td>{{ review.status }}</td>
+                <td>{{ review.createdAt|date('d/m/Y') }}</td>
+                <td>
+                    <a href="{{ path('admin_review_edit', {id: review.id}) }}" class="btn btn-show ajax-link-show">Voir</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+        {% for review in approved %}
+            <tr data-status="approved">
+                <td>
+                    {% if review.user %}
+                        {{ review.user.prenom }} {{ review.user.nom }}
+                    {% else %}
+                        {{ review.authorPrenom }} {{ review.authorNom }}
+                    {% endif %}
+                </td>
+                <td>{{ review.content }}</td>
+                <td>{{ review.status }}</td>
+                <td>{{ review.createdAt|date('d/m/Y') }}</td>
+                <td>
+                    <a href="{{ path('admin_review_edit', {id: review.id}) }}" class="btn btn-show ajax-link-show">Voir</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+        {% for review in rejected %}
+            <tr data-status="rejected">
+                <td>
+                    {% if review.user %}
+                        {{ review.user.prenom }} {{ review.user.nom }}
+                    {% else %}
+                        {{ review.authorPrenom }} {{ review.authorNom }}
+                    {% endif %}
+                </td>
+                <td>{{ review.content }}</td>
+                <td>{{ review.status }}</td>
+                <td>{{ review.createdAt|date('d/m/Y') }}</td>
+                <td>
+                    <a href="{{ path('admin_review_edit', {id: review.id}) }}" class="btn btn-show ajax-link-show">Voir</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+        {% if pending is empty and approved is empty and rejected is empty %}
+            <tr>
+                <td colspan="5">Aucun avis trouvé.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>

@@ -1,0 +1,54 @@
+<h3>
+    Liste des Murder Parties
+    <button id="review-filter-toggle" class="filter-btn">
+        <img src="{{ asset('icones/filter_white.png') }}" alt="Filter">
+    </button>
+</h3>
+
+<button id="create-mp-btn" class="btn-add" data-url="{{ path('admin_mp_new') }}">Créer une Murder Party</button>
+
+<div id="mp-filter-menu" class="filter-menu hidden">
+    <label>
+        Mot-clé :
+        <input type="text" id="mp-keyword-filter" placeholder="Titre ou synopsis">
+    </label>
+    <label>
+        Nb joueurs :
+        <input type="number" id="mp-min-players-filter" min="1" value="{{ filters.minPlayers }}">
+    </label>
+    <label>
+        Durée min :
+        <input type="number" id="mp-min-duration-filter" min="0" value="{{ filters.minDuration }}">
+    </label>
+</div>
+
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Nb joueurs</th>
+            <th>Durée</th>
+            <th>Créé le</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="mp-table-body">
+        {% for mp in murder_parties %}
+            <tr data-players="{{ mp.nbPlayers }}" data-duration="{{ mp.duree }}">
+                <td>{{ mp.title }}</td>
+                <td>{{ mp.nbPlayers }}</td>
+                <td>{{ mp.duree }} min</td>
+                <td>{{ mp.createdAt|date('d/m/Y') }}</td>
+                <td>
+                    <a href="{{ path('admin_mp_edit', {id: mp.id}) }}" class="btn btn-modify">Modifier</a>
+                    <form action="{{ path('admin_mp_delete', {id: mp.id}) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_mp_' ~ mp.id) }}">
+                        <button type="submit" class="btn btn-suppr">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="5">Aucune Murder Party</td></tr>
+        {% endfor %}
+    </tbody>
+</table>

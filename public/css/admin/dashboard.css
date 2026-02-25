@@ -1,0 +1,541 @@
+h1 {
+    display: none;
+}
+
+h2 {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    color: #F5F5F5;
+    margin-top: 40px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+h3 {
+    font-family: 'Anton', serif;
+    font-size: 2rem;
+    color: #F5F5F5;
+    margin-top: 15px;
+    text-align: center;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #AAAAAA;
+}
+
+/* Bouton filtre */
+.filter-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    vertical-align: middle;
+    padding: 5px;
+}
+
+.filter-btn img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Menu de filtre */
+.filter-menu { 
+    display: none;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #000000;
+    color: #F5F5F5;
+    font-family: 'Arimo', serif;
+}
+
+.filter-menu label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.filter-menu input,
+.filter-menu select {
+    width: 100%;
+    padding: 6px;
+    margin-top: 2px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* Container principal */
+.admin-backoffice {
+    display: flex;
+    min-height: 60vh;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    font-family: 'Arimo', serif;
+}
+
+/* Sidebar */
+.admin-sidebar {
+    width: 200px;
+    background-color: #1A1A1A;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 8px;
+}
+
+.admin-sidebar .admin-btn {
+    background-color: #0E0E0E;
+    color: #F5F5F5;
+    border: none;
+    padding: 10px 15px;
+    text-align: left;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.admin-sidebar .admin-btn:hover,
+.admin-sidebar .admin-btn.active {
+    background-color: #541826;
+}
+
+/* Contenu principal */
+.admin-content {
+    flex: 1;
+    margin-left: 20px;
+    padding: 20px;
+    background-color: #1A1A1A;
+    border-radius: 8px;
+    min-height: 400px;
+    color: #F5F5F5;
+    font-family: 'Arimo', serif;
+}
+
+/* Tableaux pour les contenus AJAX */
+.admin-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.admin-content th, .admin-content td {
+    border: 1px solid #222;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.admin-content td {
+    font-family: 'Arimo', serif;
+}
+
+.admin-content th {
+    background-color: #541826;
+    color: #F5F5F5;
+    font-family: 'Anton', serif;
+    font-size: 1.2rem;
+}
+
+.admin-content tr:nth-child(even) {
+    background-color: #1A1A1A;
+}
+
+/* Boutons dans le contenu */
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s, transform 0.1s;
+}
+
+/* Boutons Actions */
+.btn-add {
+    display: block;        /* pour qu'il se comporte comme un bloc */
+    margin: 20px auto;     /* marge verticale et centrage horizontal */
+    padding: 10px 20px;
+    background-color: #541826; /* couleur au choix */
+    color: #F5F5F5;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.btn-add:hover {
+    background-color: #9d2137;
+}
+
+.btn-show,
+.btn-suppr,
+.btn-modify {
+    background-color: #541826; 
+    color: #F5F5F5;
+}
+
+.btn-show:hover,
+.btn-suppr:hover,
+.btn-modify:hover {
+    background-color: #9d2137; /* bleu plus foncé */
+    transform: translateY(-1px);
+}
+
+.btn-show:active,
+.btn-suppr:active,
+.btn-modify:active {
+    transform: translateY(0);
+}
+
+
+/* Option pour lien AJAX (pas de reload) */
+.ajax-link-show {
+    display: inline-block;
+}
+
+/* Petite marge entre boutons si plusieurs dans la même cellule */
+td .btn-show {
+    margin-right: 6px;
+}
+
+/* ANIMATIONS JS */
+.animate-block {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease-out;
+}
+
+.animate-block.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* BOUTON RETOUR À LA LISTE */
+.retour-action {
+    margin-bottom: 15px;
+}
+
+.btn-back {
+    background-color: #541826;
+    color: #F5F5F5;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-back:hover {
+    background-color: #9d2137;
+    color: #F5F5F5;
+}
+
+/* CLIENTS */
+/* Header utilisateur */
+.user-header {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    align-items: center;
+}
+
+/* Avatar */
+.user-avatar {
+    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    font-size: 36px;
+    font-weight: bold;
+    color: #F5F5F5;
+    font-family: 'Arimo', serif;
+}
+
+/* Info utilisateur */
+.user-info h4 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    color: #F5F5F5;
+    font-family: 'Anton', serif;
+}
+
+.user-info p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #F5F5F5;
+}
+
+/* Bouton changer rôle */
+.btn-edit {
+    background-color: #9d2137;
+    color: #F5F5F5;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 5px 0;
+    transition: all 0.2s ease;
+}
+
+.btn-edit:hover {
+    background-color: #541826;
+}
+
+/* Liste des MP */
+.user-mps h5,
+.user-mps-played h5 {
+    margin-top: 30px;
+    font-size: 20px;
+    color: #F5F5F5;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 6px;
+}
+
+.user-mps p,
+.user-mps-played p {
+    font-family: 'Arimo', serif;
+    margin-top: 10px;
+    color: #AAAAAA;
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+.user-mps ul,
+.user-mps-played ul {
+    list-style-type: disc;
+    margin: 10px 0 0 20px;
+    padding: 0;
+}
+
+.user-mps li,
+.user-mps-played li {
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #F5F5F5;
+}
+
+.user-mps span,
+.user-mps-played span {
+    color: #F5F5F5;
+    font-size: 14px;
+}
+
+/* AVIS */
+.review-details {
+    background-color: #0E0E0E;
+    border: 1px solid #AAAAAA;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.review-details p {
+    margin: 8px 0;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.review-details strong {
+    display: inline-block;
+    width: 100px; /* aligne les labels */
+    color: #F5F5F5;
+}
+
+/* Actions */
+.review-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.review-actions .btn {
+    padding: 10px 18px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.review-actions .btn-approve {
+    background-color: #1a3a1a;
+    color: #F5F5F5;
+}
+
+.review-actions .btn-approve:hover {
+    background-color: #AAAAAA;
+}
+
+.review-actions .btn-reject {
+    background-color: #9d2137;
+    color: #F5F5F5;
+}
+
+.review-actions .btn-reject:hover {
+    background-color: #541826;
+}
+
+/* MURDER PARTY */
+/* New */
+/* Container général */
+.mp-forms {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 20px;
+    background-color: #000000;
+    border-radius: 12px;
+    color: #F5F5F5;
+    font-family: 'Arimo', serif;
+}
+
+/* Formulaires principaux */
+.mp-main-form, 
+.mp-character-form, 
+.mp-clue-form {
+    background-color: #1A1A1A;
+    color: #F5F5F5;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #AAAAAA;
+}
+
+/* Champs du formulaire */
+.mp-main-form .form-row,
+.mp-character-form .form-row,
+.mp-clue-form .form-row {
+    margin-bottom: 12px;
+}
+
+/* Liste dynamique */
+#characters-list .mp-character-item,
+#clues-list .mp-clue-item {
+    border: 1px solid #AAAAAA;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #1A1A1A;
+    color: #F5F5F5;
+    position: relative;
+}
+
+/* Bouton supprimer dans chaque item */
+.mp-character-item .btn-remove,
+.mp-clue-item .btn-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    background-color: #541826;
+    color: #F5F5F5;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Message "Aucun ..." */
+.empty-message {
+    font-style: italic;
+    color: #AAAAAA;
+    margin-bottom: 10px;
+}
+
+/* Ajout d'un petit style pour les labels et inputs */
+.mp-forms label {
+    font-weight: 500;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #F5F5F5;
+}
+.mp-forms input, 
+.mp-forms textarea, 
+.mp-forms select {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid#AAAAAA;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    font-family: 'Arimo', serif;
+}
+
+.mp-forms textarea {
+    resize: none;
+    overflow-y: auto;
+}
+
+/* Container global pour chaque checkbox */
+.form-group--checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+/* Case à cocher */
+.form-group--checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    margin-top: 15px;
+    accent-color: #9D2137; /* couleur de la coche */
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+/* Label de la checkbox */
+.form-group--checkbox label {
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    color: #AAAAAA;
+    text-transform: none;
+    cursor: pointer;
+    margin-bottom: 0;
+    margin-top: 15px;
+}
+
+/* Lien à l'intérieur du label */
+.form-group--checkbox label a {
+    color: #9D2137;
+    text-decoration: none;
+}
+
+.form-group--checkbox label a:hover {
+    text-decoration: underline;
+}
+
+/* Optionnel : hover sur toute la zone pour mieux cliquer */
+.form-group--checkbox:hover label {
+    color: #F5F5F5;
+}

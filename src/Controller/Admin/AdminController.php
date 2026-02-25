@@ -25,6 +25,7 @@ class AdminController extends AbstractController
         PurchaseRepository $purchaseRepo,
     ): Response {
         return $this->render('admin/dashboard.html.twig', [
+            'user' => $this->getUser(),
             'total_mp' => $mpRepo->count([]),
             'total_users' => $userRepo->count(['isDeleted' => false]),
             'pending_reviews' => $reviewRepo->count(['status' => 'pending']),
@@ -32,4 +33,5 @@ class AdminController extends AbstractController
             'total_revenue' => $purchaseRepo->getTotalRevenue(),
         ]);
     }
+
 }

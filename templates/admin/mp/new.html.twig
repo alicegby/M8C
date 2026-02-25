@@ -1,0 +1,64 @@
+<div class="retour-action">
+    <button class="ajax-btn btn-back" data-url="{{ path('admin_mp_index') }}">
+        Retour à la liste
+    </button>
+</div>
+
+<h3>Créer une Murder Party</h3>
+
+{{ form_start(form, {
+    'attr': {'id': 'murder-party-form'}
+}) }}
+
+<div class="mp-forms">
+
+    <div class="mp-main-form">
+
+        {{ form_row(form.title) }}
+        {{ form_row(form.slug) }}
+        {{ form_row(form.nbPlayers) }}
+        {{ form_row(form.duree) }}
+        {{ form_row(form.synopsis) }}
+        {{ form_row(form.scenario) }}
+        {{ form_row(form.epilogue) }}
+        {{ form_row(form.coverImageUrl) }}
+        {{ form_row(form.price) }}
+
+        <div class="form-group--checkbox">
+            {{ form_widget(form.isFree) }}
+            {{ form_label(form.isFree) }}
+        </div>
+
+        <div class="form-group--checkbox">
+            {{ form_widget(form.isPublished) }}
+            {{ form_label(form.isPublished) }}
+        </div>
+
+        <div class="mp-character-form">
+            <h3>Personnages</h3>
+            <div id="characters-list"
+                 data-prototype="{{ form_widget(form.characters.vars.prototype)|e('html_attr') }}">
+                {% if form.characters|length == 0 %}
+                    <p class="empty-message">Aucun personnage pour l'instant.</p>
+                {% endif %}
+            </div>
+
+            <button type="button"
+                    class="btn btn-add"
+                    id="add-character-btn">
+                Ajouter un personnage
+            </button>
+        </div>
+
+        <div class="mp-submit">
+            <button type="submit"
+                    class="btn btn-add btn-submit">
+                Créer la Murder Party
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+{{ form_end(form) }}

@@ -1,0 +1,71 @@
+<div class="retour-action">
+    <button class="ajax-btn btn-back" data-url="{{ path('admin_user_index') }}">
+        Retour à la liste
+    </button>
+</div>
+<h3>Fiche client</h3>
+
+<div class="user-show-container">
+
+
+    <div class="user-header">
+        <div class="user-avatar">
+            {% if user.avatarUrl %}
+                <img src="{{ user.avatarUrl }}" alt="Avatar de {{ user.prenom }}">
+            {% else %}
+                <div class="avatar-placeholder">
+                    {{ user.prenom|slice(0,1)|upper }}{{ user.nom|slice(0,1)|upper }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="user-info">
+            <h4>{{ user.prenom }} {{ user.nom }}</h4>
+            <p><strong>Email :</strong> {{ user.email }}</p>
+            <p><strong>Rôle :</strong> {{ user.role }}</p>
+
+            {# Bouton pour passer admin/utilisateur #}
+            <form action="{{ path('admin_user_toggle_role', {id: user.id}) }}" method="post" style="display:inline;">
+                <input type="hidden" name="_token" value="{{ csrf_token('toggle_role_' ~ user.id) }}">
+                <button class="btn btn-edit">{{ user.role == 'admin' ? 'Passer utilisateur' : 'Passer admin' }}</button>
+            </form>
+
+            <p><strong>Membre depuis :</strong> {{ user.createdAt|date('d/m/Y') }}</p>
+            <p><strong>Newsletter :</strong> {{ user.newsletter ? 'Oui' : 'Non' }}</p>
+            <p><strong>Email vérifié :</strong> {{ user.isVerified ? 'Oui' : 'Non' }}</p>
+        </div>
+    </div>
+
+    <div class="user-mps">
+        <h5>Murder Parties achetées</h5>
+        {% if user.purchases is empty %}
+            <p>Aucune Murder Party achetée.</p>
+        {% else %}
+            <ul>
+                {% for purchase in user.purchases %}
+                    <li>
+                        {{ purchase.murderParty.title }}
+                        <span>— Achetée le {{ purchase.createdAt|date('d/m/Y') }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="user-mps-played">
+        <h5>Murder Parties jouées</h5>
+        {% set playedMPs = user.userMurderParties|filter(ump => ump.isPlayed()) %}
+        {% if playedMPs is empty %}
+            <p>Aucune Murder Party jouée.</p>
+        {% else %}
+            <ul>
+                {% for ump in playedMPs %}
+                    <li>
+                        {{ ump.murderParty.title }}
+                        <span>— Jouée le {{ ump.playedAt ? ump.playedAt|date('d/m/Y') : 'Date inconnue' }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+</div>

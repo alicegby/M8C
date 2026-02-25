@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin; 
 
 use App\Entity\Review;
 use App\Repository\ReviewRepository;
@@ -18,41 +18,43 @@ class ReviewAdminController extends AbstractController
     #[Route('', name: 'admin_review_index')]
     public function index(ReviewRepository $repo): Response
     {
-        return $this->render('admin/review/index.html.twig', [
+        return $this->render('admin/avis/index.html.twig', [
             'pending' => $repo->findBy(['status' => 'pending'], ['createdAt' => 'DESC']),
             'approved' => $repo->findBy(['status' => 'approved'], ['createdAt' => 'DESC']),
             'rejected' => $repo->findBy(['status' => 'rejected'], ['createdAt' => 'DESC']),
         ]);
     }
-
-    #[Route('/{id}/approve', name: 'admin_review_approve', methods: ['POST'])]
-    public function approve(Review $review, EntityManagerInterface $em): Response
+    #[Route('/{id}/edit', name: 'admin_review_edit', methods: ['GET','POST'])]
+    public function edit(Review $review, Request $request, EntityManagerInterface $em, ReviewRepository $repo): Response
     {
-        $review->setStatus('approved');
-        $review->setReviewedAt(new \DateTime());
-        $em->flush();
-        $this->addFlash('success', 'Avis approuvé.');
-        return $this->redirectToRoute('admin_review_index');
-    }
+        if ($request->isMethod('POST')) {
+            $action = $request->request->get('action');
 
-    #[Route('/{id}/reject', name: 'admin_review_reject', methods: ['POST'])]
-    public function reject(Review $review, EntityManagerInterface $em): Response
-    {
-        $review->setStatus('rejected');
-        $review->setReviewedAt(new \DateTime());
-        $em->flush();
-        $this->addFlash('success', 'Avis rejeté.');
-        return $this->redirectToRoute('admin_review_index');
-    }
+            if ($action === 'approve') {
+                $review->setStatus('approved');
+            } elseif ($action === 'reject') {
+                $review->setStatus('rejected');
+            }
 
-    #[Route('/{id}/delete', name: 'admin_review_delete', methods: ['POST'])]
-    public function delete(Review $review, Request $request, EntityManagerInterface $em): Response
-    {
-        if ($this->isCsrfTokenValid('delete_review_' . $review->getId(), $request->request->get('_token'))) {
-            $em->remove($review);
+            $review->setReviewedAt(new \DateTime());
             $em->flush();
-            $this->addFlash('success', 'Avis supprimé.');
+
+            // Si c'est une requête AJAX, on renvoie directement le HTML de la liste
+            if ($request->isXmlHttpRequest()) {
+                return $this->render('admin/avis/index.html.twig', [
+                    'pending' => $repo->findBy(['status' => 'pending'], ['createdAt' => 'DESC']),
+                    'approved' => $repo->findBy(['status' => 'approved'], ['createdAt' => 'DESC']),
+                    'rejected' => $repo->findBy(['status' => 'rejected'], ['createdAt' => 'DESC']),
+                ]);
+            }
+
+            // Sinon on fait une redirection classique
+            return $this->redirectToRoute('admin_dashboard');
         }
-        return $this->redirectToRoute('admin_review_index');
+
+        // GET → afficher la page edit
+        return $this->render('admin/avis/edit.html.twig', [
+            'review' => $review,
+        ]);
     }
 }

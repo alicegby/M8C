@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admin — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin/dashboard.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Bonjour {{ user.prenom }}</h2>
+
+<div class="admin-backoffice">
+
+    {# Sidebar avec les boutons fixes #}
+    <div class="admin-sidebar animate-block">
+        <button class="admin-btn" data-url="{{ path('admin_user_index') }}">Clients</button>
+        <button class="admin-btn" data-url="{{ path('admin_review_index') }}">Avis</button>
+        <button class="admin-btn" data-url="{{ path('admin_mp_index') }}">Murder Parties</button>
+        <button class="admin-btn" data-target="pack">Pack</button>
+        <button class="admin-btn" data-target="cp">Code Promo</button>
+        <button class="admin-btn" data-target="stats">Statistiques</button>
+    </div>
+
+    {# Contenu qui se met à jour via AJAX #}
+    <div id="admin-content" class="admin-content animate-block">
+        <p>Sélectionnez un module pour afficher son contenu.</p>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
+    <script src="{{ asset('js/admin.js') }}"></script>
+{% endblock %}

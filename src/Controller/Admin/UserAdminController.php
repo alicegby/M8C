@@ -40,16 +40,16 @@ class UserAdminController extends AbstractController
         return $this->redirectToRoute('admin_user_index');
     }
 
-    #[Route('/{id}/delete', name: 'admin_user_delete', methods: ['POST'])]
-    public function delete(User $user, Request $request, EntityManagerInterface $em): Response
-    {
-        if ($this->isCsrfTokenValid('delete_user_' . $user->getId(), $request->request->get('_token'))) {
-            // Suppression douce
-            $user->setIsDeleted(true);
-            $user->setEmail('deleted_' . $user->getId() . '@deleted.com');
-            $em->flush();
-            $this->addFlash('success', 'Utilisateur supprimé.');
-        }
-        return $this->redirectToRoute('admin_user_index');
-    }
+    // #[Route('/{id}/delete', name: 'admin_user_delete', methods: ['POST'])]
+    // public function delete(User $user, Request $request, EntityManagerInterface $em): Response
+    // {
+    //    if ($this->isCsrfTokenValid('delete_user_' . $user->getId(), $request->request->get('_token'))) {
+    //        // Suppression douce
+    //        $user->setIsDeleted(true);
+    //        $user->setEmail('deleted_' . $user->getId() . '@deleted.com');
+    //        $em->flush();
+   //         $this->addFlash('success', 'Utilisateur supprimé.');
+    //    }
+    //    return $this->redirectToRoute('admin_user_index');
+    //}
 }

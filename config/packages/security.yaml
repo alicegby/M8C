@@ -29,5 +29,5 @@ security:
                 target: app_home
 
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_ADMIN } 
         - { path: ^/mon-compte, roles: ROLE_USER }

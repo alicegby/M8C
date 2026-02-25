@@ -2,12 +2,12 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\MurderParty;
 use App\Entity\Character;
 use App\Entity\Clue;
-use App\Entity\MurderParty;
+use App\Form\MurderPartyType;
 use App\Form\CharacterType;
 use App\Form\ClueType;
-use App\Form\MurderPartyType;
 use App\Repository\MurderPartyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,41 +15,112 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[Route('/admin/murder-parties')]
 #[IsGranted('ROLE_ADMIN')]
 class MurderPartyAdminController extends AbstractController
 {
     #[Route('', name: 'admin_mp_index')]
-    public function index(MurderPartyRepository $repo): Response
+    public function index(MurderPartyRepository $repo, Request $request): Response
     {
-        return $this->render('admin/murder_party/index.html.twig', [
-            'murder_parties' => $repo->findBy([], ['createdAt' => 'DESC']),
+        $qb = $repo->createQueryBuilder('mp');
+
+        $keyword = $request->query->get('keyword', '');
+        $minPlayers = $request->query->get('minPlayers', '');
+        $maxPlayers = $request->query->get('maxPlayers', '');
+        $minDuration = $request->query->get('minDuration', '');
+        $maxDuration = $request->query->get('maxDuration', '');
+
+        if ($keyword) {
+            $qb->andWhere('mp.title LIKE :keyword OR mp.synopsis LIKE :keyword')
+               ->setParameter('keyword', "%$keyword%");
+        }
+        if ($minPlayers) $qb->andWhere('mp.nbPlayers >= :minPlayers')->setParameter('minPlayers', $minPlayers);
+        if ($maxPlayers) $qb->andWhere('mp.nbPlayers <= :maxPlayers')->setParameter('maxPlayers', $maxPlayers);
+        if ($minDuration) $qb->andWhere('mp.duree >= :minDuration')->setParameter('minDuration', $minDuration);
+        if ($maxDuration) $qb->andWhere('mp.duree <= :maxDuration')->setParameter('maxDuration', $maxDuration);
+
+        $murderParties = $qb->orderBy('mp.createdAt', 'DESC')->getQuery()->getResult();
+
+        return $this->render('admin/mp/index.html.twig', [
+            'murder_parties' => $murderParties,
+            'filters' => compact('keyword','minPlayers','maxPlayers','minDuration','maxDuration'),
         ]);
     }
 
-    #[Route('/new', name: 'admin_mp_new')]
+    #[Route('/new', name: 'admin_mp_new', methods: ['GET','POST'])]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $mp = new MurderParty();
         $form = $this->createForm(MurderPartyType::class, $mp);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($mp);
-            $em->flush();
-            $this->addFlash('success', 'Murder Party créée avec succès.');
-            return $this->redirectToRoute('admin_mp_edit', ['id' => $mp->getId()]);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                /** @var UploadedFile $coverFile */
+                $coverFile = $form->get('coverImageUrl')->getData();
+
+                if ($coverFile) {
+                    $originalFilename = pathinfo($coverFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = transliterator_transliterate(
+                        'Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()',
+                        $originalFilename
+                    );
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$coverFile->guessExtension();
+
+                    try {
+                        $coverFile->move($this->getParameter('covers_directory'), $newFilename);
+                        $mp->setCoverImageUrl($newFilename);
+                    } catch (FileException $e) {
+                        $this->addFlash('error', 'Impossible de sauvegarder l’image.');
+                    }
+                }
+
+                $em->persist($mp);
+                $em->flush();
+                $this->addFlash('success', 'Murder Party créée !');
+
+                // --- Si AJAX, renvoyer JSON avec URL de redirection ---
+                if ($request->isXmlHttpRequest()) {
+                    return $this->json([
+                        'success' => true,
+                        'redirect' => $this->generateUrl('admin_mp_index'),
+                    ]);
+                }
+
+                // --- Sinon redirection normale ---
+                return $this->redirectToRoute('admin_mp_index');
+            }
+
+            // Formulaire soumis mais invalide => renvoyer HTML partiel si AJAX
+            if ($request->isXmlHttpRequest()) {
+                $characterForm = $this->createForm(CharacterType::class, new Character());
+
+                return $this->render('admin/mp/new.html.twig', [
+                    'form' => $form->createView(),
+                    'character_form' => $characterForm->createView(),
+                    'mp' => $mp,
+                    'title' => 'Nouvelle Murder Party',
+                    'isNew' => true,
+                ]);
+            }
         }
 
-        return $this->render('admin/murder_party/form.html.twig', [
-            'form' => $form,
+        // Formulaire initial (GET)
+        $characterForm = $this->createForm(CharacterType::class, new Character());
+
+        return $this->render('admin/mp/new.html.twig', [
+            'form' => $form->createView(),
+            'character_form' => $characterForm->createView(),
             'mp' => $mp,
             'title' => 'Nouvelle Murder Party',
+            'isNew' => true,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'admin_mp_edit')]
+    #[Route('/{id}/edit', name: 'admin_mp_edit', methods: ['GET','POST'])]
     public function edit(MurderParty $mp, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(MurderPartyType::class, $mp);
@@ -62,35 +133,17 @@ class MurderPartyAdminController extends AbstractController
         }
 
         // Formulaire ajout personnage
-        $character = new Character();
-        $characterForm = $this->createForm(CharacterType::class, $character);
+        $characterForm = $this->createForm(CharacterType::class, new Character());
         $characterForm->handleRequest($request);
 
-        if ($characterForm->isSubmitted() && $characterForm->isValid()) {
-            $character->setMurderParty($mp);
-            $em->persist($character);
-            $em->flush();
-            $this->addFlash('success', 'Personnage ajouté.');
-            return $this->redirectToRoute('admin_mp_edit', ['id' => $mp->getId()]);
-        }
-
         // Formulaire ajout indice
-        $clue = new Clue();
-        $clueForm = $this->createForm(ClueType::class, $clue, ['murder_party' => $mp]);
+        $clueForm = $this->createForm(ClueType::class, new Clue(), ['murder_party' => $mp]);
         $clueForm->handleRequest($request);
 
-        if ($clueForm->isSubmitted() && $clueForm->isValid()) {
-            $clue->setMurderParty($mp);
-            $em->persist($clue);
-            $em->flush();
-            $this->addFlash('success', 'Indice ajouté.');
-            return $this->redirectToRoute('admin_mp_edit', ['id' => $mp->getId()]);
-        }
-
-        return $this->render('admin/murder_party/form.html.twig', [
-            'form' => $form,
-            'character_form' => $characterForm,
-            'clue_form' => $clueForm,
+        return $this->render('admin/mp/edit.html.twig', [
+            'form' => $form->createView(),
+            'character_form' => $characterForm->createView(),
+            'clue_form' => $clueForm->createView(),
             'mp' => $mp,
             'title' => 'Modifier : ' . $mp->getTitle(),
         ]);

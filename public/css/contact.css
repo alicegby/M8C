@@ -147,8 +147,7 @@ button.btn-primary:hover {
 @media (max-width: 768px) {
     .contact-container {
         padding: 20px;
-        margin: 40px 15px;
-        min-height: unset;
+        padding: 40px 15px;
     }
 
     button.btn-primary {

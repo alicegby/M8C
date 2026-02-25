@@ -3,7 +3,8 @@ const animateBlocks = document.querySelectorAll('.animate-block');
 
 // Intersection Observer options
 const options = {
-    threshold: 0.2 // 20% de visibilité pour déclencher l'animation
+    threshold: 0.1, // 20% de visibilité pour déclencher l'animation
+    rootMargin: '0px 0px -50px 0px'
 };
 
 // Callback de l'observer
@@ -20,3 +21,9 @@ const observer = new IntersectionObserver((entries, observer) => {
 animateBlocks.forEach(block => {
     observer.observe(block);
 });
+
+setTimeout(() => {
+    animateBlocks.forEach(block => {
+        block.classList.add('active');
+    });
+}, 1000);

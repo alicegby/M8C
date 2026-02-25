@@ -8,7 +8,7 @@
 body {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100dvh;
     background-color: #000000;
     margin: 0;
 }
@@ -17,6 +17,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 0;
 }
 
 .site-footer {
@@ -125,6 +126,7 @@ body {
 .cookie-banner {
     position: fixed;
     bottom: 50px;
+    bottom: max(50px, env(safe-area-inset-bottom));
     left: 20px;
     max-width: 350px;
     background: #1C1C1C;

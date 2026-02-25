@@ -175,6 +175,25 @@ section {
     transform: scale(1.05); 
 }
 
+.mp-surmesure {
+    margin-top: 20px;
+    font-family: 'Arimo', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: #AAAAAA;
+}
+
+.mp-surmesure a {
+    color: #F5F5F5;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.mp-surmesure a:hover {
+    color: #9D2137;
+    transform: scale(1.05); 
+}
+
 /* TÉLÉCHARGEMENT */
 .telechargement {
     background-color: #1A1A1A;

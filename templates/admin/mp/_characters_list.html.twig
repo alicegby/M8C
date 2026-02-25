@@ -1,0 +1,7 @@
+<ul>
+{% for char in mp.characters %}
+    <li>{{ char.prenom }} {{ char.nom ?? '' }}</li>
+{% else %}
+    <li>Aucun personnage pour l'instant</li>
+{% endfor %}
+</ul>

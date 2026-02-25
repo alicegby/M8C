@@ -1,0 +1,36 @@
+<div class="retour-action">
+    <button class="ajax-btn btn-back" data-url="{{ path('admin_review_index') }}">
+        Retour à la liste
+    </button>
+</div>
+<h3>Détail de l'avis</h3>
+
+<div class="review-details">
+    <p><strong>Utilisateur :</strong>
+        {% if review.user %}
+            {{ review.user.prenom }} {{ review.user.nom }}
+        {% else %}
+            {{ review.authorPrenom }} {{ review.authorNom }}
+        {% endif %}
+    </p>
+    <p><strong>Email :</strong> {{ review.authorEmail }}</p>
+    <p><strong>Date :</strong> {{ review.createdAt|date('d/m/Y H:i') }}</p>
+    <p><strong>Statut :</strong> {{ review.status }}</p>
+    <p><strong>Contenu :</strong> {{ review.content }}</p>
+</div>
+
+<div class="review-actions">
+    {% if review.status != 'approved' %}
+        <form action="{{ path('admin_review_edit', {id: review.id}) }}" method="post" class="ajax-form">
+            <input type="hidden" name="action" value="approve">
+            <button class="btn btn-approve">Accepter</button>
+        </form>
+    {% endif %}
+
+    {% if review.status != 'rejected' %}
+        <form action="{{ path('admin_review_edit', {id: review.id}) }}" method="post" class="ajax-form">
+            <input type="hidden" name="action" value="reject">
+            <button class="btn btn-reject">Rejeter</button>
+        </form>
+    {% endif %}
+</div>

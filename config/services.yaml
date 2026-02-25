@@ -1,5 +1,6 @@
 parameters:
     avatars_directory: '%kernel.project_dir%/public/uploads/avatars'
+    covers_directory: '%kernel.project_dir%/public/uploads/covers'
 
 services:
     _defaults:

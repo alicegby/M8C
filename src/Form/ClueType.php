@@ -20,9 +20,13 @@ class ClueType extends AbstractType
         $murderParty = $options['murder_party'];
 
         $builder
-            ->add('content', TextareaType::class, ['label' => 'Contenu de l\'indice', 'attr' => ['rows' => 4]])
+            ->add('content', TextareaType::class, ['label' => 'Contenu de l\'indice', 'attr' => ['rows' => 5]])
             ->add('triggerMinutes', IntegerType::class, ['label' => 'Déclenchement (minutes)'])
-            ->add('isPublic', CheckboxType::class, ['label' => 'Indice public', 'required' => false])
+            ->add('isPublic', CheckboxType::class, [
+                'label' => 'Public',
+                'required' => false,
+                'row_attr' => ['class' => 'form-group--checkbox'], 
+            ])
             ->add('character', EntityType::class, [
                 'label' => 'Personnage destinataire (si individuel)',
                 'class' => Character::class,

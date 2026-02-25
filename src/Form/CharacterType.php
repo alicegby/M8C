@@ -20,11 +20,15 @@ class CharacterType extends AbstractType
             ->add('nom', TextType::class, ['label' => 'Nom', 'required' => false])
             ->add('age', IntegerType::class, ['label' => 'Âge', 'required' => false])
             ->add('job', TextType::class, ['label' => 'Métier', 'required' => false])
-            ->add('histoire', TextareaType::class, ['label' => 'Histoire', 'attr' => ['rows' => 50]])
-            ->add('mobile', TextareaType::class, ['label' => 'Mobile', 'attr' => ['rows' => 20]])
-            ->add('alibi', TextareaType::class, ['label' => 'Alibi / Lors du Crime', 'attr' => ['rows' => 50]])
-            ->add('extraInfo', TextareaType::class, ['label' => 'Infos supplémentaires', 'required' => false, 'attr' => ['rows' => 20]])
-            ->add('isGuilty', CheckboxType::class, ['label' => 'Coupable', 'required' => false]);
+            ->add('histoire', TextareaType::class, ['label' => 'Histoire', 'attr' => ['rows' => 10]])
+            ->add('mobile', TextareaType::class, ['label' => 'Mobile', 'attr' => ['rows' => 10]])
+            ->add('alibi', TextareaType::class, ['label' => 'Alibi / Lors du Crime', 'attr' => ['rows' => 10]])
+            ->add('extraInfo', TextareaType::class, ['label' => 'Infos supplémentaires', 'required' => false, 'attr' => ['rows' => 10]])
+            ->add('isGuilty', CheckboxType::class, [
+                'label' => 'Coupable',
+                'required' => false,
+                'row_attr' => ['class' => 'form-group--checkbox'], // <-- ici
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
