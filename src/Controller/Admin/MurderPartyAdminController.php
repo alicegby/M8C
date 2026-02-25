@@ -50,73 +50,51 @@ class MurderPartyAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'admin_mp_new', methods: ['GET','POST'])]
+    #[Route('/new', name: 'admin_mp_new', methods:['GET','POST'])]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $mp = new MurderParty();
         $form = $this->createForm(MurderPartyType::class, $mp);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                /** @var UploadedFile $coverFile */
-                $coverFile = $form->get('coverImageUrl')->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
 
-                if ($coverFile) {
-                    $originalFilename = pathinfo($coverFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = transliterator_transliterate(
-                        'Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()',
-                        $originalFilename
-                    );
-                    $newFilename = $safeFilename.'-'.uniqid().'.'.$coverFile->guessExtension();
+            /** @var UploadedFile $coverFile */
+            $coverFile = $form->get('coverImageUrl')->getData();
 
-                    try {
-                        $coverFile->move($this->getParameter('covers_directory'), $newFilename);
-                        $mp->setCoverImageUrl($newFilename);
-                    } catch (FileException $e) {
-                        $this->addFlash('error', 'Impossible de sauvegarder l’image.');
-                    }
+            if ($coverFile) {
+                $originalFilename = pathinfo($coverFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = transliterator_transliterate(
+                    'Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()',
+                    $originalFilename
+                );
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$coverFile->guessExtension();
+
+                try {
+                    $coverFile->move($this->getParameter('covers_directory'), $newFilename);
+                    $mp->setCoverImageUrl($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Impossible de sauvegarder l’image.');
                 }
-
-                $em->persist($mp);
-                $em->flush();
-                $this->addFlash('success', 'Murder Party créée !');
-
-                // --- Si AJAX, renvoyer JSON avec URL de redirection ---
-                if ($request->isXmlHttpRequest()) {
-                    return $this->json([
-                        'success' => true,
-                        'redirect' => $this->generateUrl('admin_mp_index'),
-                    ]);
-                }
-
-                // --- Sinon redirection normale ---
-                return $this->redirectToRoute('admin_mp_index');
             }
 
-            // Formulaire soumis mais invalide => renvoyer HTML partiel si AJAX
+            $em->persist($mp);
+            $em->flush();
+
+            $this->addFlash('success', 'Murder Party créée !');
+            $redirectUrl = $this->generateUrl('admin_dashboard');
+
             if ($request->isXmlHttpRequest()) {
-                $characterForm = $this->createForm(CharacterType::class, new Character());
-
-                return $this->render('admin/mp/new.html.twig', [
-                    'form' => $form->createView(),
-                    'character_form' => $characterForm->createView(),
-                    'mp' => $mp,
-                    'title' => 'Nouvelle Murder Party',
-                    'isNew' => true,
-                ]);
+                return $this->json(['success'=>true, 'redirect'=>$redirectUrl]);
             }
+
+            return $this->redirect($redirectUrl);
         }
 
-        // Formulaire initial (GET)
-        $characterForm = $this->createForm(CharacterType::class, new Character());
-
+        // --- GET ou formulaire invalide ---
         return $this->render('admin/mp/new.html.twig', [
             'form' => $form->createView(),
-            'character_form' => $characterForm->createView(),
             'mp' => $mp,
-            'title' => 'Nouvelle Murder Party',
-            'isNew' => true,
         ]);
     }
 
