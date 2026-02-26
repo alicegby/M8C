@@ -103,7 +103,7 @@ button.btn-primary {
     border-radius: 10px;
     font-weight: bold;
     text-decoration: none;
-    cursor: pointer;
+    cursor: pointer; 
     transition: all 0.3s ease;
     margin-top: 10px;
 }

@@ -106,7 +106,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        return [$this->role === 'admin' ? 'ROLE_ADMIN' : 'ROLE_USER'];
+        $roles = ['ROLE_USER']; // tous les utilisateurs ont ROLE_USER
+
+        if ($this->role === 'admin') {
+            $roles[] = 'ROLE_ADMIN';
+        }
+
+        return array_unique($roles);
     }
 
     public function getPassword(): ?string { return $this->passwordHash; }

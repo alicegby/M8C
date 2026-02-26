@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques — Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin/stats.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block body %}
+<h2>Statistiques Globales</h2>
+
+<div class="stats-page">
+
+    <div class="stats-filters">
+        <div class="filter-group">
+            <label for="mp-dropdown">Murder Party</label>
+            <div class="mp-select-wrapper">
+                <select id="mp-dropdown">
+                    <!-- Options chargées dynamiquement -->
+                </select>
+                <div id="mp-tags" class="mp-tags"></div>
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <label>Période</label>
+            <div class="date-inputs">
+                <input type="text" id="period-start" placeholder="Date de début">
+                <span class="date-separator">→</span>
+                <input type="text" id="period-end" placeholder="Date de fin">
+            </div>
+        </div>
+
+        <button id="apply-filters" class="btn-filter">Appliquer</button>
+    </div>
+
+    <div class="stats-cards">
+
+        <div class="stats-card">
+            <div class="stats-card-header">CA et ventes par MP</div>
+            <div class="stats-card-body">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-card-header">Coupable trouvé par MP</div>
+            <div class="stats-card-body">
+                <canvas id="successRateChart"></canvas>
+            </div>
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-card-header">Achats avec codes promo vs prix plein</div>
+            <div class="stats-card-body">
+                <canvas id="promoVsFullPriceChart"></canvas>
+            </div>
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-card-header">Panier moyen</div>
+            <div class="stats-card-body">
+                <canvas id="avgBasketChart"></canvas>
+            </div>
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-card-header">Répartition des méthodes de paiement</div>
+            <div class="stats-card-body">
+                <canvas id="paymentMethodsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-card-header">Taux de retour joueurs</div>
+            <div class="stats-card-body">
+                <canvas id="returningPlayersChart"></canvas>
+            </div>
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-card-header">MP notées vs vendues</div>
+            <div class="stats-card-body">
+                <canvas id="ratedVsSoldChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="{{ asset('js/stats.js') }}"></script>
+{% endblock %}

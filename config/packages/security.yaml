@@ -20,9 +20,7 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
-                # Redirection gérée dans SecurityController selon le rôle
-                default_target_path: app_account
-                always_use_default_target_path: false
+                success_handler: App\Security\LoginSuccessHandler
                 enable_csrf: true
             logout:
                 path: app_logout

@@ -21,6 +21,28 @@ h3 {
     border-bottom: 2px solid #AAAAAA;
 }
 
+/* --- Bouton Se déconnecter --- */
+.logout-btn {
+    display: block;       
+    width: 200px;             
+    margin: 10px auto 0 auto;  
+    margin-bottom: 30px;
+    padding: 10px 0;
+    text-align: center;
+    background-color: #541826;
+    font-family: 'Arimo', serif;
+    color: #F5F5F5;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;     
+    transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+    background-color: #9D2137;
+}
+
+
 /* Bouton filtre */
 .filter-btn {
     background: none;
@@ -91,6 +113,24 @@ h3 {
 .admin-sidebar .admin-btn {
     background-color: #0E0E0E;
     color: #F5F5F5;
+    border: none;
+    padding: 10px 15px;
+    text-align: left;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.admin-sidebar .admin-btn:hover,
+.admin-sidebar .admin-btn.active {
+    background-color: #541826;
+}
+
+.admin-sidebar .admin-btn {
+    background-color: #0E0E0E;
+    color: #F5F5F5;
+    text-decoration: none;
     border: none;
     padding: 10px 15px;
     text-align: left;
@@ -555,3 +595,4 @@ td .btn-show {
 .form-group--checkbox:hover label {
     color: #F5F5F5;
 }
+
