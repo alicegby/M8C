@@ -38,14 +38,14 @@
     <div class="stats-cards">
 
         <div class="stats-card">
-            <div class="stats-card-header">CA et ventes par MP</div>
+            <div class="stats-card-header">Chiffre d'Affaires et ventes par Murder Party</div>
             <div class="stats-card-body">
                 <canvas id="salesChart"></canvas>
             </div>
         </div>
 
         <div class="stats-card">
-            <div class="stats-card-header">Coupable trouvé par MP</div>
+            <div class="stats-card-header">Coupable trouvé par Murder Party</div>
             <div class="stats-card-body">
                 <canvas id="successRateChart"></canvas>
             </div>
@@ -80,7 +80,7 @@
         </div>
 
         <div class="stats-card">
-            <div class="stats-card-header">MP notées vs vendues</div>
+            <div class="stats-card-header">Murder Party notées vs vendues</div>
             <div class="stats-card-body">
                 <canvas id="ratedVsSoldChart"></canvas>
             </div>
@@ -92,5 +92,6 @@
 
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('js/stats.js') }}"></script>
 {% endblock %}
