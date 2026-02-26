@@ -596,3 +596,106 @@ td .btn-show {
     color: #F5F5F5;
 }
 
+/* MEDIA QUERY */
+/* MEDIA QUERY TABLETTE ET MOBILE */
+@media (max-width: 1024px) {
+
+    /* Sidebar en haut */
+    .admin-backoffice {
+        flex-direction: column;
+        margin: 10px;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+        padding: 10px;
+        order: -1; 
+        border-radius: 8px;
+    }
+
+    .admin-sidebar .admin-btn {
+        flex: 1 1 auto; 
+        text-align: center;
+        padding: 8px 5px;
+        font-size: 0.9rem;
+    }
+
+    .admin-content {
+        margin-left: 0;
+        padding: 15px;
+        min-height: auto;
+    }
+
+    /* --- TABLES : MASQUER LES COLONNES INUTILES --- */
+    /* Fonction DRY : masquer toutes les colonnes par défaut */
+    table thead th,
+    table tbody td {
+        display: none;
+    }
+
+    /* USERS : garder Prénom(1), Nom(2), Actions(6) */
+    #user-table thead th:nth-child(1),
+    #user-table thead th:nth-child(2),
+    #user-table thead th:nth-child(6),
+    #user-table tbody td:nth-child(1),
+    #user-table tbody td:nth-child(2),
+    #user-table tbody td:nth-child(6) {
+        display: table-cell;
+    }
+
+    /* AVIS : garder Utilisateur(1), Statut(3), Actions(5) */
+    #review-table thead th:nth-child(1),
+    #review-table thead th:nth-child(3),
+    #review-table thead th:nth-child(5),
+    #review-table tbody td:nth-child(1),
+    #review-table tbody td:nth-child(3),
+    #review-table tbody td:nth-child(5) {
+        display: table-cell;
+    }
+
+    /* MP : garder Titre(1) et Actions(5) */
+    #mp-table thead th:nth-child(1),
+    #mp-table thead th:nth-child(5),
+    #mp-table tbody td:nth-child(1),
+    #mp-table tbody td:nth-child(5) {
+        display: table-cell;
+    }
+
+    /* PACK : garder Nom(1), Actif(4), Actions(6) */
+    #pack-table thead th:nth-child(1),
+    #pack-table thead th:nth-child(4),
+    #pack-table thead th:nth-child(6),
+    #pack-table tbody td:nth-child(1),
+    #pack-table tbody td:nth-child(4),
+    #pack-table tbody td:nth-child(6) {
+        display: table-cell;
+    }
+
+    /* PROMO : garder Code(1), Remise(2), Actions(6) */
+    #promo-table thead th:nth-child(1),
+    #promo-table thead th:nth-child(2),
+    #promo-table thead th:nth-child(6),
+    #promo-table tbody td:nth-child(1),
+    #promo-table tbody td:nth-child(2),
+    #promo-table tbody td:nth-child(6) {
+        display: table-cell;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .admin-sidebar {
+        flex-direction: column;
+        order: -1;
+    }
+
+    .admin-sidebar .admin-btn {
+        flex: 1 1 100%;
+        font-size: 0.85rem;
+        padding: 6px 5px;
+    }
+}
