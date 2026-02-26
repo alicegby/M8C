@@ -27,7 +27,15 @@ class PromoCodeType extends AbstractType
             ->add('validFrom', DateTimeType::class, ['label' => 'Valide à partir du', 'required' => false, 'widget' => 'single_text'])
             ->add('validUntil', DateTimeType::class, ['label' => 'Valide jusqu\'au', 'required' => false, 'widget' => 'single_text'])
             ->add('maxUses', IntegerType::class, ['label' => 'Nombre max d\'utilisations', 'required' => false])
-            ->add('isActive', CheckboxType::class, ['label' => 'Actif', 'required' => false]);
+            ->add('isActive', CheckboxType::class, ['label' => 'Actif', 'required' => false])
+            ->add('applicableTo', ChoiceType::class, [
+                'label' => 'Applicable sur',
+                'choices' => [
+                    'Murder Parties uniquement' => 'mp',
+                    'Packs uniquement' => 'pack',
+                    'Les deux' => 'both',
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

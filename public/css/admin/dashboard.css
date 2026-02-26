@@ -36,9 +36,12 @@ h3 {
     height: 30px;
 }
 
+.hidden {
+    display: none;
+}
+
 /* Menu de filtre */
 .filter-menu { 
-    display: none;
     margin: 10px 0;
     padding: 10px;
     border: 1px solid #ccc;
@@ -287,6 +290,19 @@ td .btn-show {
     margin: 5px 0;
     font-size: 16px;
     color: #F5F5F5;
+}
+
+.user-count {
+    font-family: 'Arimo', serif;
+    color: #AAAAAA;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    text-align: right;
+}
+
+.user-count span {
+    color: #F5F5F5;
+    font-weight: bold;
 }
 
 /* Bouton changer rôle */

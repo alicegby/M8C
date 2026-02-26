@@ -41,6 +41,9 @@ class PromoCode
     #[ORM\Column]
     private bool $isActive = false;
 
+    #[ORM\Column(length: 20)]
+    private string $applicableTo = 'both'; // 'mp', 'pack', 'both'
+
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
@@ -77,6 +80,8 @@ class PromoCode
     public function setCurrentUses(int $currentUses): static { $this->currentUses = $currentUses; return $this; }
     public function isActive(): bool { return $this->isActive; }
     public function setIsActive(bool $isActive): static { $this->isActive = $isActive; return $this; }
+    public function getApplicableTo(): string { return $this->applicableTo; }
+    public function setApplicableTo(string $applicableTo): static { $this->applicableTo = $applicableTo; return $this; }
     public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
     public function getUpdatedAt(): \DateTimeInterface { return $this->updatedAt; }
 }

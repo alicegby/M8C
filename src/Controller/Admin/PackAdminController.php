@@ -24,7 +24,7 @@ class PackAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'admin_pack_new')]
+    #[Route('/new', name: 'admin_pack_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $pack = new Pack();
@@ -35,16 +35,24 @@ class PackAdminController extends AbstractController
             $em->persist($pack);
             $em->flush();
             $this->addFlash('success', 'Pack créé avec succès.');
-            return $this->redirectToRoute('admin_pack_index');
+            return $this->redirectToRoute('admin_dashboard');
         }
 
-        return $this->render('admin/pack/form.html.twig', [
-            'form' => $form,
-            'title' => 'Nouveau pack',
+        return $this->render('admin/pack/new.html.twig', [
+            'form' => $form->createView(),
+            'pack' => $pack,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'admin_pack_edit')]
+    #[Route('/{id}/show', name: 'admin_pack_show', methods: ['GET'])]
+    public function show(Pack $pack): Response
+    {
+        return $this->render('admin/pack/show.html.twig', [
+            'pack' => $pack,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'admin_pack_edit', methods: ['GET', 'POST'])]
     public function edit(Pack $pack, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(PackType::class, $pack);
@@ -53,12 +61,12 @@ class PackAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
             $this->addFlash('success', 'Pack mis à jour.');
-            return $this->redirectToRoute('admin_pack_index');
+            return $this->redirectToRoute('admin_dashboard');
         }
 
-        return $this->render('admin/pack/form.html.twig', [
-            'form' => $form,
-            'title' => 'Modifier : ' . $pack->getName(),
+        return $this->render('admin/pack/edit.html.twig', [
+            'form' => $form->createView(),
+            'pack' => $pack,
         ]);
     }
 
@@ -70,6 +78,6 @@ class PackAdminController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'Pack supprimé.');
         }
-        return $this->redirectToRoute('admin_pack_index');
+        return $this->redirectToRoute('admin_dashboard');
     }
 }

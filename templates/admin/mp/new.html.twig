@@ -1,16 +1,22 @@
-<div class="retour-action">
-    <button class="ajax-btn btn-back" data-url="{{ path('admin_mp_index') }}">
-        Retour à la liste
-    </button>
-</div>
+{% extends 'base.html.twig' %}
 
-<h3>Créer une Murder Party</h3>
+{% block title %}Créer une Murder Party — Admin{% endblock %}
 
-{{ form_start(form, {'attr': {'id': 'murder-party-form', 'class':'ajax-form'}}) }}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin/mp.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Créer une Murder Party</h2>
+
+
+{{ form_start(form, {'attr': {'id': 'murder-party-form'}}) }}
 
 <div class="mp-forms">
-
     <div class="mp-main-form">
+        <h3>Murder Party</h3>
 
         {{ form_row(form.title) }}
         {{ form_row(form.slug) }}
@@ -32,31 +38,32 @@
             {{ form_label(form.isPublished) }}
         </div>
 
-        <div class="mp-character-form">
-            <h3>Personnages</h3>
-            <div id="characters-list"
-                 data-prototype="{{ form_widget(form.characters.vars.prototype)|e('html_attr') }}">
-                {% if form.characters|length == 0 %}
-                    <p class="empty-message">Aucun personnage pour l'instant.</p>
-                {% endif %}
-            </div>
+    </div>
 
-            <button type="button"
-                    class="btn btn-add"
-                    id="add-character-btn">
-                Ajouter un personnage
-            </button>
+    <div class="mp-character-form">
+        <h3>Personnages</h3>
+
+        <div id="characters-list"
+             data-prototype="{{ form_widget(form.characters.vars.prototype)|e('html_attr') }}">
+            <p class="empty-message">Aucun personnage ajouté.</p>
         </div>
 
-        <div class="mp-submit">
-            <button type="submit"
-                    class="btn btn-add btn-submit">
-                Créer la Murder Party
-            </button>
-        </div>
+        <button type="button" id="add-character-btn" class="btn btn-add">
+            Ajouter un personnage
+        </button>
+    </div>
 
+    <div class="mp-submit">
+        <button type="submit" class="btn btn-add btn-submit">
+            Créer la Murder Party
+        </button>
     </div>
 
 </div>
 
 {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin.js') }}"></script>
+{% endblock %}

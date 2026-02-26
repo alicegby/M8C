@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ promo.code }} — Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin/promo.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>{{ promo.code }}</h2>
+
+<div class="show-wrapper">
+
+    <div class="modifier-action">
+        <a href="{{ path('admin_promo_edit', {id: promo.id}) }}" class="btn btn-modify">Modifier</a>
+    </div>
+
+    <div class="show-main">
+        <h3>Informations</h3>
+
+        <div class="show-info-grid">
+            <div class="show-info-item">
+                <span class="show-label">Code</span>
+                <span class="show-value promo-code-badge">{{ promo.code }}</span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Remise</span>
+                <span class="show-value">
+                    {% if promo.discountType == 'percentage' %}
+                        {{ promo.discountValue }}%
+                    {% else %}
+                        {{ promo.discountValue }} €
+                    {% endif %}
+                </span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Utilisations</span>
+                <span class="show-value">
+                    {{ promo.currentUses }}{% if promo.maxUses %} / {{ promo.maxUses }}{% else %} / illimité{% endif %}
+                </span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Statut</span>
+                <span class="show-value show-badge {{ promo.isActive ? 'badge-yes' : 'badge-no' }}">
+                    {{ promo.isActive ? 'Actif' : 'Inactif' }}
+                </span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Valide à partir du</span>
+                <span class="show-value">{{ promo.validFrom ? promo.validFrom|date('d/m/Y') : '—' }}</span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Valide jusqu'au</span>
+                <span class="show-value">{{ promo.validUntil ? promo.validUntil|date('d/m/Y') : '—' }}</span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Applicable sur</span>
+                <span class="show-value">
+                    {% if promo.applicableTo == 'mp' %}Murder Parties
+                    {% elseif promo.applicableTo == 'pack' %}Packs
+                    {% else %}Les deux{% endif %}
+                </span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Créé le</span>
+                <span class="show-value">{{ promo.createdAt|date('d/m/Y') }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modifier-action">
+        <a href="{{ path('admin_dashboard') }}" class="btn btn-back">Retour au dashboard</a>
+        <form action="{{ path('admin_promo_toggle', {id: promo.id}) }}" method="POST" style="display:inline;">
+            <input type="hidden" name="_token" value="{{ csrf_token('toggle_promo_' ~ promo.id) }}">
+            <button type="submit" class="btn {{ promo.isActive ? 'btn-suppr' : 'btn-approve' }}">
+                {{ promo.isActive ? 'Désactiver' : 'Activer' }}
+            </button>
+        </form>
+        <form action="{{ path('admin_promo_delete', {id: promo.id}) }}" method="POST" style="display:inline;">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete_promo_' ~ promo.id) }}">
+            <button type="submit" class="btn btn-suppr">Supprimer</button>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin.js') }}"></script>
+{% endblock %}

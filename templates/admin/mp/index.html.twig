@@ -1,6 +1,6 @@
 <h3>
     Liste des Murder Parties
-    <button id="review-filter-toggle" class="filter-btn">
+    <button id="mp-filter-toggle" class="filter-btn">
         <img src="{{ asset('icones/filter_white.png') }}" alt="Filter">
     </button>
 </h3>
@@ -22,6 +22,10 @@
     </label>
 </div>
 
+<p class="user-count">
+    Total : <span id="mp-count">{{ murder_parties|length }}</span> Murder Partie(s)
+</p>
+
 <table class="admin-table">
     <thead>
         <tr>
@@ -40,6 +44,7 @@
                 <td>{{ mp.duree }} min</td>
                 <td>{{ mp.createdAt|date('d/m/Y') }}</td>
                 <td>
+                    <a href="{{ path('admin_mp_show', {id: mp.id}) }}" class="btn btn-show">Voir</a>
                     <a href="{{ path('admin_mp_edit', {id: mp.id}) }}" class="btn btn-modify">Modifier</a>
                     <form action="{{ path('admin_mp_delete', {id: mp.id}) }}" method="POST" style="display:inline;">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete_mp_' ~ mp.id) }}">

@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ mp.title }} — Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin/mp.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>{{ mp.title }}</h2>
+
+<div class="show-wrapper">
+
+    {# Infos principales #}
+    <div class="show-main">
+        <h3>Informations</h3>
+
+        <div class="show-info-grid">
+            <div class="show-info-item">
+                <span class="show-label">Titre</span>
+                <span class="show-value">{{ mp.title }}</span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Slug</span>
+                <span class="show-value">{{ mp.slug }}</span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Durée</span>
+                <span class="show-value">{{ mp.duree }} minutes</span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Joueurs</span>
+                <span class="show-value">{{ mp.nbPlayers }}</span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Prix</span>
+                <span class="show-value">{{ mp.isFree ? 'Gratuit' : mp.price ~ ' €' }}</span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Publiée</span>
+                <span class="show-value show-badge {{ mp.isPublished ? 'badge-yes' : 'badge-no' }}">
+                    {{ mp.isPublished ? 'Oui' : 'Non' }}
+                </span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Créée le</span>
+                <span class="show-value">{{ mp.createdAt|date('d/m/Y') }}</span>
+            </div>
+        </div>
+
+        {% if mp.coverImageUrl %}
+            <div class="show-cover">
+                <img src="{{ asset('uploads/covers/' ~ mp.coverImageUrl) }}" alt="Cover {{ mp.title }}">
+            </div>
+        {% endif %}
+
+        <div class="show-text-section">
+            <h4>Synopsis</h4>
+            <p>{{ mp.synopsis }}</p>
+        </div>
+
+        <div class="show-text-section">
+            <h4>Scénario</h4>
+            <p>{{ mp.scenario }}</p>
+        </div>
+
+        <div class="show-text-section">
+            <h4>Épilogue</h4>
+            <p>{{ mp.epilogue }}</p>
+        </div>
+    </div>
+
+    {# Personnages #}
+    <div class="show-section">
+        <h3>Personnages ({{ mp.characters|length }})</h3>
+
+        {% if mp.characters|length == 0 %}
+            <p class="empty-message">Aucun personnage.</p>
+        {% else %}
+            <div class="show-cards-grid">
+                {% for character in mp.characters %}
+                    <div class="show-card">
+                        <div class="show-card-header {{ character.isGuilty ? 'card-guilty' : '' }}">
+                            <h4>{{ character.prenom }} {{ character.nom }}</h4>
+                            {% if character.isGuilty %}
+                                <span class="guilty-badge">⚠ Coupable</span>
+                            {% endif %}
+                        </div>
+                        <div class="show-card-body">
+                            <p><span class="show-label">Âge</span> {{ character.age ?? '—' }}</p>
+                            <p><span class="show-label">Métier</span> {{ character.job ?? '—' }}</p>
+                            <div class="show-card-section">
+                                <h5>Histoire</h5>
+                                <p>{{ character.histoire }}</p>
+                            </div>
+                            <div class="show-card-section">
+                                <h5>Mobile</h5>
+                                <p>{{ character.mobile }}</p>
+                            </div>
+                            <div class="show-card-section">
+                                <h5>Alibi</h5>
+                                <p>{{ character.alibi }}</p>
+                            </div>
+                            {% if character.extraInfo %}
+                                <div class="show-card-section">
+                                    <h5>Infos supplémentaires</h5>
+                                    <p>{{ character.extraInfo }}</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {# Indices #}
+    <div class="show-section">
+        <h3>Indices ({{ mp.clues|length }})</h3>
+
+        {% if mp.clues|length == 0 %}
+            <p class="empty-message">Aucun indice.</p>
+        {% else %}
+            <div class="show-cards-grid">
+                {% for clue in mp.clues %}
+                    <div class="show-card">
+                        <div class="show-card-header">
+                            <h4>Indice {{ loop.index }}</h4>
+                            <span class="show-badge {{ clue.isPublic ? 'badge-yes' : 'badge-no' }}">
+                                {{ clue.isPublic ? 'Public' : 'Individuel' }}
+                            </span>
+                        </div>
+                        <div class="show-card-body">
+                            <p><span class="show-label">Déclenchement</span> {{ clue.triggerMinutes }} min</p>
+                            {% if clue.character %}
+                                <p><span class="show-label">Destinataire</span> {{ clue.character.prenom }} {{ clue.character.nom }}</p>
+                            {% endif %}
+                            <div class="show-card-section">
+                                <h5>Contenu</h5>
+                                <p>{{ clue.content }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="modifier-action">
+        <a href="{{ path('admin_mp_edit', {id: mp.id}) }}" class="btn btn-modify">Modifier</a>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin.js') }}"></script>
+{% endblock %}

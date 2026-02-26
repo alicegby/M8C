@@ -11,6 +11,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\{NotBlank, Positive, File};
 use App\Form\CharacterType;
 use App\Form\ClueType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class MurderPartyType extends AbstractType
 {
@@ -52,7 +54,28 @@ class MurderPartyType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
                 'label' => false,
+                'entry_options' => [
+                    'murder_party' => null, // sera écrasé par l'event
+                ],
             ]);
+
+            $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+                $mp = $event->getData();
+                $form = $event->getForm();
+
+                if ($mp && $mp->getId()) {
+                    $form->add('clues', CollectionType::class, [
+                        'entry_type' => ClueType::class,
+                        'allow_add' => true,
+                        'allow_delete' => true,
+                        'by_reference' => false,
+                        'label' => false,
+                        'entry_options' => [
+                            'murder_party' => $mp,
+                        ],
+                    ]);
+                }
+            });
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -1,0 +1,103 @@
+<h3>
+    Liste des Codes Promo
+    <button id="promo-filter-toggle" class="filter-btn">
+        <img src="{{ asset('icones/filter_white.png') }}" alt="Filter">
+    </button>
+</h3>
+
+<button id="create-promo-btn" class="btn-add" data-url="{{ path('admin_promo_new') }}">Créer un code promo</button>
+
+<p class="user-count">
+    Total : <span id="promo-count">{{ promo_codes|length }}</span> code(s) promo
+</p>
+
+<div id="promo-filter-menu" class="filter-menu hidden">
+    <label>
+        Utilisations :
+        <select id="promo-uses-filter">
+            <option value="">Tous</option>
+            <option value="unused">Non utilisés</option>
+            <option value="used">Utilisés</option>
+            <option value="full">Épuisés</option>
+        </select>
+    </label>
+    <label>
+        Validité :
+        <select id="promo-validity-filter">
+            <option value="">Tous</option>
+            <option value="valid">En cours</option>
+            <option value="expired">Expirés</option>
+            <option value="unlimited">Illimités</option>
+        </select>
+    </label>
+    <label>
+        Statut :
+        <select id="promo-active-filter">
+            <option value="">Tous</option>
+            <option value="1">Actifs</option>
+            <option value="0">Inactifs</option>
+        </select>
+    </label>
+</div>
+
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Remise</th>
+            <th>Utilisations</th>
+            <th>Validité</th>
+            <th>Actif</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="promo-table-body">
+        {% for promo in promo_codes %}
+            <tr
+                data-current-uses="{{ promo.currentUses }}"
+                data-max-uses="{{ promo.maxUses ?? '' }}"
+                data-valid-until="{{ promo.validUntil ? promo.validUntil|date('Y-m-d') : '' }}"
+                data-active="{{ promo.isActive ? '1' : '0' }}"
+            >
+                <td><strong>{{ promo.code }}</strong></td>
+                <td>
+                    {% if promo.discountType == 'percentage' %}
+                        {{ promo.discountValue }}%
+                    {% else %}
+                        {{ promo.discountValue }} €
+                    {% endif %}
+                </td>
+                <td>
+                    {{ promo.currentUses }}
+                    {% if promo.maxUses %}/ {{ promo.maxUses }}{% endif %}
+                </td>
+                <td>
+                    {% if promo.validFrom %}{{ promo.validFrom|date('d/m/Y') }}{% else %}—{% endif %}
+                    →
+                    {% if promo.validUntil %}{{ promo.validUntil|date('d/m/Y') }}{% else %}—{% endif %}
+                </td>
+                <td>
+                    <span class="show-badge {{ promo.isActive ? 'badge-yes' : 'badge-no' }}">
+                        {{ promo.isActive ? 'Actif' : 'Inactif' }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{{ path('admin_promo_show', {id: promo.id}) }}" class="btn btn-show">Voir</a>
+                    <a href="{{ path('admin_promo_edit', {id: promo.id}) }}" class="btn btn-modify">Modifier</a>
+                    <form action="{{ path('admin_promo_toggle', {id: promo.id}) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('toggle_promo_' ~ promo.id) }}">
+                        <button type="submit" class="btn {{ promo.isActive ? 'btn-suppr' : 'btn-approve' }}">
+                            {{ promo.isActive ? 'Désactiver' : 'Activer' }}
+                        </button>
+                    </form>
+                    <form action="{{ path('admin_promo_delete', {id: promo.id}) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_promo_' ~ promo.id) }}">
+                        <button type="submit" class="btn btn-suppr">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="6">Aucun code promo.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>

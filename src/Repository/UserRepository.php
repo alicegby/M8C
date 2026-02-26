@@ -12,4 +12,30 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+
+    public function findByBirthday(int $day, int $month): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT id FROM users
+            WHERE dob IS NOT NULL
+            AND is_deleted = false
+            AND EXTRACT(DAY FROM dob) = :day
+            AND EXTRACT(MONTH FROM dob) = :month
+        ';
+
+        $result = $conn->executeQuery($sql, ['day' => $day, 'month' => $month]);
+        $ids = $result->fetchAllAssociative();
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('u')
+            ->where('u.id IN (:ids)')
+            ->setParameter('ids', array_column($ids, 'id'))
+            ->getQuery()
+            ->getResult();
+    }
 }

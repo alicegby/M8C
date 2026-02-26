@@ -8,50 +8,22 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(res => res.text())
             .then(html => {
                 content.innerHTML = html;
-                initAjaxContent(); // ré-init JS
+                initAjaxContent();
             })
             .catch(err => console.error('Erreur AJAX load:', err));
     }
 
     // --- INITIALISATION CONTENU AJAX ---
     function initAjaxContent() {
-        initAjaxForms();
         initDynamicCollections();
+        initDynamicClues();
         initUserFilters();
         initReviewFilters();
         initMPFilters();
+        initPromoFilters();
         initDeleteConfirmations();
         initAjaxBackButtons();
         initAjaxShowLinks();
-    }
-
-    // --- FORMULAIRE AJAX (NEW & EDIT MP) ---
-    function initAjaxForms() {
-        const form = document.querySelector('#murder-party-form');
-        if (!form) return;
-
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            const data = new FormData(form);
-
-            fetch(form.action, {
-                method: form.method,
-                body: data,
-                headers: { 'X-Requested-With':'XMLHttpRequest' },
-            })
-            .then(async res => {
-                const contentType = res.headers.get('content-type');
-                if (contentType && contentType.includes('application/json')) {
-                    const json = await res.json();
-                    if (json.success && json.redirect) window.location.href = json.redirect;
-                } else {
-                    const html = await res.text();
-                    content.innerHTML = html;
-                    initAjaxContent(); // ⚡ ré-init JS
-                }
-            })
-            .catch(err => console.error('Erreur AJAX submit:', err));
-        });
     }
 
     // --- COLLECTIONS DYNAMIQUES (PERSONNAGES) ---
@@ -67,16 +39,125 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!prototype) return;
 
             const html = prototype.replace(/__name__/g, characterIndex);
+            const number = characterIndex + 1;
+
             const wrapper = document.createElement('div');
             wrapper.classList.add('mp-character-item');
-            wrapper.innerHTML = `<h4>Personnage ${characterIndex + 1}</h4>${html}<button type="button" class="btn btn-remove">Supprimer</button>`;
-            container.appendChild(wrapper);
+            wrapper.innerHTML = `
+                <div class="character-header">
+                    <h4>Personnage ${number}</h4>
+                    <button type="button" class="btn-toggle-character">▼</button>
+                </div>
+                <div class="character-body hidden">
+                    ${html}
+                    <button type="button" class="btn btn-remove">Supprimer</button>
+                </div>
+            `;
 
-            wrapper.querySelector('.btn-remove')?.addEventListener('click', () => wrapper.remove());
+            container.appendChild(wrapper);
             container.querySelector('.empty-message')?.remove();
+
+            // Toggle déroulement
+            const header = wrapper.querySelector('.character-header');
+            const body = wrapper.querySelector('.character-body');
+            const toggleBtn = wrapper.querySelector('.btn-toggle-character');
+
+            header.addEventListener('click', () => {
+                body.classList.toggle('hidden');
+                toggleBtn.textContent = body.classList.contains('hidden') ? '▼' : '▲';
+            });
+
+            // Ouvre automatiquement à la création
+            body.classList.remove('hidden');
+            toggleBtn.textContent = '▲';
+
+            wrapper.querySelector('.btn-remove')?.addEventListener('click', () => {
+                wrapper.remove();
+                // Renuméroter
+                container.querySelectorAll('.mp-character-item h4').forEach((h4, i) => {
+                    h4.textContent = `Personnage ${i + 1}`;
+                });
+                if (container.querySelectorAll('.mp-character-item').length === 0) {
+                    container.innerHTML = '<p class="empty-message">Aucun personnage ajouté.</p>';
+                }
+            });
 
             characterIndex++;
         });
+    }
+    // --- COLLECTIONS DYNAMIQUES (INDICES) ---
+    function initDynamicClues() {
+        const container = document.getElementById('clues-list');
+        if (!container) return;
+
+        let clueIndex = container.querySelectorAll('.mp-clue-item').length || 0;
+        const prototype = container.dataset.prototype;
+        const addBtn = document.getElementById('add-clue-btn');
+
+        // Toggle sur les indices existants (edit)
+        container.querySelectorAll('.mp-clue-item').forEach(item => {
+            const header = item.querySelector('.clue-header');
+            const body = item.querySelector('.clue-body');
+            const toggleBtn = item.querySelector('.btn-toggle-clue');
+
+            header?.addEventListener('click', () => {
+                body.classList.toggle('hidden');
+                toggleBtn.textContent = body.classList.contains('hidden') ? '▼' : '▲';
+            });
+
+            item.querySelector('.btn-remove')?.addEventListener('click', () => {
+                item.remove();
+                reindexClues();
+            });
+        });
+
+        addBtn?.addEventListener('click', () => {
+            if (!prototype) return;
+
+            const html = prototype.replace(/__name__/g, clueIndex);
+            const number = clueIndex + 1;
+
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('mp-clue-item');
+            wrapper.innerHTML = `
+                <button type="button" class="btn-remove">Supprimer</button>
+                <div class="clue-header">
+                    <h4>Indice ${number}</h4>
+                    <button type="button" class="btn-toggle-clue">▲</button>
+                </div>
+                <div class="clue-body">
+                    ${html}
+                </div>
+            `;
+
+            container.appendChild(wrapper);
+            container.querySelector('.empty-message')?.remove();
+
+            const header = wrapper.querySelector('.clue-header');
+            const body = wrapper.querySelector('.clue-body');
+            const toggleBtn = wrapper.querySelector('.btn-toggle-clue');
+
+            header.addEventListener('click', () => {
+                body.classList.toggle('hidden');
+                toggleBtn.textContent = body.classList.contains('hidden') ? '▼' : '▲';
+            });
+
+            wrapper.querySelector('.btn-remove')?.addEventListener('click', () => {
+                wrapper.remove();
+                reindexClues();
+            });
+
+            clueIndex++;
+        });
+
+        function reindexClues() {
+            container.querySelectorAll('.mp-clue-item .clue-header h4').forEach((h4, i) => {
+                h4.textContent = `Indice ${i + 1}`;
+            });
+            if (container.querySelectorAll('.mp-clue-item').length === 0) {
+                container.innerHTML = '<p class="empty-message">Aucun indice ajouté.</p>';
+            }
+        }
     }
 
     // --- CONFIRM DELETE ---
@@ -121,6 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
         function filterUsers() {
             const search = searchInput.value.toLowerCase();
             const newsletter = newsletterSelect.value;
+            let visibleCount = 0;
+
             tableBody.querySelectorAll('tr').forEach(row => {
                 if (row.children.length === 1) return;
                 const prenom = row.children[0].textContent.toLowerCase();
@@ -129,8 +212,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const newsletterVal = row.children[3].textContent.toLowerCase();
                 const matchesSearch = prenom.includes(search) || nom.includes(search) || email.includes(search);
                 const matchesNewsletter = newsletter === '' || (newsletter === '1' && newsletterVal === 'oui') || (newsletter === '0' && newsletterVal === 'non');
-                row.style.display = matchesSearch && matchesNewsletter ? '' : 'none';
+                const visible = matchesSearch && matchesNewsletter;
+                row.style.display = visible ? '' : 'none';
+                if (visible) visibleCount++;
             });
+
+            const counter = document.getElementById('user-count');
+            if (counter) counter.textContent = visibleCount;
         }
 
         searchInput.addEventListener('input', filterUsers);
@@ -151,27 +239,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
         statusSelect.addEventListener('change', () => {
             const status = statusSelect.value;
+            let visibleCount = 0;
+
             tableBody.querySelectorAll('tr').forEach(row => {
-                row.style.display = (status === '' || row.dataset.status === status) ? '' : 'none';
+                if (row.children.length === 1) return;
+                const visible = status === '' || row.dataset.status === status;
+                row.style.display = visible ? '' : 'none';
+                if (visible) visibleCount++;
             });
+
+            const counter = document.getElementById('review-count');
+            if (counter) counter.textContent = visibleCount;
         });
     }
 
-    // --- FILTRES MURDER PARTIES ---
+    /// --- FILTRES MURDER PARTIES ---
     function initMPFilters() {
         const keywordInput = document.getElementById('mp-keyword-filter');
         const minPlayersInput = document.getElementById('mp-min-players-filter');
         const minDurationInput = document.getElementById('mp-min-duration-filter');
         const tableBody = document.getElementById('mp-table-body');
-        const filterToggle = document.getElementById('mp-filter-toggle');
+        const filterToggle = document.getElementById('mp-filter-toggle'); // ⚠️ corriger l'id dans le HTML
         const filterMenu = document.getElementById('mp-filter-menu');
 
         if (!keywordInput || !minPlayersInput || !minDurationInput || !tableBody) return;
 
-        // toggle menu MP
         if (filterToggle && filterMenu) {
             filterToggle.addEventListener('click', () => {
-                filterMenu.style.display = filterMenu.style.display === 'block' ? 'none' : 'block';
+                filterMenu.classList.toggle('hidden'); // utilise classList car ton menu a la class "hidden"
             });
         }
 
@@ -188,11 +283,80 @@ document.addEventListener('DOMContentLoaded', () => {
                 const show = title.includes(keyword) && players >= minPlayers && duration >= minDuration;
                 row.style.display = show ? '' : 'none';
             });
+
+            const counter = document.getElementById('mp-count');
+            if (counter) counter.textContent = visibleCount;
         }
 
         keywordInput.addEventListener('input', filterMPs);
         minPlayersInput.addEventListener('input', filterMPs);
         minDurationInput.addEventListener('input', filterMPs);
+    }
+    // --- FILTRES CODES PROMO ---
+    function initPromoFilters() {
+        const filterToggle = document.getElementById('promo-filter-toggle');
+        const filterMenu = document.getElementById('promo-filter-menu');
+        const usesSelect = document.getElementById('promo-uses-filter');
+        const validitySelect = document.getElementById('promo-validity-filter');
+        const activeSelect = document.getElementById('promo-active-filter');
+        const tableBody = document.getElementById('promo-table-body');
+
+        if (!filterToggle || !filterMenu || !tableBody) return;
+
+        filterToggle.addEventListener('click', () => {
+            filterMenu.classList.toggle('hidden');
+        });
+
+        function filterPromos() {
+            const uses = usesSelect.value;
+            const validity = validitySelect.value;
+            const active = activeSelect.value;
+            const today = new Date().toISOString().split('T')[0];
+            let visibleCount = 0;
+
+            tableBody.querySelectorAll('tr').forEach(row => {
+                if (row.children.length === 1) return;
+
+                const rowType = row.dataset.type;
+                const currentUses = parseInt(row.dataset.currentUses) || 0;
+                const maxUses = row.dataset.maxUses !== '' ? parseInt(row.dataset.maxUses) : null;
+                const validUntil = row.dataset.validUntil;
+                const rowActive = row.dataset.active;
+
+                // Filtre utilisations
+                let matchUses = true;
+                if (uses === 'unused') matchUses = currentUses === 0;
+                else if (uses === 'used') matchUses = currentUses > 0 && (maxUses === null || currentUses < maxUses);
+                else if (uses === 'full') matchUses = maxUses !== null && currentUses >= maxUses;
+
+                // Filtre validité
+                let matchValidity = true;
+                if (validity === 'valid') {
+                    // En cours = pas de date OU date future
+                    matchValidity = validUntil === '' || validUntil >= today;
+                } else if (validity === 'expired') {
+                    // Expiré = date passée obligatoirement
+                    matchValidity = validUntil !== '' && validUntil < today;
+                } else if (validity === 'unlimited') {
+                    // Illimité = pas de date du tout
+                    matchValidity = validUntil === '';
+                }
+
+                // Filtre actif
+                const matchActive = active === '' || rowActive === active;
+
+                const visible = matchUses && matchValidity && matchActive;
+                row.style.display = visible ? '' : 'none';
+                if (visible) visibleCount++;
+            });
+
+            const counter = document.getElementById('promo-count');
+            if (counter) counter.textContent = visibleCount;
+        }
+
+        usesSelect.addEventListener('change', filterPromos);
+        validitySelect.addEventListener('change', filterPromos);
+        activeSelect.addEventListener('change', filterPromos);
     }
 
     // --- SIDEBAR ---
@@ -206,13 +370,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- BOUTON CREER MP INDEX ---
+    // --- BOUTON CREER MP — navigation full page ---
     document.addEventListener('click', e => {
-        if (e.target && e.target.id === 'create-mp-btn') loadAjax(e.target.dataset.url);
+        if (e.target && e.target.id === 'create-mp-btn') {
+            window.location.href = e.target.dataset.url;
+        }
+    });
+
+    // --- BOUTON CREER PACK — navigation full page ---
+    document.addEventListener('click', e => {
+        if (e.target && e.target.id === 'create-pack-btn') {
+            window.location.href = e.target.dataset.url;
+        }
+    });
+
+    // --- BOUTON CREER PROMO — navigation full page ---
+    document.addEventListener('click', e => {
+        if (e.target && e.target.id === 'create-promo-btn') {
+            window.location.href = e.target.dataset.url;
+        }
     });
 
     // --- INITIALISATION DES FILTRES AU CHARGEMENT ---
     initUserFilters();
     initReviewFilters();
     initMPFilters();
+
+    // --- INIT COLLECTIONS si on est sur la page new MP ---
+    initDynamicCollections();
+    initDynamicClues();
+    initPromoFilters();
 });

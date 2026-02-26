@@ -127,4 +127,37 @@ class MurderParty
     public function getClues(): Collection { return $this->clues; }
     public function getPacks(): Collection { return $this->packs; }
     public function getUserMurderParties(): Collection { return $this->userMurderParties; }
+
+    // Logiques métiers
+    public function addCharacter(Character $character): static
+    {
+        if (!$this->characters->contains($character)) {
+            $this->characters->add($character);
+            $character->setMurderParty($this);
+        }
+        return $this;
+    }
+
+    public function removeCharacter(Character $character): static
+    {
+        if ($this->characters->removeElement($character)) {
+            // Si la FK ne peut pas être null, on ne touche pas à murderParty
+        }
+        return $this;
+    }
+
+    public function addClue(Clue $clue): static
+    {
+        if (!$this->clues->contains($clue)) {
+            $this->clues->add($clue);
+            $clue->setMurderParty($this);
+        }
+        return $this;
+    }
+
+    public function removeClue(Clue $clue): static
+    {
+        $this->clues->removeElement($clue);
+        return $this;
+    }
 }

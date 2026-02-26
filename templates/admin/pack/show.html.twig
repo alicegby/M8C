@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ pack.name }} — Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin/pack.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>{{ pack.name }}</h2>
+
+<div class="show-wrapper">
+
+    <div class="show-main">
+        <h3>Informations</h3>
+
+        <div class="show-info-grid">
+            <div class="show-info-item">
+                <span class="show-label">Nom</span>
+                <span class="show-value">{{ pack.name }}</span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Prix</span>
+                <span class="show-value">{{ pack.price }} €</span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Actif</span>
+                <span class="show-value show-badge {{ pack.isActive ? 'badge-yes' : 'badge-no' }}">
+                    {{ pack.isActive ? 'Oui' : 'Non' }}
+                </span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Créé le</span>
+                <span class="show-value">{{ pack.createdAt|date('d/m/Y') }}</span>
+            </div>
+        </div>
+
+        {% if pack.description %}
+            <div class="show-text-section">
+                <h4>Description</h4>
+                <p>{{ pack.description }}</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="show-section">
+        <h3>Murder Parties incluses ({{ pack.murderParties|length }})</h3>
+
+        {% if pack.murderParties|length == 0 %}
+            <p class="empty-message">Aucune Murder Party dans ce pack.</p>
+        {% else %}
+            <div class="show-cards-grid">
+                {% for mp in pack.murderParties %}
+                    <div class="show-card">
+                        <div class="show-card-header">
+                            <h4>{{ mp.title }}</h4>
+                        </div>
+                        <div class="show-card-body">
+                            <p><span class="show-label">Durée</span> {{ mp.duree }} min</p>
+                            <p><span class="show-label">Joueurs</span> {{ mp.nbPlayers }}</p>
+                            <p><span class="show-label">Prix</span> {{ mp.isFree ? 'Gratuit' : mp.price ~ ' €' }}</p>
+                            <a href="{{ path('admin_mp_show', {id: mp.id}) }}" class="btn btn-show" style="margin-top:10px;">Voir</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="modifier-action">
+        <a href="{{ path('admin_pack_edit', {id: pack.id}) }}" class="btn btn-modify">Modifier</a>
+    </div>
+    
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin.js') }}"></script>
+{% endblock %}

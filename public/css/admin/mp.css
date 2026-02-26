@@ -1,0 +1,733 @@
+h1 {
+    display: none;
+}
+
+h2 {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    color: #F5F5F5;
+    margin-top: 40px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+h3 {
+    font-family: 'Anton', serif;
+    font-size: 2rem;
+    color: #F5F5F5;
+    margin-top: 15px;
+    text-align: center;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #AAAAAA;
+}
+
+/* ===========================
+   MURDER PARTY — CREATE / NEW
+   =========================== */
+
+/* Container général */
+.mp-forms {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 20px;
+    background-color: #000000;
+    border-radius: 12px;
+    color: #F5F5F5;
+    font-family: 'Arimo', serif;
+    margin: 30px auto;
+    max-width: 900px;
+}
+
+/* Blocs principaux */
+.mp-main-form,
+.mp-character-form,
+.mp-clue-form {
+    background-color: #1A1A1A;
+    color: #F5F5F5;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #AAAAAA;
+}
+
+/* Titres de section */
+.mp-main-form h3,
+.mp-character-form h3,
+.mp-clue-form h3 {
+    font-family: 'Anton', serif;
+    font-size: 1.8rem;
+    color: #F5F5F5;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #541826;
+    text-align: left;
+}
+
+/* Champs du formulaire */
+.mp-main-form .form-row,
+.mp-character-form .form-row,
+.mp-clue-form .form-row {
+    margin-bottom: 12px;
+}
+
+/* Labels */
+.mp-forms label {
+    font-weight: 500;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #F5F5F5;
+}
+
+/* Inputs / Textarea / Select */
+.mp-forms input,
+.mp-forms textarea,
+.mp-forms select {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #AAAAAA;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    font-family: 'Arimo', serif;
+    background-color: #0E0E0E;
+    color: #F5F5F5;
+}
+
+.mp-forms input:focus,
+.mp-forms textarea:focus,
+.mp-forms select:focus {
+    outline: none;
+    border-color: #9D2137;
+}
+
+.mp-forms textarea {
+    resize: none;
+    overflow-y: auto;
+}
+
+/* Checkboxes */
+.form-group--checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.form-group--checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    margin-top: 15px;
+    accent-color: #9D2137;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+.form-group--checkbox label {
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    color: #AAAAAA;
+    text-transform: none;
+    cursor: pointer;
+    margin-bottom: 0;
+    margin-top: 15px;
+}
+
+.form-group--checkbox label a {
+    color: #9D2137;
+    text-decoration: none;
+}
+
+.form-group--checkbox label a:hover {
+    text-decoration: underline;
+}
+
+.form-group--checkbox:hover label {
+    color: #F5F5F5;
+}
+
+/* ===========================
+   PERSONNAGES — liste dynamique
+   =========================== */
+
+#characters-list .mp-character-item,
+#clues-list .mp-clue-item {
+    border: 1px solid #AAAAAA;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #0E0E0E;
+    color: #F5F5F5;
+    position: relative;
+}
+
+/* Header cliquable */
+.character-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding-right: 80px; /* espace pour le btn-remove absolu */
+}
+
+.character-header h4 {
+    font-family: 'Anton', serif;
+    font-size: 1.1rem;
+    color: #F5F5F5;
+    margin: 0;
+}
+
+.btn-toggle-character {
+    background: none;
+    border: none;
+    color: #AAAAAA;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.btn-toggle-character:hover {
+    color: #F5F5F5;
+}
+
+/* Corps replié */
+.character-body {
+    margin-top: 12px;
+}
+
+.character-body.hidden {
+    display: none;
+}
+
+/* Bouton supprimer */
+.mp-character-item .btn-remove,
+.mp-clue-item .btn-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    background-color: #541826;
+    color: #F5F5F5;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.mp-character-item .btn-remove:hover,
+.mp-clue-item .btn-remove:hover {
+    background-color: #9D2137;
+}
+
+/* Message vide */
+.empty-message {
+    font-style: italic;
+    color: #AAAAAA;
+    margin-bottom: 10px;
+}
+
+/* ===========================
+   BOUTONS
+   =========================== */
+
+.mp-submit {
+    text-align: center;
+}
+
+.btn-add,
+.btn-submit {
+    display: inline-block;
+    margin: 10px auto;
+    padding: 10px 24px;
+    background-color: #541826;
+    color: #F5F5F5;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.btn-add:hover,
+.btn-submit:hover {
+    background-color: #9D2137;
+}
+
+/* Bouton retour */
+.retour-action {
+    max-width: 900px;
+    margin: 20px auto 0;
+}
+
+.btn-back {
+    background-color: #541826;
+    color: #F5F5F5;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Arimo', serif;
+}
+
+.btn-back:hover {
+    background-color: #9D2137;
+    color: #F5F5F5;
+}
+
+.clue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding-right: 80px;
+}
+
+.clue-header h4 {
+    font-family: 'Anton', serif;
+    font-size: 1.1rem;
+    color: #F5F5F5;
+    margin: 0;
+}
+
+.btn-toggle-clue {
+    background: none;
+    border: none;
+    color: #AAAAAA;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.btn-toggle-clue:hover {
+    color: #F5F5F5;
+}
+
+.clue-body {
+    margin-top: 12px;
+}
+
+.clue-body.hidden {
+    display: none;
+}
+
+/* SHOW MURDER PARTY */
+
+.show-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 1400px;
+    margin-left: 50px;
+    margin-right: 50px;
+    font-family: 'Arimo', serif;
+}
+
+/* modifier */
+.modifier-action {
+    max-width: 1100px;
+    margin: 20px auto 0;
+    display: flex;
+    gap: 12px;
+}
+
+.modifier-action .btn-modify {
+    padding: 10px 24px;
+    background-color: #541826;
+    color: #F5F5F5;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.modifier-action .btn-modify:hover {
+    background-color: #9D2137;
+}
+
+/* Sections principales */
+.show-main,
+.show-section {
+    background-color: #1A1A1A;
+    border: 1px solid #AAAAAA;
+    border-radius: 10px;
+    padding: 24px;
+    color: #F5F5F5;
+}
+
+.show-main h3,
+.show-section h3 {
+    font-family: 'Anton', serif;
+    font-size: 1.8rem;
+    color: #F5F5F5;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #541826;
+    text-align: left;
+}
+
+/* Grille infos principales */
+.show-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.show-info-item {
+    background-color: #0E0E0E;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.show-label {
+    font-size: 0.75rem;
+    color: #AAAAAA;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.show-value {
+    font-size: 1rem;
+    color: #F5F5F5;
+    font-weight: 500;
+}
+
+/* Badges */
+.show-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.badge-yes {
+    background-color: #1a3a1a;
+    color: #7FBF7F;
+}
+
+.badge-no {
+    background-color: #3a1a1a;
+    color: #BF7F7F;
+}
+
+/* Cover */
+.show-cover {
+    margin-bottom: 24px;
+}
+
+.show-cover img {
+    max-width: 300px;
+    border-radius: 8px;
+    border: 1px solid #AAAAAA;
+}
+
+/* Sections texte (synopsis, scénario, épilogue) */
+.show-text-section {
+    margin-bottom: 20px;
+    padding: 16px;
+    background-color: #0E0E0E;
+    border-radius: 8px;
+    border-left: 3px solid #541826;
+}
+
+.show-text-section h4 {
+    font-family: 'Anton', serif;
+    font-size: 1.1rem;
+    color: #9D2137;
+    margin-bottom: 8px;
+}
+
+.show-text-section p {
+    line-height: 1.6;
+    color: #DDDDDD;
+    white-space: pre-line;
+}
+
+/* Grille de cards */
+.show-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* Card individuelle */
+.show-card {
+    background-color: #0E0E0E;
+    border: 1px solid #AAAAAA;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.show-card-header {
+    background-color: #541826;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.show-card-header.card-guilty {
+    background-color: #7a0e1e;
+}
+
+.show-card-header h4 {
+    font-family: 'Anton', serif;
+    font-size: 1.1rem;
+    color: #F5F5F5;
+    margin: 0;
+}
+
+.guilty-badge {
+    font-size: 0.75rem;
+    background-color: #F5F5F5;
+    color: #7a0e1e;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+.show-card-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.show-card-body p {
+    color: #DDDDDD;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.show-card-body .show-label {
+    display: inline-block;
+    margin-right: 6px;
+    font-weight: bold;
+}
+
+/* Sous-sections dans les cards */
+.show-card-section {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #2A2A2A;
+}
+
+.show-card-section h5 {
+    font-family: 'Anton', serif;
+    font-size: 0.95rem;
+    color: #9D2137;
+    margin-bottom: 4px;
+}
+
+.show-card-section p {
+    line-height: 1.5;
+    white-space: pre-line;
+}
+
+/* Message vide */
+.empty-message {
+    font-style: italic;
+    color: #AAAAAA;
+}
+
+/* MEDIA QUERY */
+/* Tablette (max 1024px) */
+@media (max-width: 1024px) {
+
+    .mp-forms {
+        max-width: 100%;
+        margin: 20px;
+        padding: 16px;
+    }
+
+    .show-wrapper {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .show-cover img {
+        width: 320px;
+    }
+
+    .modifier-action {
+        max-width: 100%;
+        margin: 16px 0 0;
+    }
+
+    .show-info-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+
+    .show-cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+}
+
+/* Mobile (max 768px) */
+@media (max-width: 768px) {
+
+    h2 {
+        font-size: 2rem;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    .mp-forms {
+        margin: 10px;
+        padding: 12px;
+        gap: 24px;
+        border-radius: 8px;
+    }
+
+    .mp-main-form,
+    .mp-character-form,
+    .mp-clue-form {
+        padding: 14px;
+    }
+
+    .mp-main-form h3,
+    .mp-character-form h3,
+    .mp-clue-form h3 {
+        font-size: 1.4rem;
+    }
+
+    .retour-action {
+        margin: 12px 10px 0;
+    }
+
+    .btn-back,
+    .btn-add,
+    .btn-submit {
+        width: 100%;
+        text-align: center;
+        display: block;
+    }
+
+    /* Accordéon personnages / indices */
+    .character-header,
+    .clue-header {
+        padding-right: 60px;
+    }
+
+    .mp-character-item .btn-remove,
+    .mp-clue-item .btn-remove {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+
+    /* Show */
+    .show-wrapper {
+        margin-left: 10px;
+        margin-right: 10px;
+        gap: 24px;
+    }
+
+    .modifier-action {
+        flex-direction: column;
+    }
+
+    .modifier-action .btn-modify {
+        width: 100%;
+        text-align: center;
+        margin-top: 16px;
+        margin-bottom: 16px;
+    }
+
+    .show-main,
+    .show-section {
+        padding: 16px;
+    }
+
+    .show-main h3,
+    .show-section h3 {
+        font-size: 1.4rem;
+    }
+
+    .show-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .show-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .show-cover {
+        margin-bottom: 16px;
+    }
+
+    .show-cover img {
+        width: 100%;
+        border-radius: 6px;
+    }
+
+    .show-text-section {
+        padding: 12px;
+    }
+}
+
+/* Petit mobile (max 480px) */
+@media (max-width: 480px) {
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    .show-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .show-info-item {
+        padding: 10px 12px;
+    }
+
+    .show-cover img {
+        border-radius: 4px;
+    }
+
+    .mp-forms {
+        margin: 6px;
+        padding: 10px;
+    }
+
+    .mp-main-form,
+    .mp-character-form,
+    .mp-clue-form {
+        padding: 10px;
+    }
+
+    .character-header h4,
+    .clue-header h4 {
+        font-size: 0.95rem;
+    }
+
+    .show-card-header h4 {
+        font-size: 0.95rem;
+    }
+}

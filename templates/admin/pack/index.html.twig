@@ -1,0 +1,48 @@
+<h3>
+    Liste des Packs des Murder Parties
+</h3>
+
+<button id="create-pack-btn" class="btn-add" data-url="{{ path('admin_pack_new') }}">Créer un pack</button>
+
+
+<p class="user-count">
+    Total : <span id="pack-count">{{ packs|length }}</span> pack(s)
+</p>
+
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>MP incluses</th>
+            <th>Actif</th>
+            <th>Créé le</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="pack-table-body">
+        {% for pack in packs %}
+            <tr>
+                <td>{{ pack.name }}</td>
+                <td>{{ pack.price }} €</td>
+                <td>{{ pack.murderParties|length }}</td>
+                <td>
+                    <span class="show-badge {{ pack.isActive ? 'badge-yes' : 'badge-no' }}">
+                        {{ pack.isActive ? 'Oui' : 'Non' }}
+                    </span>
+                </td>
+                <td>{{ pack.createdAt|date('d/m/Y') }}</td>
+                <td>
+                    <a href="{{ path('admin_pack_show', {id: pack.id}) }}" class="btn btn-show">Voir</a>
+                    <a href="{{ path('admin_pack_edit', {id: pack.id}) }}" class="btn btn-modify">Modifier</a>
+                    <form action="{{ path('admin_pack_delete', {id: pack.id}) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_pack_' ~ pack.id) }}">
+                        <button type="submit" class="btn btn-suppr">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="6">Aucun pack trouvé.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>

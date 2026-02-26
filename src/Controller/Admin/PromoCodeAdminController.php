@@ -24,7 +24,7 @@ class PromoCodeAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'admin_promo_new')]
+    #[Route('/new', name: 'admin_promo_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $promo = new PromoCode();
@@ -35,16 +35,23 @@ class PromoCodeAdminController extends AbstractController
             $em->persist($promo);
             $em->flush();
             $this->addFlash('success', 'Code promo créé.');
-            return $this->redirectToRoute('admin_promo_index');
+            return $this->redirectToRoute('admin_dashboard');
         }
 
-        return $this->render('admin/promo_code/form.html.twig', [
-            'form' => $form,
-            'title' => 'Nouveau code promo',
+        return $this->render('admin/promo_code/new.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'admin_promo_edit')]
+    #[Route('/{id}/show', name: 'admin_promo_show', methods: ['GET'])]
+    public function show(PromoCode $promo): Response
+    {
+        return $this->render('admin/promo_code/show.html.twig', [
+            'promo' => $promo,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'admin_promo_edit', methods: ['GET', 'POST'])]
     public function edit(PromoCode $promo, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(PromoCodeType::class, $promo);
@@ -53,22 +60,24 @@ class PromoCodeAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
             $this->addFlash('success', 'Code promo mis à jour.');
-            return $this->redirectToRoute('admin_promo_index');
+            return $this->redirectToRoute('admin_dashboard');
         }
 
-        return $this->render('admin/promo_code/form.html.twig', [
-            'form' => $form,
-            'title' => 'Modifier : ' . $promo->getCode(),
+        return $this->render('admin/promo_code/edit.html.twig', [
+            'form' => $form->createView(),
+            'promo' => $promo,
         ]);
     }
 
     #[Route('/{id}/toggle', name: 'admin_promo_toggle', methods: ['POST'])]
-    public function toggle(PromoCode $promo, EntityManagerInterface $em): Response
+    public function toggle(PromoCode $promo, Request $request, EntityManagerInterface $em): Response
     {
-        $promo->setIsActive(!$promo->isActive());
-        $em->flush();
-        $this->addFlash('success', 'Statut mis à jour.');
-        return $this->redirectToRoute('admin_promo_index');
+        if ($this->isCsrfTokenValid('toggle_promo_' . $promo->getId(), $request->request->get('_token'))) {
+            $promo->setIsActive(!$promo->isActive());
+            $em->flush();
+            $this->addFlash('success', 'Statut mis à jour.');
+        }
+       return $this->redirectToRoute('admin_dashboard');
     }
 
     #[Route('/{id}/delete', name: 'admin_promo_delete', methods: ['POST'])]
@@ -79,6 +88,6 @@ class PromoCodeAdminController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'Code promo supprimé.');
         }
-        return $this->redirectToRoute('admin_promo_index');
+        return $this->redirectToRoute('admin_dashboard');
     }
 }

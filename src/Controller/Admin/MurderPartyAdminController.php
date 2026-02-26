@@ -74,7 +74,7 @@ class MurderPartyAdminController extends AbstractController
                     $coverFile->move($this->getParameter('covers_directory'), $newFilename);
                     $mp->setCoverImageUrl($newFilename);
                 } catch (FileException $e) {
-                    $this->addFlash('error', 'Impossible de sauvegarder l’image.');
+                    $this->addFlash('error', 'Impossible de sauvegarder l\'image.');
                 }
             }
 
@@ -82,19 +82,12 @@ class MurderPartyAdminController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'Murder Party créée !');
-            $redirectUrl = $this->generateUrl('admin_dashboard');
-
-            if ($request->isXmlHttpRequest()) {
-                return $this->json(['success'=>true, 'redirect'=>$redirectUrl]);
-            }
-
-            return $this->redirect($redirectUrl);
+            return $this->redirectToRoute('admin_dashboard');
         }
 
-        // --- GET ou formulaire invalide ---
         return $this->render('admin/mp/new.html.twig', [
             'form' => $form->createView(),
-            'mp' => $mp,
+            'mp'   => $mp,
         ]);
     }
 
@@ -105,25 +98,42 @@ class MurderPartyAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile $coverFile */
+            $coverFile = $form->get('coverImageUrl')->getData();
+
+            if ($coverFile) {
+                $originalFilename = pathinfo($coverFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = transliterator_transliterate(
+                    'Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()',
+                    $originalFilename
+                );
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$coverFile->guessExtension();
+
+                try {
+                    $coverFile->move($this->getParameter('covers_directory'), $newFilename);
+                    $mp->setCoverImageUrl($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Impossible de sauvegarder l\'image.');
+                }
+            }
+
             $em->flush();
             $this->addFlash('success', 'Murder Party mise à jour.');
-            return $this->redirectToRoute('admin_mp_edit', ['id' => $mp->getId()]);
+            return $this->redirectToRoute('admin_dashboard');
         }
-
-        // Formulaire ajout personnage
-        $characterForm = $this->createForm(CharacterType::class, new Character());
-        $characterForm->handleRequest($request);
-
-        // Formulaire ajout indice
-        $clueForm = $this->createForm(ClueType::class, new Clue(), ['murder_party' => $mp]);
-        $clueForm->handleRequest($request);
 
         return $this->render('admin/mp/edit.html.twig', [
             'form' => $form->createView(),
-            'character_form' => $characterForm->createView(),
-            'clue_form' => $clueForm->createView(),
+            'mp'   => $mp,
+        ]);
+    }
+
+    #[Route('/{id}/show', name: 'admin_mp_show', methods: ['GET'])]
+    public function show(MurderParty $mp): Response
+    {
+        return $this->render('admin/mp/show.html.twig', [
             'mp' => $mp,
-            'title' => 'Modifier : ' . $mp->getTitle(),
         ]);
     }
 
@@ -135,7 +145,7 @@ class MurderPartyAdminController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'Murder Party supprimée.');
         }
-        return $this->redirectToRoute('admin_mp_index');
+        return $this->redirectToRoute('admin_dashboard');
     }
 
     #[Route('/character/{id}/delete', name: 'admin_character_delete', methods: ['POST'])]

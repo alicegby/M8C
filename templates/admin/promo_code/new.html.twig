@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un Code Promo — Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin/promo.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Créer un Code Promo</h2>
+
+{{ form_start(form, {'attr': {'id': 'promo-form'}}) }}
+
+<div class="mp-forms">
+    <div class="mp-main-form">
+        <h3>Informations</h3>
+
+        {{ form_row(form.code) }}
+        {{ form_row(form.discountType) }}
+        {{ form_row(form.discountValue) }}
+        {{ form_row(form.validFrom) }}
+        {{ form_row(form.validUntil) }}
+        {{ form_row(form.maxUses) }}
+        {{ form_row(form.applicableTo) }}
+
+        <div class="form-group--checkbox">
+            {{ form_widget(form.isActive) }}
+            {{ form_label(form.isActive) }}
+        </div>
+    </div>
+
+    <div class="mp-submit">
+        <button type="submit" class="btn btn-add btn-submit">Créer le code promo</button>
+    </div>
+</div>
+
+{{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin.js') }}"></script>
+{% endblock %}

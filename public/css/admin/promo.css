@@ -1,0 +1,406 @@
+/* ===========================
+   PROMO CODES — CREATE / EDIT / SHOW
+   =========================== */
+
+h1 {
+    display: none;
+}
+
+h2 {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    color: #F5F5F5;
+    margin-top: 40px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+h3 {
+    font-family: 'Anton', serif;
+    font-size: 2rem;
+    color: #F5F5F5;
+    margin-top: 15px;
+    text-align: center;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #AAAAAA;
+}
+
+/* ===========================
+   FORMULAIRE (new / edit)
+   =========================== */
+
+.mp-forms {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 20px;
+    background-color: #000000;
+    border-radius: 12px;
+    color: #F5F5F5;
+    font-family: 'Arimo', serif;
+    margin: 30px auto;
+    max-width: 700px;
+}
+
+.mp-main-form {
+    background-color: #1A1A1A;
+    color: #F5F5F5;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #AAAAAA;
+}
+
+.mp-main-form h3 {
+    font-family: 'Anton', serif;
+    font-size: 1.8rem;
+    color: #F5F5F5;
+    margin-bottom: 20px;
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #541826;
+    text-align: left;
+}
+
+/* Labels */
+.mp-forms label {
+    font-weight: 500;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #F5F5F5;
+    font-family: 'Arimo', serif;
+}
+
+/* Inputs / Textarea / Select */
+.mp-forms input,
+.mp-forms textarea,
+.mp-forms select {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #AAAAAA;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    font-family: 'Arimo', serif;
+    background-color: #0E0E0E;
+    color: #F5F5F5;
+}
+
+.mp-forms input:focus,
+.mp-forms textarea:focus,
+.mp-forms select:focus {
+    outline: none;
+    border-color: #9D2137;
+}
+
+/* Checkbox isActive */
+.form-group--checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.form-group--checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    margin-top: 2px;
+    accent-color: #9D2137;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+.form-group--checkbox label {
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    color: #AAAAAA;
+    cursor: pointer;
+    margin: 0;
+}
+
+.form-group--checkbox:hover label {
+    color: #F5F5F5;
+}
+
+/* ===========================
+   BOUTONS
+   =========================== */
+
+.retour-action {
+    max-width: 700px;
+    margin: 20px auto 0;
+}
+
+.btn-back {
+    background-color: #541826;
+    color: #F5F5F5;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Arimo', serif;
+}
+
+.btn-back:hover {
+    background-color: #9D2137;
+    color: #F5F5F5;
+}
+
+.mp-submit {
+    text-align: center;
+}
+
+.btn-add,
+.btn-submit {
+    display: inline-block;
+    margin: 10px auto;
+    padding: 10px 24px;
+    background-color: #541826;
+    color: #F5F5F5;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.btn-add:hover,
+.btn-submit:hover {
+    background-color: #9D2137;
+}
+
+/* ===========================
+   SHOW
+   =========================== */
+
+.show-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 30px 50px 50px;
+    font-family: 'Arimo', serif;
+    max-width: 900px;
+}
+
+.modifier-action {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.modifier-action .btn-modify {
+    padding: 10px 24px;
+    background-color: #541826;
+    color: #F5F5F5;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.modifier-action .btn-modify:hover {
+    background-color: #9D2137;
+}
+
+.btn-approve {
+    background-color: #1a3a1a;
+    color: #7FBF7F;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Arimo', serif;
+    font-size: 0.95rem;
+    transition: background-color 0.2s;
+}
+
+.btn-approve:hover {
+    background-color: #2a5a2a;
+}
+
+.show-main {
+    background-color: #1A1A1A;
+    border: 1px solid #AAAAAA;
+    border-radius: 10px;
+    padding: 24px;
+    color: #F5F5F5;
+}
+
+.show-main h3 {
+    font-family: 'Anton', serif;
+    font-size: 1.8rem;
+    color: #F5F5F5;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #541826;
+    text-align: left;
+    margin-top: 0;
+}
+
+.show-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.show-info-item {
+    background-color: #0E0E0E;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.show-label {
+    font-size: 0.75rem;
+    color: #AAAAAA;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.show-value {
+    font-size: 1rem;
+    color: #F5F5F5;
+    font-weight: 500;
+}
+
+/* Badge code promo */
+.promo-code-badge {
+    font-family: 'Anton', serif;
+    font-size: 1.2rem;
+    color: #9D2137;
+    letter-spacing: 0.1em;
+}
+
+/* Badges statut */
+.show-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.badge-yes {
+    background-color: #1a3a1a;
+    color: #7FBF7F;
+}
+
+.badge-no {
+    background-color: #3a1a1a;
+    color: #BF7F7F;
+}
+
+/* ===========================
+   MEDIA QUERIES
+   =========================== */
+
+@media (max-width: 1024px) {
+    .show-wrapper {
+        margin: 20px;
+        max-width: 100%;
+    }
+
+    .retour-action {
+        max-width: 100%;
+        margin: 16px 20px 0;
+    }
+
+    .mp-forms {
+        max-width: 100%;
+        margin: 20px;
+    }
+
+    .show-info-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    h2 {
+        font-size: 2rem;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    .show-wrapper {
+        margin: 10px;
+        gap: 20px;
+    }
+
+    .mp-forms {
+        margin: 10px;
+        padding: 12px;
+        gap: 24px;
+    }
+
+    .mp-main-form {
+        padding: 14px;
+    }
+
+    .retour-action {
+        margin: 12px 10px 0;
+    }
+
+    .modifier-action {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .modifier-action .btn-modify,
+    .modifier-action .btn-back,
+    .modifier-action .btn-approve,
+    .modifier-action .btn-suppr {
+        width: 100%;
+        text-align: center;
+    }
+
+    .show-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .btn-add,
+    .btn-submit,
+    .btn-back {
+        width: 100%;
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    .show-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mp-forms {
+        margin: 6px;
+        padding: 10px;
+    }
+
+    .mp-main-form {
+        padding: 10px;
+    }
+}
