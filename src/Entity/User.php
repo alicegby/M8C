@@ -87,6 +87,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $resetTokenExpiresAt = null;
 
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $supabaseId = null;
+
     public function __construct()
     {
         $this->purchases        = new ArrayCollection();
@@ -179,5 +182,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getPlayedMurderParties(): array
     {
         return $this->userMurderParties->filter(fn($ump) => $ump->isPlayed())->toArray();
+    }
+    public function getSupabaseId(): ?string
+    {
+        return $this->supabaseId;
+    }
+
+    public function setSupabaseId(string $id): self
+    {
+        $this->supabaseId = $id;
+        return $this;
     }
 }

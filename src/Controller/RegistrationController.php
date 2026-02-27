@@ -54,8 +54,8 @@ class RegistrationController extends AbstractController
 
             // ── 1️⃣ Création utilisateur dans Supabase Auth ─────────
             try {
-                $client = new User();
-                $response = $client->post("{$this->supabaseUrl}/auth/v1/admin/users", [
+                $client = new Client(); // GuzzleHttp\Client
+                $response = $client->request('POST', "{$this->supabaseUrl}/auth/v1/admin/users", [
                     'headers' => [
                         'apikey' => $this->supabaseKey,
                         'Authorization' => "Bearer {$this->supabaseKey}",
@@ -64,7 +64,7 @@ class RegistrationController extends AbstractController
                     'json' => [
                         'email' => $user->getEmail(),
                         'password' => $plainPassword,
-                        'email_confirm' => false, // on peut envoyer mail de vérif ensuite
+                        'email_confirm' => false,
                     ],
                 ]);
 
