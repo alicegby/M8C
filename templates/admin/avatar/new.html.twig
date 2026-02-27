@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un Avatar — Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin/pack.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Créer un Avatar</h2>
+
+{{ form_start(form, {'attr': {'id': 'avatar-form'}}) }}
+
+<div class="mp-forms">
+    <div class="mp-main-form">
+        <h3>Informations de l'Avatar</h3>
+
+        {{ form_row(form.name) }}
+        {{ form_row(form.avatarFile) }}
+
+    </div>
+
+    <div class="mp-submit">
+        <button type="submit" class="btn btn-add btn-submit">Créer l'Avatar</button>
+    </div>
+</div>
+
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/admin.js') }}"></script>
+{% endblock %}

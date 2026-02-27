@@ -90,6 +90,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $supabaseId = null;
 
+    #[ORM\ManyToOne(targetEntity: Avatar::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Avatar $avatar = null;
+
     public function __construct()
     {
         $this->purchases        = new ArrayCollection();

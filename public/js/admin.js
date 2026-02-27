@@ -24,6 +24,37 @@ document.addEventListener('DOMContentLoaded', () => {
         initDeleteConfirmations();
         initAjaxBackButtons();
         initAjaxShowLinks();
+        initAvatarButtons(); 
+    }
+
+    // --- BOUTONS AVATARS ---
+    function initAvatarButtons() {
+        const createBtn = document.getElementById('create-avatar-btn');
+        createBtn?.addEventListener('click', () => loadAjax(createBtn.dataset.url));
+
+        // Voir un avatar
+        content.querySelectorAll('.btn-show').forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            loadAjax(link.href);
+        });
+    });
+
+        // Supprimer un avatar
+        content.querySelectorAll('form[data-action="delete-avatar"]').forEach(f => {
+            f.addEventListener('submit', e => {
+                if (!confirm('Voulez-vous vraiment supprimer cet avatar ?')) e.preventDefault();
+            });
+        });
+    }
+
+    // --- CONFIRM DELETE pour les autres formulaires ---
+    function initDeleteConfirmations() {
+        content.querySelectorAll('form[data-action="delete"]').forEach(f => {
+            f.addEventListener('submit', e => {
+                if (!confirm('Êtes-vous sûr(e) ? Cette action est irréversible.')) e.preventDefault();
+            });
+        });
     }
 
     // --- COLLECTIONS DYNAMIQUES (PERSONNAGES) ---
@@ -57,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
             container.appendChild(wrapper);
             container.querySelector('.empty-message')?.remove();
 
-            // Toggle déroulement
             const header = wrapper.querySelector('.character-header');
             const body = wrapper.querySelector('.character-body');
             const toggleBtn = wrapper.querySelector('.btn-toggle-character');
@@ -73,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             wrapper.querySelector('.btn-remove')?.addEventListener('click', () => {
                 wrapper.remove();
-                // Renuméroter
                 container.querySelectorAll('.mp-character-item h4').forEach((h4, i) => {
                     h4.textContent = `Personnage ${i + 1}`;
                 });
@@ -85,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             characterIndex++;
         });
     }
+
     // --- COLLECTIONS DYNAMIQUES (INDICES) ---
     function initDynamicClues() {
         const container = document.getElementById('clues-list');
@@ -94,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const prototype = container.dataset.prototype;
         const addBtn = document.getElementById('add-clue-btn');
 
-        // Toggle sur les indices existants (edit)
         container.querySelectorAll('.mp-clue-item').forEach(item => {
             const header = item.querySelector('.clue-header');
             const body = item.querySelector('.clue-body');
@@ -158,32 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 container.innerHTML = '<p class="empty-message">Aucun indice ajouté.</p>';
             }
         }
-    }
-
-    // --- CONFIRM DELETE ---
-    function initDeleteConfirmations() {
-        content.querySelectorAll('form[data-action="delete"]').forEach(f => {
-            f.addEventListener('submit', e => {
-                if (!confirm('Êtes-vous sûr(e) ? Cette action est irréversible.')) e.preventDefault();
-            });
-        });
-    }
-
-    // --- BOUTONS RETOUR AJAX ---
-    function initAjaxBackButtons() {
-        content.querySelectorAll('.ajax-btn.btn-back').forEach(btn => {
-            btn.addEventListener('click', () => loadAjax(btn.dataset.url));
-        });
-    }
-
-    // --- SHOW LINKS AJAX ---
-    function initAjaxShowLinks() {
-        content.querySelectorAll('.ajax-link-show').forEach(link => {
-            link.addEventListener('click', e => {
-                e.preventDefault();
-                loadAjax(link.href);
-            });
-        });
     }
 
     // --- FILTRES UTILISATEURS ---
@@ -253,20 +256,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /// --- FILTRES MURDER PARTIES ---
+    // --- FILTRES MURDER PARTIES ---
     function initMPFilters() {
         const keywordInput = document.getElementById('mp-keyword-filter');
         const minPlayersInput = document.getElementById('mp-min-players-filter');
         const minDurationInput = document.getElementById('mp-min-duration-filter');
         const tableBody = document.getElementById('mp-table-body');
-        const filterToggle = document.getElementById('mp-filter-toggle'); // ⚠️ corriger l'id dans le HTML
+        const filterToggle = document.getElementById('mp-filter-toggle');
         const filterMenu = document.getElementById('mp-filter-menu');
 
         if (!keywordInput || !minPlayersInput || !minDurationInput || !tableBody) return;
 
         if (filterToggle && filterMenu) {
             filterToggle.addEventListener('click', () => {
-                filterMenu.classList.toggle('hidden'); // utilise classList car ton menu a la class "hidden"
+                filterMenu.classList.toggle('hidden');
             });
         }
 
@@ -274,6 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const keyword = keywordInput.value.toLowerCase();
             const minPlayers = parseInt(minPlayersInput.value) || 0;
             const minDuration = parseInt(minDurationInput.value) || 0;
+            let visibleCount = 0;
 
             tableBody.querySelectorAll('tr').forEach(row => {
                 if (row.children.length === 1) return;
@@ -282,6 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const duration = parseInt(row.dataset.duration);
                 const show = title.includes(keyword) && players >= minPlayers && duration >= minDuration;
                 row.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
             });
 
             const counter = document.getElementById('mp-count');
@@ -292,7 +297,8 @@ document.addEventListener('DOMContentLoaded', () => {
         minPlayersInput.addEventListener('input', filterMPs);
         minDurationInput.addEventListener('input', filterMPs);
     }
-    // --- FILTRES CODES PROMO ---
+
+    // --- FILTRES PROMOS ---
     function initPromoFilters() {
         const filterToggle = document.getElementById('promo-filter-toggle');
         const filterMenu = document.getElementById('promo-filter-menu');
@@ -332,13 +338,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Filtre validité
                 let matchValidity = true;
                 if (validity === 'valid') {
-                    // En cours = pas de date OU date future
                     matchValidity = validUntil === '' || validUntil >= today;
                 } else if (validity === 'expired') {
-                    // Expiré = date passée obligatoirement
                     matchValidity = validUntil !== '' && validUntil < today;
                 } else if (validity === 'unlimited') {
-                    // Illimité = pas de date du tout
                     matchValidity = validUntil === '';
                 }
 
@@ -370,34 +373,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- BOUTON CREER MP — navigation full page ---
+    // --- BOUTONS CREATION PAGE FULL ---
     document.addEventListener('click', e => {
-        if (e.target && e.target.id === 'create-mp-btn') {
-            window.location.href = e.target.dataset.url;
-        }
+        if (e.target?.id === 'create-mp-btn') window.location.href = e.target.dataset.url;
+        if (e.target?.id === 'create-pack-btn') window.location.href = e.target.dataset.url;
+        if (e.target?.id === 'create-promo-btn') window.location.href = e.target.dataset.url;
+        if (e.target?.id === 'create-avatar-btn') window.location.href = e.target.dataset.url;
     });
 
-    // --- BOUTON CREER PACK — navigation full page ---
-    document.addEventListener('click', e => {
-        if (e.target && e.target.id === 'create-pack-btn') {
-            window.location.href = e.target.dataset.url;
-        }
-    });
-
-    // --- BOUTON CREER PROMO — navigation full page ---
-    document.addEventListener('click', e => {
-        if (e.target && e.target.id === 'create-promo-btn') {
-            window.location.href = e.target.dataset.url;
-        }
-    });
-
-    // --- INITIALISATION DES FILTRES AU CHARGEMENT ---
+    // --- INITIALISATION AU CHARGEMENT ---
     initUserFilters();
     initReviewFilters();
     initMPFilters();
-
-    // --- INIT COLLECTIONS si on est sur la page new MP ---
     initDynamicCollections();
     initDynamicClues();
     initPromoFilters();
+    initAvatarButtons(); // <-- initialisation des avatars
 });

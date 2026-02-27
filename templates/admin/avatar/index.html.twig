@@ -1,0 +1,35 @@
+<h3>
+    Liste des Avatars
+</h3>
+
+<button id="create-avatar-btn" class="btn-add" data-url="{{ path('admin_avatars_new') }}">Créer un Avatar</button>
+
+<table class="admin-table" id="avatar-table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="avatar-table-body">
+        {% for avatar in avatars %}
+            <tr>
+                <td>{{ avatar.name }}</td>
+            
+                <td>
+                   <a href="{{ path('admin_avatars_show', {'id': avatar.id}) }}" class="btn btn-show">Voir</a>
+
+                    {# Formulaire delete #}
+                    <form method="post" action="{{ path('admin_avatars_delete', {'id': avatar.id}) }}" style="display:inline-block" data-action="delete-avatar">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ avatar.id) }}">
+                        <button class="btn btn-suppr">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucun avatar trouvé.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

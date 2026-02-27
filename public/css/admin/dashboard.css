@@ -685,6 +685,13 @@ td .btn-show {
         display: table-cell;
     }
 
+    #avatar-table  thead th:nth-child(1),
+    #avatar-table  thead th:nth-child(2),
+    tbody td:nth-child(1),
+    tbody td:nth-child(2) {
+        display: table-cell;
+    }
+
 }
 
 @media (max-width: 768px) {

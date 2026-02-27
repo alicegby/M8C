@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Voir l'avatar — Admin{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/admin/avatar.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>{{ avatar.name }}</h2>
+
+<div class="avatar-details">
+    {% if avatar.imageUrl %}
+        <img src="{{ asset(avatar.imageUrl) }}" alt="{{ avatar.name }}" width="120">
+    {% else %}
+            <span class="show-value">Aucune image</span>
+    {% endif %}
+</div>
+
+{% endblock %}
