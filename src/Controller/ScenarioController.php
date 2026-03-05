@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Purchase;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\MurderPartyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,16 +26,32 @@ class ScenarioController extends AbstractController
     }
 
     #[Route('/scenario/{slug}', name: 'scenario_show')]
-    public function show(string $slug, MurderPartyRepository $murderPartyRepository): Response
-    {
-        $scenario = $murderPartyRepository->findOneBy(['slug' => $slug, 'isPublished' => true]);
+    public function show(
+        string $slug,
+        MurderPartyRepository $murderPartyRepository,
+        EntityManagerInterface $em,
+    ): Response {
+        $scenario = $murderPartyRepository->findOneBy([
+            'slug' => $slug,
+            'isPublished' => true,
+        ]);
 
         if (!$scenario) {
             throw $this->createNotFoundException('Scénario non trouvé');
         }
 
+        $isPurchased = false;
+        if ($this->getUser()) {
+            $isPurchased = $em->getRepository(Purchase::class)->findOneBy([
+                'user' => $this->getUser(),
+                'murderParty' => $scenario,
+                'status' => 'completed',
+            ]) !== null;
+        }
+
         return $this->render('scenario_show.html.twig', [
             'scenario' => $scenario,
+            'isPurchased' => $isPurchased,
         ]);
     }
 }

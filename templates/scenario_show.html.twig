@@ -14,7 +14,7 @@
     <div class="scenario-container">
         <p class="meta">{{ scenario.duree }} min | {{ scenario.nbPlayers }} joueurs | {{ scenario.averageRating }}/5</p>
         <p class="tarif">
-            {% if scenario.price == '0.00' %}
+            {% if scenario.isFree %}
                 Gratuit
             {% else %}
                 {{ scenario.price }} €
@@ -22,22 +22,50 @@
         </p>
         <h2>Synopsis</h2>
         <p>{{ scenario.synopsis }}</p>
-        <a href="{{ path('rules') }}">Voir les règles du jeu</a>
-    </div>
-    <div class="btn-play">
-        <p><a href="{{ path('telechargement') }}">Téléchargez</a> l'application pour jouer à cette Murder Party</p>
-        <div class="download-buttons">
-            <a href="#">
-                <img src="{{ asset('icones/apple_darkred.png') }}" alt="Téléchargement Apple">
-            </a>
-            <a href="#">
-                <img src="{{ asset('icones/android_darkred.png') }}" alt="Téléchargement Android">
-            </a>
+
+        <div class="scenario-btns">
+            {% if scenario.isFree or isPurchased %}
+                <a href="#" class="btn-jouer">Jouer</a>
+            {% else %}
+                <button
+                    class="btn-primary btn-add-cart"
+                    data-slug="{{ scenario.slug }}"
+                    id="btn-add-cart"
+                >
+                    Ajouter au panier — {{ scenario.price }} €
+                </button>
+                <a href="{{ path('stripe_checkout_cart') }}" class="btn-secondary btn-buy-now" id="btn-buy-now" style="display:none">
+                    Voir mon panier et payer
+                </a>
+            {% endif %}
+            <a href="{{ path('rules') }}" class="btn-rules">Voir les règles du jeu</a>
         </div>
+    </div>
+
+    <div class="btn-play">
+        {% if scenario.isFree or isPurchased %}
+            {% if isPurchased %}
+                <p>✅ Vous possédez ce scénario</p>
+            {% endif %}
+            <p><a href="{{ path('telechargement') }}">Téléchargez</a> l'application pour jouer à cette Murder Party</p>
+            <div class="download-buttons">
+                <a href="#"><img src="{{ asset('icones/apple_darkred.png') }}" alt="Téléchargement Apple"></a>
+                <a href="#"><img src="{{ asset('icones/android_darkred.png') }}" alt="Téléchargement Android"></a>
+            </div>
+        {% else %}
+            <p class="download-notice">
+                <a href="{{ path('telechargement') }}">Téléchargez</a> l'application pour jouer
+            </p>
+            <div class="download-buttons">
+                <a href="#"><img src="{{ asset('icones/apple_darkred.png') }}" alt="Apple"></a>
+                <a href="#"><img src="{{ asset('icones/android_darkred.png') }}" alt="Android"></a>
+            </div>
+        {% endif %}
     </div>
 </section>
 {% endblock %}
 
 {% block javascripts %}
     <script src="{{ asset('js/scroll.js') }}"></script>
+    <script src="{{ asset('js/addtocart.js') }}"></script>
 {% endblock %}

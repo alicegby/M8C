@@ -4,7 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Purchase;
 use App\Repository\MurderPartyRepository;
-use App\Repository\UserRepository;
+use App\Repository\PackRepository;
+use App\Service\CartService;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
@@ -16,45 +17,53 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class StripeController extends AbstractController
 {
-    #[Route('/paiement/{slug}', name: 'stripe_checkout')]
-    public function checkout(
-        string $slug,
-        MurderPartyRepository $murderPartyRepository,
+    #[Route('/checkout/panier', name: 'stripe_checkout_cart')]
+    public function checkoutCart(
+        CartService $cartService,
     ): Response {
-        $scenario = $murderPartyRepository->findOneBy(['slug' => $slug]);
-
-        if (!$scenario) {
-            throw $this->createNotFoundException('Scénario introuvable');
-        }
-
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
 
+        $cart = $cartService->getFullCart();
+
+        if (empty($cart['items'])) {
+            $this->addFlash('error', 'Votre panier est vide.');
+            return $this->redirectToRoute('cart_index');
+        }
+
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
-        $session = Session::create([
-            'payment_method_types' => ['card'],
-            'line_items' => [[
+        // Construit les line_items pour Stripe
+        $lineItems = [];
+        foreach ($cart['items'] as $item) {
+            $lineItems[] = [
                 'price_data' => [
                     'currency' => 'eur',
                     'product_data' => [
-                        'name' => $scenario->getTitle(),
-                        'description' => substr($scenario->getSynopsis(), 0, 255),
+                        'name' => $item['name'],
                     ],
-                    'unit_amount' => (int)($scenario->getPrice() * 100), // en centimes
+                    'unit_amount' => (int)(floatval($item['price']) * 100),
                 ],
                 'quantity' => 1,
-            ]],
+            ];
+        }
+
+        $session = Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => $lineItems,
             'mode' => 'payment',
-            'success_url' => $this->generateUrl('stripe_success', [
-                'slug' => $slug,
-            ], UrlGeneratorInterface::ABSOLUTE_URL) . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => $this->generateUrl('scenario_show', [
-                'slug' => $slug,
-            ], UrlGeneratorInterface::ABSOLUTE_URL),
+            'success_url' => $this->generateUrl(
+                'stripe_success_cart',
+                [],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            ) . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => $this->generateUrl(
+                'cart_index',
+                [],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            ),
             'metadata' => [
-                'murder_party_id' => $scenario->getId(),
                 'user_id' => $this->getUser()->getUserIdentifier(),
             ],
         ]);
@@ -62,17 +71,18 @@ class StripeController extends AbstractController
         return $this->redirect($session->url);
     }
 
-    #[Route('/paiement/succes/{slug}', name: 'stripe_success')]
-    public function success(
-        string $slug,
+    #[Route('/checkout/success', name: 'stripe_success_cart')]
+    public function successCart(
         Request $request,
+        CartService $cartService,
         MurderPartyRepository $murderPartyRepository,
+        PackRepository $packRepository,
         EntityManagerInterface $em,
     ): Response {
         $sessionId = $request->query->get('session_id');
 
         if (!$sessionId) {
-            return $this->redirectToRoute('scenarios');
+            return $this->redirectToRoute('cart_index');
         }
 
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
@@ -80,44 +90,71 @@ class StripeController extends AbstractController
 
         if ($stripeSession->payment_status !== 'paid') {
             $this->addFlash('error', 'Le paiement n\'a pas été confirmé.');
-            return $this->redirectToRoute('scenarios');
+            return $this->redirectToRoute('cart_index');
         }
 
-        $scenario = $murderPartyRepository->findOneBy(['slug' => $slug]);
         $user = $this->getUser();
+        $cart = $cartService->getFullCart();
 
-        if (!$scenario || !$user) {
-            return $this->redirectToRoute('scenarios');
-        }
+        foreach ($cart['items'] as $item) {
+            // Vérifie si déjà acheté
+            $existing = null;
 
-        // Vérifie si déjà acheté
-        $existing = $em->getRepository(Purchase::class)->findOneBy([
-            'user' => $user,
-            'murderParty' => $scenario,
-        ]);
+            if ($item['type'] === 'scenario') {
+                $existing = $em->getRepository(Purchase::class)->findOneBy([
+                    'user' => $user,
+                    'murderParty' => $item['entity'],
+                ]);
+            } elseif ($item['type'] === 'pack') {
+                $existing = $em->getRepository(Purchase::class)->findOneBy([
+                    'user' => $user,
+                    'pack' => $item['entity'],
+                ]);
+            }
 
-        if (!$existing) {
+            if ($existing) continue;
+
             $purchase = new Purchase();
             $purchase->setUser($user);
-            $purchase->setMurderParty($scenario);
-            $purchase->setPurchaseType('single');
-            $purchase->setAmountPaid($scenario->getPrice());
-            $purchase->setPaymentMethod($stripeSession->payment_method_types[0] ?? 'card');
-            $purchase->setStripePaymentId($stripeSession->payment_intent);
+            $purchase->setAmountPaid($item['price']);
+            $purchase->setPaymentMethod('card');
+            $purchase->setStripePaymentId($stripeSession->payment_intent ?? $sessionId);
             $purchase->setStatus('completed');
 
+            if ($item['type'] === 'scenario') {
+                $purchase->setMurderParty($item['entity']);
+                $purchase->setPurchaseType('single');
+            } elseif ($item['type'] === 'pack') {
+                $purchase->setPack($item['entity']);
+                $purchase->setPurchaseType('pack');
+
+                // Débloque aussi chaque scénario du pack
+                foreach ($item['entity']->getMurderParties() as $mp) {
+                    $existingMp = $em->getRepository(Purchase::class)->findOneBy([
+                        'user' => $user,
+                        'murderParty' => $mp,
+                    ]);
+                    if (!$existingMp) {
+                        $mpPurchase = new Purchase();
+                        $mpPurchase->setUser($user);
+                        $mpPurchase->setMurderParty($mp);
+                        $mpPurchase->setAmountPaid('0.00');
+                        $mpPurchase->setPaymentMethod('card');
+                        $mpPurchase->setStripePaymentId($stripeSession->payment_intent ?? $sessionId);
+                        $mpPurchase->setStatus('completed');
+                        $mpPurchase->setPurchaseType('single');
+                        $em->persist($mpPurchase);
+                    }
+                }
+            }
+
             $em->persist($purchase);
-            $em->flush();
         }
 
-        $this->addFlash('success', 'Achat confirmé ! Vous pouvez maintenant jouer à ' . $scenario->getTitle());
-        return $this->redirectToRoute('scenario_show', ['slug' => $slug]);
-    }
+        $em->flush();
+        $cartService->clear();
 
-    #[Route('/paiement/annulation', name: 'stripe_cancel')]
-    public function cancel(): Response
-    {
-        $this->addFlash('info', 'Paiement annulé.');
-        return $this->redirectToRoute('scenarios');
+        $this->addFlash('success', 'Paiement confirmé ! Vos Murder Parties sont disponibles.');
+        return $this->redirectToRoute('app_account');
     }
 }

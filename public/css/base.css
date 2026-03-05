@@ -98,6 +98,10 @@ body {
     line-height: 1; /* ← ajout */
 }
 
+.menu-links a:hover {
+    color: #CCCCCC;
+}
+
 /* PANIER */
 .cart-icon {
     position: relative;
