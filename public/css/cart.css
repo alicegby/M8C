@@ -417,3 +417,85 @@ h2 {
     transform: scale(1.05);
 }
 
+/* MEDIA QUERY */
+/* TABLETTE */
+@media (max-width: 1024px) {
+
+    .cart-layout {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .cart-right {
+        position: static;
+        order: -1;
+    }
+
+    .cart-customer,
+    .cart-login-box {
+        padding: 20px;
+    }
+
+}
+
+/* MOBILE */
+@media (max-width: 640px) {
+
+    h2 {
+        font-size: 2rem;
+        margin-top: 20px;
+    }
+
+    .cart-section {
+        padding: 1.5rem 0.8rem;
+    }
+
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .cart-item-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .cart-item-price {
+        font-size: 1.2rem;
+    }
+
+    .promo-form {
+        flex-direction: column;
+    }
+
+    .promo-form .btn-primary {
+        width: 100%;
+        text-align: center;
+    }
+
+    .cart-total-line {
+        font-size: 0.95rem;
+    }
+
+    .cart-total-final {
+        font-size: 1.1rem;
+    }
+
+    .cart-total-final span:last-child {
+        font-size: 1.3rem;
+    }
+
+    .cart-customer-info li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .btn-login,
+    .btn-register {
+        font-size: 1rem;
+        padding: 11px 20px;
+    }
+
+}

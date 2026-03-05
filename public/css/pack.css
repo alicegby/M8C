@@ -264,4 +264,116 @@ main.main-content {
     transform: scale(1.05);
 }
 
- 
+ /* MEDIA QUERY */
+ /* TABLETTE */
+@media (max-width: 1024px) {
+
+    .packs-hero h2 {
+        font-size: 2.5rem;
+    }
+
+    .packs-hero p {
+        font-size: 1.1rem;
+        max-width: 600px;
+    }
+
+    .scenario-card {
+        width: 320px;
+    }
+
+    .scenario-grid {
+        gap: 20px;
+    }
+
+    .pack-show {
+        font-size: 2.2rem;
+    }
+
+}
+
+/* MOBILE */
+@media (max-width: 640px) {
+
+    .packs-hero {
+        padding: 30px 15px;
+    }
+
+    .packs-hero h2 {
+        font-size: 2rem;
+    }
+
+    .packs-hero p {
+        font-size: 1rem;
+    }
+
+    .scenario-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .scenario-card {
+        width: 95%;
+        padding: 18px;
+    }
+
+    .scenario-content h3 {
+        font-size: 1.3rem;
+    }
+
+    .scenario-price {
+        font-size: 1.2rem;
+    }
+
+    .scenario-description {
+        font-size: 0.95rem;
+    }
+
+    .btn-primary,
+    .btn-cart,
+    .btn-play {
+        width: 100%;
+        max-width: none;
+        font-size: 0.95rem;
+        padding: 11px 16px;
+    }
+
+    .pack-show {
+        font-size: 2rem;
+    }
+
+    .pack-show-hero h2 {
+        font-size: 1.6rem;
+    }
+
+    .pack-show-hero h3 {
+        font-size: 1.4rem;
+    }
+
+    .scenario-description {
+        font-size: 1rem;
+    }
+
+    .mp-card h4 {
+        font-size: 1.1rem;
+    }
+
+    .mp-card p {
+        font-size: 0.95rem;
+    }
+
+    .pack-actions {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-panier,
+    .btn-jouer {
+        width: 100%;
+        max-width: 320px;
+        text-align: center;
+        font-size: 1rem;
+    }
+
+}
