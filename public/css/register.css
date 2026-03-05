@@ -10,9 +10,7 @@ h2 {
     text-align: center;
 }
 
-/* ================================
-   CONTENEUR
-   ================================ */
+/* CONTENEUR */
 .auth-container {
     display: flex;
     justify-content: center;
@@ -21,9 +19,7 @@ h2 {
     padding: 40px 20px;
 }
 
-/* ================================
-   BOX
-   ================================ */
+/* BOX */
 .auth-box {
     background-color: #0E0E0E;
     padding: 50px 40px;
@@ -37,9 +33,7 @@ h2 {
     max-width: 680px;
 }
 
-/* ================================
-   LOGO
-   ================================ */
+/* LOGO */
 .auth-logo {
     margin-bottom: 20px;
 }
@@ -49,9 +43,7 @@ h2 {
     border-radius: 10px;
 }
 
-/* ================================
-   TITRE & SOUS-TITRE
-   ================================ */
+/* TITRE & SOUS-TITRE */
 .auth-box h2 {
     font-family: 'Anton', sans-serif;
     font-size: 2rem;
@@ -66,9 +58,7 @@ h2 {
     margin-bottom: 25px;
 }
 
-/* ================================
-   FLASH MESSAGES
-   ================================ */
+/* FLASH MESSAGES */
 .flash-error, .flash-success, .flash-warning, .flash-info {
     font-family: 'Arimo', serif;
     padding: 12px 15px;
@@ -83,9 +73,7 @@ h2 {
 .flash-warning { background-color: #C48C6A; color: #000000; }
 .flash-info    { background-color: #0a1f2d; border-left: 3px solid #3498db; color: #85c1e9; }
 
-/* ================================
-   FORMULAIRE
-   ================================ */
+/* FORMULAIRE */
 .auth-form {
     text-align: left;
 }
@@ -131,9 +119,7 @@ h2 {
     box-shadow: 0 0 5px #9D2137;
 }
 
-/* ================================
-   MOT DE PASSE + TOGGLE
-   ================================ */
+/* MOT DE PASSE + TOGGLE */
 .input-password {
     position: relative;
 }
@@ -181,9 +167,7 @@ h2 {
     display: block;
 }
 
-/* ================================
-   FORCE MOT DE PASSE
-   ================================ */
+/* FORCE MOT DE PASSE */
 .password-strength {
     height: 4px;
     border-radius: 2px;
@@ -196,9 +180,7 @@ h2 {
 .password-strength.medium { background: #e67e22; width: 66%; }
 .password-strength.strong { background: #1a3a1a; width: 100%; }
 
-/* ================================
-   ERREURS
-   ================================ */
+/* ERREURS */
 .form-group ul {
     list-style: none;
     margin: 5px 0 0;
@@ -212,9 +194,7 @@ h2 {
     margin-top: 4px;
 }
 
-/* ================================
-   CHECKBOXES
-   ================================ */
+/* CHECKBOXES */
 .form-group--checkbox {
     display: flex;
     flex-direction: row;
@@ -255,9 +235,7 @@ h2 {
     text-decoration: underline;
 }
 
-/* ================================
-   BOUTON
-   ================================ */
+/* BOUTON */
 .btn-auth {
     width: 100%;
     padding: 15px;
@@ -277,9 +255,7 @@ h2 {
     transform: scale(1.03);
 }
 
-/* ================================
-   LIENS BAS DE PAGE
-   ================================ */
+/* LIENS BAS DE PAGE */
 .auth-links {
     font-family: 'Arimo', serif;
     margin-top: 20px;
@@ -299,9 +275,7 @@ h2 {
 
 .auth-links a:hover { color: #9D2137; }
 
-/* ================================
-   RESPONSIVE
-   ================================ */
+/* RESPONSIVE */
 @media (max-width: 768px) {
     .auth-box--wide {
         padding: 35px 25px;

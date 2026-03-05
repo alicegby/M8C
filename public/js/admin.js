@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.admin-btn');
     const content = document.getElementById('admin-content');
 
-    // --- FONCTION AJAX ---
+    // FONCTION AJAX
     function loadAjax(url) {
         fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
             .then(res => res.text())
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => console.error('Erreur AJAX load:', err));
     }
 
-    // --- INITIALISATION CONTENU AJAX ---
+    // INITIALISATION CONTENU AJAX 
     function initAjaxContent() {
         initDynamicCollections();
         initDynamicClues();
@@ -24,23 +24,40 @@ document.addEventListener('DOMContentLoaded', () => {
         initDeleteConfirmations();
         initAjaxBackButtons();
         initAjaxShowLinks();
-        initAvatarButtons(); 
+        initAvatarButtons();
+        initPurchaseFilters();
+        initRefundButtons();
     }
 
-    // --- BOUTONS AVATARS ---
+    // BOUTONS RETOUR 
+    function initAjaxBackButtons() {
+        content.querySelectorAll('.btn-back[data-url]').forEach(btn => {
+            btn.addEventListener('click', () => loadAjax(btn.dataset.url));
+        });
+    }
+
+    // LIENS AJAX SHOW 
+    function initAjaxShowLinks() {
+        content.querySelectorAll('a.ajax-link-show').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                loadAjax(link.href);
+            });
+        });
+    }
+
+    // BOUTONS AVATARS 
     function initAvatarButtons() {
         const createBtn = document.getElementById('create-avatar-btn');
         createBtn?.addEventListener('click', () => loadAjax(createBtn.dataset.url));
 
-        // Voir un avatar
         content.querySelectorAll('.btn-show').forEach(link => {
-        link.addEventListener('click', e => {
-            e.preventDefault();
-            loadAjax(link.href);
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                loadAjax(link.href);
+            });
         });
-    });
 
-        // Supprimer un avatar
         content.querySelectorAll('form[data-action="delete-avatar"]').forEach(f => {
             f.addEventListener('submit', e => {
                 if (!confirm('Voulez-vous vraiment supprimer cet avatar ?')) e.preventDefault();
@@ -48,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- CONFIRM DELETE pour les autres formulaires ---
+    // CONFIRM DELETE 
     function initDeleteConfirmations() {
         content.querySelectorAll('form[data-action="delete"]').forEach(f => {
             f.addEventListener('submit', e => {
@@ -57,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- COLLECTIONS DYNAMIQUES (PERSONNAGES) ---
+    // COLLECTIONS DYNAMIQUES (PERSONNAGES) 
     function initDynamicCollections() {
         const container = document.getElementById('characters-list');
         if (!container) return;
@@ -97,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleBtn.textContent = body.classList.contains('hidden') ? '▼' : '▲';
             });
 
-            // Ouvre automatiquement à la création
             body.classList.remove('hidden');
             toggleBtn.textContent = '▲';
 
@@ -115,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- COLLECTIONS DYNAMIQUES (INDICES) ---
+    // COLLECTIONS DYNAMIQUES (INDICES) 
     function initDynamicClues() {
         const container = document.getElementById('clues-list');
         if (!container) return;
@@ -189,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- FILTRES UTILISATEURS ---
+    // FILTRES UTILISATEURS 
     function initUserFilters() {
         const filterToggle = document.getElementById('filter-toggle');
         const filterMenu = document.getElementById('filter-menu');
@@ -228,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
         newsletterSelect.addEventListener('change', filterUsers);
     }
 
-    // --- FILTRES AVIS ---
+    // FILTRES AVIS 
     function initReviewFilters() {
         const filterToggle = document.getElementById('review-filter-toggle');
         const filterMenu = document.getElementById('review-filter-menu');
@@ -256,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- FILTRES MURDER PARTIES ---
+    // FILTRES MURDER PARTIES 
     function initMPFilters() {
         const keywordInput = document.getElementById('mp-keyword-filter');
         const minPlayersInput = document.getElementById('mp-min-players-filter');
@@ -298,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
         minDurationInput.addEventListener('input', filterMPs);
     }
 
-    // --- FILTRES PROMOS ---
+    // FILTRES PROMOS 
     function initPromoFilters() {
         const filterToggle = document.getElementById('promo-filter-toggle');
         const filterMenu = document.getElementById('promo-filter-menu');
@@ -323,19 +339,16 @@ document.addEventListener('DOMContentLoaded', () => {
             tableBody.querySelectorAll('tr').forEach(row => {
                 if (row.children.length === 1) return;
 
-                const rowType = row.dataset.type;
                 const currentUses = parseInt(row.dataset.currentUses) || 0;
                 const maxUses = row.dataset.maxUses !== '' ? parseInt(row.dataset.maxUses) : null;
                 const validUntil = row.dataset.validUntil;
                 const rowActive = row.dataset.active;
 
-                // Filtre utilisations
                 let matchUses = true;
                 if (uses === 'unused') matchUses = currentUses === 0;
                 else if (uses === 'used') matchUses = currentUses > 0 && (maxUses === null || currentUses < maxUses);
                 else if (uses === 'full') matchUses = maxUses !== null && currentUses >= maxUses;
 
-                // Filtre validité
                 let matchValidity = true;
                 if (validity === 'valid') {
                     matchValidity = validUntil === '' || validUntil >= today;
@@ -345,7 +358,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     matchValidity = validUntil === '';
                 }
 
-                // Filtre actif
                 const matchActive = active === '' || rowActive === active;
 
                 const visible = matchUses && matchValidity && matchActive;
@@ -362,7 +374,86 @@ document.addEventListener('DOMContentLoaded', () => {
         activeSelect.addEventListener('change', filterPromos);
     }
 
-    // --- SIDEBAR ---
+    // FILTRES ACHATS 
+    function initPurchaseFilters() {
+        const filterToggle = document.getElementById('purchase-filter-toggle');
+        const filterMenu = document.getElementById('purchase-filter-menu');
+        const searchInput = document.getElementById('purchase-search');
+        const statusSelect = document.getElementById('purchase-status-filter');
+        const typeSelect = document.getElementById('purchase-type-filter');
+        const refundableSelect = document.getElementById('purchase-refundable-filter');
+        const tableBody = document.getElementById('purchase-table-body');
+
+        if (!tableBody) return;
+
+        filterToggle?.addEventListener('click', () => {
+            filterMenu.classList.toggle('hidden');
+        });
+
+        function filterPurchases() {
+            const search = searchInput?.value.toLowerCase() || '';
+            const status = statusSelect?.value || '';
+            const type = typeSelect?.value || '';
+            const refundable = refundableSelect?.value || '';
+            let visibleCount = 0;
+
+            tableBody.querySelectorAll('tr').forEach(row => {
+                const matchSearch = !search || row.dataset.client.includes(search);
+                const matchStatus = !status || row.dataset.status === status;
+                const matchType = !type || row.dataset.type === type;
+                const matchRefundable = !refundable || row.dataset.refundable === refundable;
+
+                const visible = matchSearch && matchStatus && matchType && matchRefundable;
+                row.style.display = visible ? '' : 'none';
+                if (visible) visibleCount++;
+            });
+
+            const counter = document.getElementById('purchase-count');
+            if (counter) counter.textContent = visibleCount;
+        }
+
+        searchInput?.addEventListener('input', filterPurchases);
+        statusSelect?.addEventListener('change', filterPurchases);
+        typeSelect?.addEventListener('change', filterPurchases);
+        refundableSelect?.addEventListener('change', filterPurchases);
+    }
+
+    // REMBOURSEMENTS 
+    function initRefundButtons() {
+        content.querySelectorAll('.refund-form').forEach(form => {
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+
+                if (!confirm('Confirmer le remboursement ? Cette action est irréversible.')) return;
+
+                const url = form.dataset.url;
+                const token = form.querySelector('input[name="_token"]').value;
+                const purchaseId = form.dataset.purchaseId;
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `_token=${encodeURIComponent(token)}`
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        const row = document.getElementById(`purchase-row-${purchaseId}`);
+                        if (row) {
+                            row.querySelector('.purchase-status').innerHTML = '↩️ Remboursé';
+                            row.querySelector('.purchase-status').className = 'purchase-status purchase-status--refunded';
+                            row.querySelector('td:last-child').innerHTML = '<span class="text-muted">—</span>';
+                        }
+                    } else {
+                        alert('Erreur : ' + data.error);
+                    }
+                })
+                .catch(() => alert('Erreur lors du remboursement.'));
+            });
+        });
+    }
+
+    // SIDEBAR 
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
             buttons.forEach(b => b.classList.remove('active'));
@@ -373,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- BOUTONS CREATION PAGE FULL ---
+    // BOUTONS CREATION PAGE FULL 
     document.addEventListener('click', e => {
         if (e.target?.id === 'create-mp-btn') window.location.href = e.target.dataset.url;
         if (e.target?.id === 'create-pack-btn') window.location.href = e.target.dataset.url;
@@ -381,12 +472,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target?.id === 'create-avatar-btn') window.location.href = e.target.dataset.url;
     });
 
-    // --- INITIALISATION AU CHARGEMENT ---
+    // INITIALISATION AU CHARGEMENT 
     initUserFilters();
     initReviewFilters();
     initMPFilters();
     initDynamicCollections();
     initDynamicClues();
     initPromoFilters();
-    initAvatarButtons(); // <-- initialisation des avatars
+    initAvatarButtons();
+    initPurchaseFilters();
+    initRefundButtons();
 });

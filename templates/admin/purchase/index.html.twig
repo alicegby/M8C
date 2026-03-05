@@ -1,0 +1,120 @@
+<h3>
+    Achats
+    <button id="purchase-filter-toggle" class="filter-btn">
+        <img src="{{ asset('icones/filter_white.png') }}" alt="Filter">
+    </button>
+</h3>
+
+<p class="user-count">
+    Total : <span id="purchase-count">{{ purchases|length }}</span> achat(s)
+</p>
+
+<div id="purchase-filter-menu" class="filter-menu hidden">
+    <label>
+        Recherche client :
+        <input type="text" id="purchase-search" placeholder="Nom, prénom, email...">
+    </label>
+    <label>
+        Statut :
+        <select id="purchase-status-filter">
+            <option value="">Tous</option>
+            <option value="completed">Complété</option>
+            <option value="refunded">Remboursé</option>
+            <option value="pending">En attente</option>
+        </select>
+    </label>
+    <label>
+        Type :
+        <select id="purchase-type-filter">
+            <option value="">Tous</option>
+            <option value="scenario">Scénario</option>
+            <option value="pack">Pack</option>
+        </select>
+    </label>
+    <label>
+        Remboursable :
+        <select id="purchase-refundable-filter">
+            <option value="">Tous</option>
+            <option value="yes">Oui</option>
+            <option value="no">Non</option>
+        </select>
+    </label>
+</div>
+
+{% if purchases is empty %}
+    <p>Aucun achat pour le moment.</p>
+{% else %}
+    <table class="admin-table" id="purchase-table">
+        <thead>
+            <tr>
+                <th>Client</th>
+                <th>Scénario / Pack</th>
+                <th>Montant</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Remboursable</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="purchase-table-body">
+            {% for purchase in purchases %}
+                <tr
+                    data-status="{{ purchase.status }}"
+                    data-type="{{ purchase.murderParty ? 'scenario' : 'pack' }}"
+                    data-refundable="{{ purchase.status != 'refunded' and purchase.isRefundable() ? 'yes' : 'no' }}"
+                    data-client="{{ purchase.user.prenom|lower }} {{ purchase.user.nom|lower }} {{ purchase.user.email|lower }}"
+                    id="purchase-row-{{ purchase.id }}"
+                >
+                    <td>
+                        {{ purchase.user.prenom }} {{ purchase.user.nom }}<br>
+                        <small>{{ purchase.user.email }}</small>
+                    </td>
+                    <td>
+                        {% if purchase.murderParty %}
+                            🔪 {{ purchase.murderParty.title }}
+                        {% elseif purchase.pack %}
+                            🩸 {{ purchase.pack.name }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>{{ purchase.amountPaid }} €</td>
+                    <td>{{ purchase.purchasedAt|date('d/m/Y H:i') }}</td>
+                    <td>
+                        <span class="purchase-status purchase-status--{{ purchase.status }}">
+                            {% if purchase.status == 'completed' %}✅ Complété
+                            {% elseif purchase.status == 'refunded' %}↩️ Remboursé
+                            {% else %}⏳ En attente
+                            {% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        {% if purchase.status == 'refunded' %}
+                            <span class="text-muted">—</span>
+                        {% elseif purchase.isRefundable() %}
+                            <span class="refundable-yes">✅ Oui</span>
+                        {% else %}
+                            <span class="refundable-no">❌ Non</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if purchase.status != 'refunded' and purchase.isRefundable() %}
+                            <form
+                                class="refund-form"
+                                data-purchase-id="{{ purchase.id }}"
+                                data-url="{{ path('admin_purchase_refund', {'id': purchase.id}) }}"
+                            >
+                                <input type="hidden" name="_token" value="{{ csrf_token('refund_' ~ purchase.id) }}">
+                                <button type="submit" class="btn btn-refund">
+                                    Rembourser
+                                </button>
+                            </form>
+                        {% else %}
+                            <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

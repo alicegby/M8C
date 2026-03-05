@@ -596,6 +596,63 @@ td .btn-show {
     color: #F5F5F5;
 }
 
+/* ACHATS */
+.purchase-status {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-family: 'Arimo', serif;
+    font-weight: bold;
+}
+
+.purchase-status--completed {
+    background-color: #1a3a1a;
+    color: #4CAF50;
+}
+
+.purchase-status--refunded {
+    background-color: #2a2a2a;
+    color: #AAAAAA;
+}
+
+.purchase-status--pending {
+    background-color: #3a2a00;
+    color: #FFC107;
+}
+
+.refundable-yes {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.refundable-no {
+    color: #9D2137;
+    font-weight: bold;
+}
+
+.text-muted {
+    color: #AAAAAA;
+}
+
+.btn-refund {
+    background-color: #541826;
+    color: #F5F5F5;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Arimo', serif;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.btn-refund:hover {
+    background-color: #9D2137;
+    transform: translateY(-1px);
+}
+
+
 /* MEDIA QUERY */
 /* MEDIA QUERY TABLETTE ET MOBILE */
 @media (max-width: 1024px) {
@@ -689,6 +746,15 @@ td .btn-show {
     #avatar-table  thead th:nth-child(2),
     tbody td:nth-child(1),
     tbody td:nth-child(2) {
+        display: table-cell;
+    }
+
+    #purchase-table thead th:nth-child(1),
+    #purchase-table thead th:nth-child(5),
+    #purchase-table thead th:nth-child(7),
+    #purchase-table tbody td:nth-child(1),
+    #purchase-table tbody td:nth-child(5),
+    #purchase-table tbody td:nth-child(7) {
         display: table-cell;
     }
 
