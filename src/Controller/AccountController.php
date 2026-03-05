@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Entity\GamePlayer;
+use App\Entity\Purchase;
 use App\Repository\NewsletterSubscriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,21 +22,46 @@ class AccountController extends AbstractController
 {
     #[Route('/mon-compte', name: 'app_account')]
     #[IsGranted('ROLE_USER')]
-    public function index(NewsletterSubscriptionRepository $newsletterRepo): Response
+    public function index(
+        NewsletterSubscriptionRepository $newsletterRepo,
+        EntityManagerInterface $em
+    ): Response
     {
         /** @var User $user */
         $user = $this->getUser();
 
-        // Redirige si l'utilisateur n'a pas confirmé son email
         if (!$user->isVerified()) {
             return $this->redirectToRoute('app_verification_pending');
         }
 
         $isSubscribed = $newsletterRepo->findOneBy(['email' => $user->getEmail()]) !== null;
 
+        // Récupération des parties jouées par l'utilisateur
+        $playedMPs = $em->getRepository(GamePlayer::class)
+            ->createQueryBuilder('gp')
+            ->join('gp.gameSession', 'gs')
+            ->join('gs.murderParty', 'mp')
+            ->addSelect('gs', 'mp')
+            ->where('gp.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('gs.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        // Récupération des parties achetées par l'utilisateur 
+        $purchases = $em->getRepository(Purchase::class)
+        ->createQueryBuilder('p')
+        ->andWhere('p.user = :user')
+        ->setParameter('user', $user)
+        ->orderBy('p.purchasedAt', 'DESC')
+        ->getQuery()
+        ->getResult();
+
         return $this->render('account.html.twig', [
             'user' => $user,
             'isSubscribed' => $isSubscribed,
+            'playedMPs' => $playedMPs, 
+            'purchases' => $purchases,
         ]);
     }
 

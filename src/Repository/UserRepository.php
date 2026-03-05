@@ -13,6 +13,15 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function findBySupabaseId(string $supabaseId): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.supabaseId = :id')
+            ->setParameter('id', $supabaseId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function findByBirthday(int $day, int $month): array
     {
         $conn = $this->getEntityManager()->getConnection();

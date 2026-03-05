@@ -12,20 +12,40 @@
 
 <div class="account-container">
 
-    <div class="account-header animate-block">
-        <div class="account-avatar">
-            {% if user.avatarUrl %}
-                <img src="{{ user.avatarUrl }}" alt="Avatar">
-            {% else %}
-                <div class="account-avatar__placeholder">
-                    {{ user.prenom|slice(0,1)|upper }}{{ user.nom|slice(0,1)|upper }}
-                </div>
-            {% endif %}
+    {# TOP : account-header + mes informations côte à côte #}
+    <div class="account-top animate-block">
+        <div class="account-header">
+            <div class="account-avatar">
+                {% if user.avatarUrl %}
+                    <img src="{{ user.avatarUrl }}" alt="Avatar">
+                {% else %}
+                    <div class="account-avatar__placeholder">
+                        {{ user.prenom|slice(0,1)|upper }}{{ user.nom|slice(0,1)|upper }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="account-header__info">
+                <h2>{{ user.prenom }} {{ user.nom }}</h2>
+                <p class="account-email">{{ user.email }}</p>
+                <p class="account-since">Membre depuis {{ user.createdAt|date('d/m/Y') }}</p>
+            </div>
         </div>
-        <div class="account-header__info">
-            <h2>{{ user.prenom }} {{ user.nom }}</h2>
-            <p class="account-email">{{ user.email }}</p>
-            <p class="account-since">Membre depuis {{ user.createdAt|date('d/m/Y') }}</p>
+
+        <div class="account-card">
+            <h3>Mes informations 
+                <a href="{{ path('account_edit') }}" class="btn-edit">Modifier</a>
+            </h3>
+            <ul class="account-info-list">
+                <li><span>Prénom</span><strong>{{ user.prenom }}</strong></li>
+                <li><span>Nom</span><strong>{{ user.nom }}</strong></li>
+                <li><span>Email</span><strong>{{ user.email }}</strong></li>
+                {% if user.dob %}
+                <li><span>Date de naissance</span><strong>{{ user.dob|date('d/m/Y') }}</strong></li>
+                {% endif %}
+                {% if user.pseudo %}
+                <li><span>Pseudo</span><strong>{{ user.pseudo }}</strong></li>
+                {% endif %}
+            </ul>
         </div>
     </div>
 
@@ -52,60 +72,52 @@
         <a href="{{ path('avis_new') }}" class="btn-primary">Laisser un avis sur Meurtre à Huis Clos</a>
     </div>
 
+    {# Grid des autres sections #}
     <div class="account-grid animate-block">
 
         <div class="account-card">
-            <h3>Mes informations 
-                <a href="{{ path('account_edit') }}" class="btn-edit">Modifier</a>
-            </h3>
-            <ul class="account-info-list">
-                <li><span>Prénom</span><strong>{{ user.prenom }}</strong></li>
-                <li><span>Nom</span><strong>{{ user.nom }}</strong></li>
-                <li><span>Email</span><strong>{{ user.email }}</strong></li>
-                {% if user.dob %}
-                <li><span>Date de naissance</span><strong>{{ user.dob|date('d/m/Y') }}</strong></li>
-                {% endif %}
-                {% if user.pseudo %}
-                <li><span>Pseudo</span><strong>{{ user.pseudo }}</strong></li>
-                {% endif %}
-            </ul>
+            <h3>Murder Parties jouées</h3>
+            {% if playedMPs is empty %}
+                <p class="account-empty">Vous n'avez encore participé à aucune partie.</p>
+            {% else %}
+                <ul class="account-purchases-list">
+                    {% for played in playedMPs %}
+                        <li>
+                            <strong>{{ played.gameSession.murderParty.title }}</strong>
+                            <span>{{ played.gameSession.createdAt|date('d/m/Y') }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </div>
 
         <div class="account-card">
             <h3>Mes Murder Parties achetées</h3>
-            {% if user.purchases is empty %}
-                <p class="account-empty">Vous n'avez pas encore acheté de scénario.</p>
-                <a href="{{ path('scenarios_list') }}" class="btn-primary">Découvrir les scénarios</a>
-            {% else %}
-                <ul class="account-purchases-list">
-                    {% for purchase in user.purchases %}
+            <div class="card">
+                {% if purchases is empty %}
+                    <p>Aucune Murder Party achetée pour le moment.</p>
+                {% else %}
+                    <ul>
+                    {% for p in purchases %}
                         <li>
-                            <strong>{{ purchase.murderParty.title }}</strong>
-                            <span>{{ purchase.createdAt|date('d/m/Y') }}</span>
+                            {% if p.murderParty %}
+                                {{ p.murderParty.title }}
+                            {% elseif p.pack %}
+                                {{ p.pack.name }}
+                            {% else %}
+                                Achat inconnu
+                            {% endif %}
+                            - {{ p.purchasedAt|date('d/m/Y') }}
                         </li>
                     {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
-
-        <div class="account-card">
-            <h3>Murder Parties jouées</h3>
-            {% if user.playedMurderParties is empty %}
-                <p class="account-empty">Vous n'avez encore participé à aucune partie.</p>
-            {% else %}
-                <ul class="account-purchases-list">
-                    {% for played in user.playedMurderParties %}
-                        <li>
-                            <strong>{{ played.getMurderParty().title }}</strong>
-                            <span>{{ played.getUnlockedAt()|date('d/m/Y') }}</span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+                    </ul>
+                {% endif %}
+            </div>
         </div>
 
     </div>
 
+    {# Footer #}
     <div class="account-footer animate-block">
         <div class="app-access">
             <h4>Accéder à l'application</h4>

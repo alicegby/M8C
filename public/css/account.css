@@ -218,6 +218,48 @@ h2 {
     margin-bottom: 10px;
 }
 
+/* Container de la liste */
+.account-purchases-list {
+    list-style: none;     
+    padding: 0;
+    margin: 0;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;          
+}
+
+/* Chaque item de la liste */
+.account-purchases-list li {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    background-color: #1F1F1F1F;     /* fond sombre type app */
+    padding: 14px 18px;
+    border-radius: 10px;
+    border: 1px solid #541826;    /* bordure subtile rouge foncé */
+    font-family: 'Arimo', sans-serif;
+    color: #F5F5F5;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+/* Effet au survol */
+.account-purchases-list li:hover {
+    transform: translateY(-2px);
+}
+
+/* Titre de la MP */
+.account-purchases-list li .mp-title {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Date de l'achat / partie jouée */
+.account-purchases-list li .mp-date {
+    font-size: 14px;
+    color: #CCCCCC;
+}
+
 /* MODIFICATION */
 .account-edit-container {
     flex: 1;
