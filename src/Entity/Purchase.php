@@ -53,6 +53,9 @@ class Purchase
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private \DateTimeInterface $purchasedAt;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $playedAt = null;
+
     public function __construct()
     {
         $this->purchasedAt = new \DateTime();
@@ -82,4 +85,14 @@ class Purchase
     public function setStatus(string $status): static { $this->status = $status; return $this; }
     public function getPurchasedAt(): \DateTimeInterface { return $this->purchasedAt; }
     public function setPurchasedAt(\DateTimeInterface $purchasedAt): static { $this->purchasedAt = $purchasedAt; return $this; }
+    public function getPlayedAt(): ?\DateTimeInterface { return $this->playedAt; }
+    public function setPlayedAt(?\DateTimeInterface $playedAt): static { $this->playedAt = $playedAt; return $this; }
+
+    public function isRefundable(): bool
+    {
+        if ($this->playedAt !== null) return false;
+        $purchased = \DateTime::createFromInterface($this->purchasedAt);
+        $limit = $purchased->modify('+15 days');
+        return new \DateTime() <= $limit;
+    }
 }

@@ -29,10 +29,24 @@
             </a>
         </div>
 
-        <div class="burger">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="header-right">
+            <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <a href="{{ path('cart_index') }}" class="cart-icon">
+                <div class="cart-icon-wrapper">
+                    <img src="{{ asset('icones/panier.png') }}" alt="Panier" class="cart-img">
+                    {% set cartCount = cartService.getCount() %}
+                    {% if cartCount > 0 %}
+                        <span class="cart-badge" id="cart-badge">{{ cartCount }}</span>
+                    {% else %}
+                        <span class="cart-badge" id="cart-badge" style="display:none">0</span>
+                    {% endif %}
+                </div>
+            </a>
         </div>
 
         <nav class="menu-links">
@@ -43,7 +57,17 @@
             <a href="{{ path('about') }}">À propos</a>
             <a href="{{ path('contact') }}">Contact</a>
             <a href="{{ path('app_login')}}">Connexion</a>
-            </ul>
+            <a href="{{ path('cart_index') }}" class="cart-icon cart-icon-desktop">
+                <div class="cart-icon-wrapper">
+                    <img src="{{ asset('icones/panier.png') }}" alt="Panier" class="cart-img">
+                    {% set cartCount = cartService.getCount() %}
+                    {% if cartCount > 0 %}
+                        <span class="cart-badge">{{ cartCount }}</span>
+                    {% else %}
+                        <span class="cart-badge" style="display:none">0</span>
+                    {% endif %}
+                </div>
+            </a>
         </nav>
     </div>
 </header>
@@ -58,10 +82,10 @@
     <div class="footer-container">
 
         <div class="footer-left">
+            <a href="{{ path('avis_new') }}">Laisser un avis</a>
             <a href="{{ path('mentions') }}">Mentions légales</a>
             <a href="{{ path('cgv') }}">Conditions Générales de Vente</a>
             <a href="{{ path('confidentialite') }}">Politique de confidentialité</a>
-            <a href="{{ path('avis_new') }}">Laisser un avis</a>
         </div>
 
         <div class="footer-credit">
