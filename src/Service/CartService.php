@@ -4,6 +4,8 @@ namespace App\Service;
 
 use App\Repository\MurderPartyRepository;
 use App\Repository\PackRepository;
+use App\Repository\PromoCodeRepository;
+use App\Repository\PromoCodeUsageRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class CartService
@@ -12,6 +14,8 @@ class CartService
         private RequestStack $requestStack,
         private MurderPartyRepository $murderPartyRepository,
         private PackRepository $packRepository,
+        private PromoCodeRepository $promoCodeRepository,
+        private PromoCodeUsageRepository $promoCodeUsageRepository,
     ) {}
 
     private function getSession()
@@ -96,5 +100,95 @@ class CartService
         }
 
         return ['items' => $items, 'total' => $total];
+    }
+
+    public function applyPromoCode(string $code, ?object $user): array
+{
+    $promoCode = $this->promoCodeRepository->findOneBy([
+        'code' => strtoupper($code),
+        'isActive' => true,
+    ]);
+
+    if (!$promoCode) {
+        return ['success' => false, 'error' => 'Code promo invalide ou inactif.'];
+    }
+
+    // Vérifie la date de validité
+    $now = new \DateTime();
+    if ($promoCode->getValidFrom() && $now < $promoCode->getValidFrom()) {
+        return ['success' => false, 'error' => 'Ce code promo n\'est pas encore actif.'];
+    }
+    if ($promoCode->getValidUntil() && $now > $promoCode->getValidUntil()) {
+        return ['success' => false, 'error' => 'Ce code promo a expiré.'];
+    }
+
+    // Vérifie le nombre max d'utilisations global
+    if ($promoCode->getMaxUses() !== null && $promoCode->getCurrentUses() >= $promoCode->getMaxUses()) {
+        return ['success' => false, 'error' => 'Ce code promo a atteint sa limite d\'utilisation.'];
+    }
+
+    // Vérifie si l'utilisateur l'a déjà utilisé
+    if ($user) {
+        $alreadyUsed = $this->promoCodeUsageRepository->findOneBy([
+            'user' => $user,
+            'promoCode' => $promoCode,
+        ]);
+        if ($alreadyUsed) {
+            return ['success' => false, 'error' => 'Vous avez déjà utilisé ce code promo.'];
+        }
+    }
+
+    // Stocke le code en session
+    $this->getSession()->set('promo_code', $promoCode->getCode());
+
+    return [
+        'success' => true,
+        'code' => $promoCode->getCode(),
+        'discountType' => $promoCode->getDiscountType(),
+        'discountValue' => $promoCode->getDiscountValue(),
+    ];
+}
+
+public function getAppliedPromoCode(): ?string
+{
+    return $this->getSession()->get('promo_code');
+}
+
+public function removePromoCode(): void
+{
+    $this->getSession()->remove('promo_code');
+}
+
+    public function getFullCartWithPromo(?object $user): array
+    {
+        $cart = $this->getFullCart();
+        $promoCodeStr = $this->getAppliedPromoCode();
+        $discount = 0;
+        $promoData = null;
+
+        if ($promoCodeStr) {
+            $promoCode = $this->promoCodeRepository->findOneBy(['code' => $promoCodeStr]);
+            if ($promoCode) {
+                if ($promoCode->getDiscountType() === 'percentage') {
+                    $discount = $cart['total'] * (floatval($promoCode->getDiscountValue()) / 100);
+                } else {
+                    $discount = floatval($promoCode->getDiscountValue());
+                }
+                $discount = min($discount, $cart['total']);
+                $promoData = [
+                    'code' => $promoCode->getCode(),
+                    'discountType' => $promoCode->getDiscountType(),
+                    'discountValue' => $promoCode->getDiscountValue(),
+                    'discount' => round($discount, 2),
+                ];
+            }
+        }
+
+        return [
+            'items' => $cart['items'],
+            'total' => $cart['total'],
+            'totalAfterDiscount' => round($cart['total'] - $discount, 2),
+            'promo' => $promoData,
+        ];
     }
 }

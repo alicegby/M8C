@@ -128,6 +128,22 @@ class WebhookController extends AbstractController
             }
 
             $em->flush();
+
+            $promoCodeStr = $session->metadata->promo_code ?? null;
+            if ($promoCodeStr) {
+                $promoCode = $em->getRepository(\App\Entity\PromoCode::class)->findOneBy([
+                    'code' => $promoCodeStr
+                ]);
+                if ($promoCode) {
+                    $promoCode->setCurrentUses($promoCode->getCurrentUses() + 1);
+
+                    $usage = new \App\Entity\PromoCodeUsage();
+                    $usage->setUser($user);
+                    $usage->setPromoCode($promoCode);
+                    $em->persist($usage);
+                    $em->flush();
+                }
+            }
         }
 
         return new Response('OK', 200);

@@ -19,6 +19,7 @@
 
         <div class="success-items">
             <h3>Récapitulatif de votre commande</h3>
+
             {% for item in items %}
                 <div class="success-item">
                     <span class="success-item-type">
@@ -28,9 +29,39 @@
                     <span class="success-item-price">{{ item.price }} €</span>
                 </div>
             {% endfor %}
+
+            {% if promo %}
+                <div class="success-item success-item-promo">
+                    <span class="success-item-type">﹪</span>
+                    <span class="success-item-name">
+                        Code promo {{ promo.code }}
+                        {% if promo.discountType == 'percentage' %}
+                            (-{{ promo.discountValue }}%)
+                        {% else %}
+                            (-{{ promo.discountValue }} €)
+                        {% endif %}
+                    </span>
+                    <span class="success-item-price success-item-discount">
+                        -{{ promo.discount|number_format(2, ',', ' ') }} €
+                    </span>
+                </div>
+            {% endif %}
+
             <div class="success-total">
-                <span>Total payé</span>
-                <span>{{ total|number_format(2, ',', ' ') }} €</span>
+                {% if promo %}
+                    <div class="success-total-line">
+                        <span>Sous-total</span>
+                        <span>{{ total|number_format(2, ',', ' ') }} €</span>
+                    </div>
+                    <div class="success-total-line success-total-discount">
+                        <span>Réduction</span>
+                        <span>-{{ promo.discount|number_format(2, ',', ' ') }} €</span>
+                    </div>
+                {% endif %}
+                <div class="success-total-line success-total-final">
+                    <span>Total payé</span>
+                    <span>{{ totalAfterDiscount|number_format(2, ',', ' ') }} €</span>
+                </div>
             </div>
         </div>
 

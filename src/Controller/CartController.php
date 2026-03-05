@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\CartService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -16,11 +17,17 @@ class CartController extends AbstractController
     #[Route('', name: 'index')]
     public function index(): Response
     {
-        $cart = $this->cartService->getFullCart();
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login', ['_target_path' => '/panier']);
+        }
+
+        $cart = $this->cartService->getFullCartWithPromo($this->getUser());
 
         return $this->render('cart.html.twig', [
             'items' => $cart['items'],
             'total' => $cart['total'],
+            'totalAfterDiscount' => $cart['totalAfterDiscount'],
+            'promo' => $cart['promo'],
         ]);
     }
 
@@ -58,5 +65,26 @@ class CartController extends AbstractController
     {
         $this->cartService->clear();
         return $this->redirectToRoute('cart_index');
+    }
+
+    #[Route('/promo/appliquer', name: 'apply_promo', methods: ['POST'])]
+    public function applyPromo(Request $request): JsonResponse
+    {
+        $code = strtoupper(trim($request->request->get('code', '')));
+
+        if (empty($code)) {
+            return new JsonResponse(['success' => false, 'error' => 'Entre un code promo.']);
+        }
+
+        $result = $this->cartService->applyPromoCode($code, $this->getUser());
+
+        return new JsonResponse($result);
+    }
+
+    #[Route('/promo/supprimer', name: 'remove_promo', methods: ['POST'])]
+    public function removePromo(): JsonResponse
+    {
+        $this->cartService->removePromoCode();
+        return new JsonResponse(['success' => true]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\CartService;
+use App\Repository\PromoCodeRepository;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,12 +17,13 @@ class StripeController extends AbstractController
     #[Route('/checkout/panier', name: 'stripe_checkout_cart')]
     public function checkoutCart(
         CartService $cartService,
+        PromoCodeRepository $promoCodeRepository,
     ): Response {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
 
-        $cart = $cartService->getFullCart();
+        $cart = $cartService->getFullCartWithPromo($this->getUser());
 
         if (empty($cart['items'])) {
             $this->addFlash('error', 'Votre panier est vide.');
@@ -30,8 +32,8 @@ class StripeController extends AbstractController
 
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
-        // Construit les line_items pour Stripe
         $lineItems = [];
+
         foreach ($cart['items'] as $item) {
             $lineItems[] = [
                 'price_data' => [
@@ -43,6 +45,28 @@ class StripeController extends AbstractController
                 ],
                 'quantity' => 1,
             ];
+        }
+
+        // Ajoute une ligne de réduction si code promo appliqué
+        if ($cart['promo'] && $cart['promo']['discount'] > 0) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => 'eur',
+                    'product_data' => [
+                        'name' => 'Code promo : ' . $cart['promo']['code'],
+                    ],
+                    'unit_amount' => -(int)($cart['promo']['discount'] * 100),
+                ],
+                'quantity' => 1,
+            ];
+        }
+
+        // Métadonnées pour le webhook
+        $metadata = [
+            'user_id' => $this->getUser()->getUserIdentifier(),
+        ];
+        if ($cart['promo']) {
+            $metadata['promo_code'] = $cart['promo']['code'];
         }
 
         $session = Session::create([
@@ -59,9 +83,7 @@ class StripeController extends AbstractController
                 [],
                 UrlGeneratorInterface::ABSOLUTE_URL
             ),
-            'metadata' => [
-                'user_id' => $this->getUser()->getUserIdentifier(),
-            ],
+            'metadata' => $metadata,
         ]);
 
         return $this->redirect($session->url);
@@ -91,17 +113,20 @@ class StripeController extends AbstractController
             return $this->redirectToRoute('cart_index');
         }
 
-        // Récupère les items du panier pour l'affichage
-        $cart = $cartService->getFullCart();
+        $cart = $cartService->getFullCartWithPromo($this->getUser());
         $items = $cart['items'];
         $total = $cart['total'];
+        $totalAfterDiscount = $cart['totalAfterDiscount'];
+        $promo = $cart['promo'];
 
-        // Vide le panier
         $cartService->clear();
+        $cartService->removePromoCode();
 
         return $this->render('payment_success.html.twig', [
             'items' => $items,
             'total' => $total,
+            'totalAfterDiscount' => $totalAfterDiscount,
+            'promo' => $promo,
         ]);
     }
 }

@@ -8,7 +8,7 @@
 
 {% block body %}
 <h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
-<h2>Mon panier</h2>
+<h2 class="cart-title">Mon panier</h2>
 
 <section class="cart-section">
     <div class="container">
@@ -18,46 +18,120 @@
                 <a href="{{ path('scenarios_list') }}" class="btn-primary">Découvrir les Murder Parties</a>
             </div>
         {% else %}
-            <div class="cart-items">
-                {% for item in items %}
-                    <div class="cart-item">
-                        <div class="cart-item-info">
-                            <span class="cart-item-type">
-                                {% if item.type == 'pack' %}🩸 Pack{% else %}🩸 Scénario{% endif %}
-                            </span>
-                            <span class="cart-item-name">{{ item.name }}</span>
+            <div class="cart-layout">
+
+                {# COLONNE GAUCHE #}
+                <div class="cart-left">
+
+                    <div class="cart-items">
+                        {% for item in items %}
+                            <div class="cart-item">
+                                <div class="cart-item-info">
+                                    <span class="cart-item-type">
+                                        {% if item.type == 'pack' %}🩸 Pack{% else %}🩸 Scénario{% endif %}
+                                    </span>
+                                    <span class="cart-item-name">{{ item.name }}</span>
+                                </div>
+                                <div class="cart-item-actions">
+                                    <span class="cart-item-price">{{ item.price }} €</span>
+                                    <a href="{{ path('cart_remove', {'key': item.key}) }}" class="cart-remove">✕</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {# CODE PROMO #}
+                    <div class="cart-promo">
+                        {% if promo %}
+                            <div class="promo-applied">
+                                <span class="promo-code">{{ promo.code }}</span>
+                                <span class="promo-discount">
+                                    {% if promo.discountType == 'percentage' %}
+                                        -{{ promo.discountValue }}%
+                                    {% else %}
+                                        -{{ promo.discountValue }} €
+                                    {% endif %}
+                                </span>
+                                <button class="promo-remove" id="btn-remove-promo">✕</button>
+                            </div>
+                        {% else %}
+                            <p class="promo-label">Vous avez un code promo ?</p>
+                            <div class="promo-form">
+                                <input
+                                    type="text"
+                                    id="promo-input"
+                                    placeholder="Entrez votre code"
+                                    maxlength="100"
+                                >
+                                <button class="btn-primary" id="btn-apply-promo">Appliquer</button>
+                            </div>
+                            <p class="promo-error" id="promo-error" style="display:none"></p>
+                        {% endif %}
+                    </div>
+
+                    {# TOTAL #}
+                    <div class="cart-total-block">
+                        <div class="cart-total-line">
+                            <span>Sous-total</span>
+                            <span>{{ total|number_format(2, ',', ' ') }} €</span>
                         </div>
-                        <div class="cart-item-actions">
-                            <span class="cart-item-price">{{ item.price }} €</span>
-                            <a href="{{ path('cart_remove', {'key': item.key}) }}" class="cart-remove">✕</a>
+                        {% if promo %}
+                            <div class="cart-total-line cart-discount">
+                                <span>
+                                    Réduction
+                                    {% if promo.discountType == 'percentage' %}
+                                        ({{ promo.discountValue }}%)
+                                    {% endif %}
+                                </span>
+                                <span>-{{ promo.discount|number_format(2, ',', ' ') }} €</span>
+                            </div>
+                        {% endif %}
+                        <div class="cart-total-line cart-total-final">
+                            <span>Total</span>
+                            <span>{{ totalAfterDiscount|number_format(2, ',', ' ') }} €</span>
                         </div>
                     </div>
-                {% endfor %}
-            </div>
 
-            <div class="cart-summary">
-                <div class="cart-total">
-                    <span>Total</span>
-                    <span>{{ total|number_format(2, ',', ' ') }} €</span>
                 </div>
 
-                {% if app.user %}
-                    <a href="{{ path('stripe_checkout_cart') }}" class="btn-primary cart-checkout">
-                        Passer au paiement
-                    </a>
-                {% else %}
-                    <p class="cart-login-notice">Vous devez être connecté pour poursuivre votre commande.</p>
-                    <div class="auth-buttons">
-                        <a href="{{ path('app_login', {'_target_path': path('cart_index')}) }}" class="btn-login">
-                            Se connecter
+                {# COLONNE DROITE #}
+                <div class="cart-right">
+
+                    {% if app.user %}
+                        <div class="cart-customer">
+                            <h3>Vos informations</h3>
+                            <ul class="cart-customer-info">
+                                <li><span>Prénom</span><strong>{{ app.user.prenom }}</strong></li>
+                                <li><span>Nom</span><strong>{{ app.user.nom }}</strong></li>
+                                <li><span>Email</span><strong>{{ app.user.email }}</strong></li>
+                            </ul>
+                        </div>
+
+                        <a href="{{ path('stripe_checkout_cart') }}" class="btn-primary cart-checkout">
+                            Passer au paiement
                         </a>
-                        <a href="{{ path('app_register') }}" class="btn-register">
-                            Créer un compte
-                        </a>
-                    </div>
-                {% endif %}
+                        <p class="cart-secure">🔒 Paiement sécurisé par Stripe</p>
+
+                    {% else %}
+                        <div class="cart-login-box">
+                            <p class="cart-login-notice">Connectez-vous pour finaliser votre commande.</p>
+                            <a href="{{ path('app_login', {'_target_path': path('cart_index')}) }}" class="btn-primary">
+                                Se connecter
+                            </a>
+                            <a href="{{ path('app_register') }}" class="btn-secondary">
+                                Créer un compte
+                            </a>
+                        </div>
+                    {% endif %}
+
+                </div>
+
             </div>
         {% endif %}
     </div>
 </section>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
+    <script src="{{ asset('js/codepromo.js') }}"></script>
 {% endblock %}
