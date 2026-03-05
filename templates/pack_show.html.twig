@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ pack.name }} — Pack Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/pack.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Packs de Murder Parties</h1>
+<h2 class="pack-show">{{ pack.name }}</h2>
+
+<section class="pack-show-hero animate-block">
+    <div class="container">
+        
+        {% if pack.price > 0 %}
+            <p class="scenario-price">{{ pack.price }} €</p>
+        {% else %}
+            <p class="scenario-price">Gratuit</p>
+        {% endif %}
+
+        <p class="scenario-description">{{ pack.description }}</p>
+
+        {% if pack.getMurderParties()|length > 0 %}
+            <h3>Scénarios inclus :</h3>
+            <div class="mp-list">
+                {% for scenario in pack.getMurderParties() %}
+                    <div class="mp-card">
+                        <h4>{{ scenario.title }}</h4>
+                        <p>{{ scenario.duree }} minutes | {{ scenario.nbPlayers }} joueurs
+                            {% if scenario.averageRating is not empty and scenario.averageRating != 0 %}
+                                | {{ scenario.averageRating }}/5
+                            {% endif %}
+                        </p>
+                        <p class="scenario-synopsis">{{ scenario.synopsis }}</p>
+                        <a href="{{ path('scenario_show', {'slug': scenario.slug}) }}" class="btn-see">Voir la Murder Party</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="pack-actions">
+            {% if pack.price > 0 %}
+                <button
+                    class="btn-primary btn-add-cart"
+                    data-slug="{{ scenario.slug }}"
+                    data-name="{{ scenario.title }}"
+                    data-price="{{ scenario.price }}"
+                    id="btn-add-cart"
+                >
+                    Ajouter au panier
+                </button>
+            {% else %}
+                <a href="#" class="btn-jouer">Jouer</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/scroll.js') }}"></script>
+<script src="{{ asset('js/addtocart.js') }}"></script>
+{% endblock %}

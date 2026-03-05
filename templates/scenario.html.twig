@@ -12,9 +12,15 @@
 <section class="scenarios-hero animate-block">
     <div class="container">
         <h2>Découvrez nos Murder Parties</h2>
-        <p>Choisissez votre scénario et plongez dans l’enquête. Chaque partie est unique !</p>
+        <p>
+            Choisissez votre scénario et plongez dans l’enquête directement sur l'application. Chaque partie est unique ! 
+        </p>
     </div>
 </section>
+
+<p class="intro animate-block">
+    Toutes nos Murder Parties peuvent être commandées directement sur le site et se jouent exclusivement via l’application. Plongez dans l’enquête où que vous soyez ! 
+</p>
 
 <section class="scenario-devis animate-block">
     <div class="container">
@@ -34,10 +40,37 @@
                     <div class="scenario-content">
                         <h3>{{ scenario.title }}</h3>
                         <p class="scenario-meta">
-                            {{ scenario.duree }} minutes | {{ scenario.nbPlayers }} joueurs | {{ scenario.averageRating }}/5
+                            {{ scenario.duree }} minutes | {{ scenario.nbPlayers }} joueurs
+                            {% if scenario.averageRating is not empty and scenario.averageRating != 0 %}
+                                | {{ scenario.averageRating }}/5
+                            {% endif %}
+                        </p>
+                        <p class="scenario-price">
+                            {% if scenario.price > 0 %}
+                                {{ scenario.price }} €  
+                            {% else %}
+                                Gratuit
+                            {% endif %}
                         </p>
                         <p class="scenario-synopsis">{{ scenario.synopsis }}</p>
-                        <a href="{{ path('scenario_show', {'slug': scenario.slug}) }}" class="btn-primary">Voir la Murder Party</a>
+
+                        <div class="scenario-buttons">
+                            <a href="{{ path('scenario_show', {'slug': scenario.slug}) }}" class="btn-primary">Voir la Murder Party</a>
+                            {% if scenario.price > 0 %}
+                               <button
+                                    class="btn-primary btn-add-cart"
+                                    data-slug="{{ scenario.slug }}"
+                                    data-name="{{ scenario.title }}"
+                                    data-price="{{ scenario.price }}"
+                                    id="btn-add-cart"
+                                >
+                                    Ajouter au panier
+                                </button>
+                            {% else %}
+                                <a href="#" class="btn-cart">Jouer</a>
+                            {% endif %}
+                        </div>
+
                     </div>
                 </div>
             {% else %}
@@ -47,8 +80,11 @@
     </div>
 </section>
 
+<a href="{{ path('packs_list') }}" class="btn-primary btn-packs">Découvrez les Murder Parties en packs</a>
+
 {% endblock %}
 
 {% block javascripts %}
     <script src="{{ asset('js/scroll.js') }}"></script>
+    <script src="{{ asset('js/addtocart.js') }}"></script>
 {% endblock %}

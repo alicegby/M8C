@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement confirmé — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/payment_success.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+
+<section class="success-section animate-block">
+    <div class="container">
+
+        <div class="success-icon">🔪</div>
+
+        <h2>Paiement confirmé !</h2>
+        <p class="success-subtitle">Votre enquête vous attend...</p>
+
+        <div class="success-items">
+            <h3>Récapitulatif de votre commande</h3>
+            {% for item in items %}
+                <div class="success-item">
+                    <span class="success-item-type">
+                        {% if item.type == 'pack' %}🩸{% else %}🩸{% endif %}
+                    </span>
+                    <span class="success-item-name">{{ item.name }}</span>
+                    <span class="success-item-price">{{ item.price }} €</span>
+                </div>
+            {% endfor %}
+            <div class="success-total">
+                <span>Total payé</span>
+                <span>{{ total|number_format(2, ',', ' ') }} €</span>
+            </div>
+        </div>
+
+        <div class="success-info">
+            <p>Vos Murder Parties sont maintenant disponibles dans l'application.</p>
+            <p>Téléchargez l'application pour commencer à jouer !</p>
+        </div>
+
+        <div class="success-buttons">
+            <div class="download-buttons">
+                <a href="#">
+                    <img src="{{ asset('icones/apple_darkred.png') }}" alt="Téléchargement Apple">
+                </a>
+                <a href="#">
+                    <img src="{{ asset('icones/android_darkred.png') }}" alt="Téléchargement Android">
+                </a>
+            </div>
+            <a href="{{ path('app_account') }}" class="btn-primary">
+                Voir mes Murder Parties
+            </a>
+            <a href="{{ path('scenarios_list') }}" class="btn-secondary">
+                Découvrir d'autres scénarios
+            </a>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
+{% endblock %}

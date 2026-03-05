@@ -1,0 +1,126 @@
+.success-section {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.success-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    animation: popIn 0.5s ease;
+}
+
+@keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+.success-section h2 {
+    font-family: 'Anton', serif;
+    color: #F5F5F5;
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.success-subtitle {
+    font-family: 'Arimo', sans-serif;
+    color: #AAAAAA;
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+}
+
+.success-items {
+    background-color: #1C1C1C;
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    text-align: left;
+}
+
+.success-items h3 {
+    font-family: 'Anton', serif;
+    color: #F5F5F5;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.success-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #2C2C2C;
+}
+
+.success-item-type {
+    font-size: 1.2rem;
+}
+
+.success-item-name {
+    font-family: 'Arimo', sans-serif;
+    color: #F5F5F5;
+    font-size: 1rem;
+    flex: 1;
+}
+
+.success-item-price {
+    font-family: 'Anton', serif;
+    color: #9D2137;
+    font-size: 1rem;
+}
+
+.success-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    font-family: 'Anton', serif;
+    color: #F5F5F5;
+    font-size: 1.2rem;
+}
+
+.success-total span:last-child {
+    color: #9D2137;
+    font-size: 1.4rem;
+}
+
+.success-info {
+    max-width: 500px;
+    margin: 0 auto 40px;
+}
+
+.success-info p {
+    font-family: 'Arimo', sans-serif;
+    color: #AAAAAA;
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+.success-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.download-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.download-buttons a img {
+    height: 50px;
+    transition: transform 0.3s ease;
+}
+
+.download-buttons a img:hover {
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .success-section h2 { font-size: 2rem; }
+    .success-items { padding: 20px; }
+    .success-icon { font-size: 3.5rem; }
+}

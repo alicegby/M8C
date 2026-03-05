@@ -7,10 +7,11 @@
 {% endblock %}
 
 {% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Mon panier</h2>
+
 <section class="cart-section">
     <div class="container">
-        <h2>Mon panier</h2>
-
         {% if items is empty %}
             <div class="cart-empty">
                 <p>Votre panier est vide.</p>
@@ -22,7 +23,7 @@
                     <div class="cart-item">
                         <div class="cart-item-info">
                             <span class="cart-item-type">
-                                {% if item.type == 'pack' %}🎁 Pack{% else %}🔪 Scénario{% endif %}
+                                {% if item.type == 'pack' %}🩸 Pack{% else %}🩸 Scénario{% endif %}
                             </span>
                             <span class="cart-item-name">{{ item.name }}</span>
                         </div>
@@ -45,13 +46,15 @@
                         Passer au paiement
                     </a>
                 {% else %}
-                    <p class="cart-login-notice">Vous devez être connecté pour payer.</p>
-                    <a href="{{ path('app_login') }}" class="btn-primary">
-                        Se connecter pour payer
-                    </a>
-                    <a href="{{ path('app_register') }}" class="btn-secondary">
-                        Créer un compte
-                    </a>
+                    <p class="cart-login-notice">Vous devez être connecté pour poursuivre votre commande.</p>
+                    <div class="auth-buttons">
+                        <a href="{{ path('app_login', {'_target_path': path('cart_index')}) }}" class="btn-login">
+                            Se connecter
+                        </a>
+                        <a href="{{ path('app_register') }}" class="btn-register">
+                            Créer un compte
+                        </a>
+                    </div>
                 {% endif %}
             </div>
         {% endif %}

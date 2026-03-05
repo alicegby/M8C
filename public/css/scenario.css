@@ -33,6 +33,14 @@ main.main-content {
     margin: 0 auto;
 }
 
+.intro {
+    color: #CCCCCC;
+    font-family: 'Arimo', serif;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 10px;
+}
+
 /* DEVIS */
 .scenario-devis {
     padding: 20px 20px;
@@ -100,8 +108,16 @@ main.main-content {
 .scenario-meta {
     font-family: 'Arimo', serif;
     font-size: 0.9rem;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     color: #AAAAAA;
+}
+
+.scenario-price {
+    font-family: 'Arimo', serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #9D2137;
 }
 
 .scenario-synopsis {
@@ -151,6 +167,33 @@ main.main-content {
 .btn-secondary:hover {
     background-color: #9D2137;
     color: #F5F5F5;
+    transform: scale(1.05);
+}
+.scenario-buttons {
+    display: flex;
+    flex-direction: column; /* force les boutons en colonne */
+    gap: 10px; /* espace entre les boutons */
+    margin-top: 10px;
+}
+
+.btn-cart {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 12px 30px;
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    text-decoration: none;
+    color: #F5F5F5;
+    background-color: #541826;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-cart:hover {
+    background-color: #9D2137;
     transform: scale(1.05);
 }
 
@@ -340,6 +383,24 @@ main.main-content {
     transform: scale(1.2);
 }
 
+.btn-packs {
+    display: inline-block;
+    margin: 30px auto 50px auto;
+    background-color: #541826;
+    color: #F5F5F5;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.btn-packs:hover {
+    transform: scale(1.05);
+    background-color: #9D2137;
+}
+
 /* ANIMATIONS JS */
 .animate-block {
     opacity: 0;
@@ -367,6 +428,7 @@ main.main-content {
     .scenario-card { width: 350px; }
     .scenario-content h3 { font-size: 1.3rem; }
     .scenario-meta { font-size: 0.85rem; }
+    .scenario-price { font-size: 1.1rem; }
     .scenario-synopsis { font-size: 0.95rem; }
     .scenario-container { padding: 25px 20px; }
     .scenario-container h2 { font-size: 1.3rem; }
@@ -381,6 +443,7 @@ main.main-content {
     .scenario-card { width: 90%; }
     .scenario-content h3 { font-size: 1.2rem; }
     .scenario-meta { font-size: 0.8rem; }
+    .scenario-price { font-size: 1rem; }
     .scenario-synopsis { font-size: 0.9rem; }
     .scenario-container { padding: 20px 15px; }
     .scenario-container h2 { font-size: 1.2rem; }
@@ -390,6 +453,10 @@ main.main-content {
     .btn-play .download-buttons { flex-direction: row; gap: 15px; }
     .scenario-btns { flex-direction: column; align-items: center; }
     .btn-jouer, .btn-rules { width: 100%; max-width: 280px; }
+    .scenario-buttons {
+        flex-direction: row; /* côte à côte sur desktop */
+        align-items: center; /* bouton alignés verticalement */
+    }
 }
 
 @media (max-width: 480px) {
@@ -397,6 +464,7 @@ main.main-content {
     .scenarios-hero p { font-size: 0.95rem; }
     .scenario-content h3 { font-size: 1.1rem; }
     .scenario-meta { font-size: 0.75rem; }
+    .scenario-price { font-size: 0.9rem; }
     .scenario-synopsis { font-size: 0.85rem; }
     .scenario-container h2 { font-size: 1.1rem; }
     .scenario-container p { font-size: 0.9rem; }

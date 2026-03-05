@@ -38,6 +38,9 @@
 
         <form method="post" action="{{ path('app_login') }}" class="auth-form">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            {% if target_path %}
+                <input type="hidden" name="_target_path" value="{{ target_path }}">
+            {% endif %}
 
             <div class="form-group">
                 <label for="email">Adresse email</label>

@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Packs — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/pack.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Packs de Murder Parties</h1>
+
+<section class="packs-hero animate-block">
+    <div class="container">
+        <h2>Découvrez nos Packs de Murder Parties</h2>
+        <p>
+            Chaque pack regroupe plusieurs scénarios pour vivre plusieurs enquêtes passionnantes. Tous les scénarios sont uniquement jouables sur l'application.
+        </p>
+    </div>
+</section>
+
+<section class="packs-list animate-block">
+    <div class="container">
+        <div class="scenario-grid">
+            {% for pack in packs %}
+                <div class="scenario-card">
+                    <div class="scenario-content">
+                        <h3>{{ pack.name }}</h3>
+
+                        {% if pack.price > 0 %}
+                            <p class="scenario-price">{{ pack.price }} €</p>
+                        {% else %}
+                            <p class="scenario-price">Gratuit</p>
+                        {% endif %}
+
+                        <p class="scenario-description">{{ pack.description }}</p>
+
+                        {% if pack.getMurderParties()|length > 0 %}
+                            <ul class="pack-scenarios-list">
+                                {% for scenario in pack.getMurderParties() %}
+                                    <li>{{ scenario.title }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        <a href="{{ path('pack_show', {'id': pack.id}) }}" class="btn-primary">Voir le pack</a>
+
+                        {% if pack.price > 0 %}
+                            <button
+                                    class="btn-primary btn-add-cart"
+                                    data-id="{{ pack.id }}"
+                                    data-name="{{ pack.name }}"
+                                    data-price="{{ pack.price }}"
+                                    data-type="pack"
+                                >
+                                    Ajouter au panier
+                                </button>
+                        {% else %}
+                            <a href="#" class="btn-play">Jouer</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <p>Aucun pack disponible pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
+    <script src="{{ asset('js/addtocart.js') }}"></script>
+{% endblock %}

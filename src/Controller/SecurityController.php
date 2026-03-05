@@ -30,6 +30,11 @@ class SecurityController extends AbstractController
             if ($this->isGranted('ROLE_ADMIN')) {
                 return $this->redirectToRoute('admin_dashboard');
             }
+            // Redirige vers _target_path si présent
+            $targetPath = $request->query->get('_target_path');
+            if ($targetPath) {
+                return $this->redirect($targetPath);
+            }
             return $this->redirectToRoute('app_account');
         }
 
@@ -50,6 +55,7 @@ class SecurityController extends AbstractController
         return $this->render('login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
+            'target_path' => $request->query->get('_target_path'),
         ]);
     }
 

@@ -2,11 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Purchase;
-use App\Repository\MurderPartyRepository;
-use App\Repository\PackRepository;
 use App\Service\CartService;
-use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -75,86 +71,37 @@ class StripeController extends AbstractController
     public function successCart(
         Request $request,
         CartService $cartService,
-        MurderPartyRepository $murderPartyRepository,
-        PackRepository $packRepository,
-        EntityManagerInterface $em,
     ): Response {
         $sessionId = $request->query->get('session_id');
 
-        if (!$sessionId) {
+        if (!$sessionId || !$this->getUser()) {
             return $this->redirectToRoute('cart_index');
         }
 
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
-        $stripeSession = Session::retrieve($sessionId);
+
+        try {
+            $stripeSession = Session::retrieve($sessionId);
+        } catch (\Exception $e) {
+            return $this->redirectToRoute('cart_index');
+        }
 
         if ($stripeSession->payment_status !== 'paid') {
             $this->addFlash('error', 'Le paiement n\'a pas été confirmé.');
             return $this->redirectToRoute('cart_index');
         }
 
-        $user = $this->getUser();
+        // Récupère les items du panier pour l'affichage
         $cart = $cartService->getFullCart();
+        $items = $cart['items'];
+        $total = $cart['total'];
 
-        foreach ($cart['items'] as $item) {
-            // Vérifie si déjà acheté
-            $existing = null;
-
-            if ($item['type'] === 'scenario') {
-                $existing = $em->getRepository(Purchase::class)->findOneBy([
-                    'user' => $user,
-                    'murderParty' => $item['entity'],
-                ]);
-            } elseif ($item['type'] === 'pack') {
-                $existing = $em->getRepository(Purchase::class)->findOneBy([
-                    'user' => $user,
-                    'pack' => $item['entity'],
-                ]);
-            }
-
-            if ($existing) continue;
-
-            $purchase = new Purchase();
-            $purchase->setUser($user);
-            $purchase->setAmountPaid($item['price']);
-            $purchase->setPaymentMethod('card');
-            $purchase->setStripePaymentId($stripeSession->payment_intent ?? $sessionId);
-            $purchase->setStatus('completed');
-
-            if ($item['type'] === 'scenario') {
-                $purchase->setMurderParty($item['entity']);
-                $purchase->setPurchaseType('single');
-            } elseif ($item['type'] === 'pack') {
-                $purchase->setPack($item['entity']);
-                $purchase->setPurchaseType('pack');
-
-                // Débloque aussi chaque scénario du pack
-                foreach ($item['entity']->getMurderParties() as $mp) {
-                    $existingMp = $em->getRepository(Purchase::class)->findOneBy([
-                        'user' => $user,
-                        'murderParty' => $mp,
-                    ]);
-                    if (!$existingMp) {
-                        $mpPurchase = new Purchase();
-                        $mpPurchase->setUser($user);
-                        $mpPurchase->setMurderParty($mp);
-                        $mpPurchase->setAmountPaid('0.00');
-                        $mpPurchase->setPaymentMethod('card');
-                        $mpPurchase->setStripePaymentId($stripeSession->payment_intent ?? $sessionId);
-                        $mpPurchase->setStatus('completed');
-                        $mpPurchase->setPurchaseType('single');
-                        $em->persist($mpPurchase);
-                    }
-                }
-            }
-
-            $em->persist($purchase);
-        }
-
-        $em->flush();
+        // Vide le panier
         $cartService->clear();
 
-        $this->addFlash('success', 'Paiement confirmé ! Vos Murder Parties sont disponibles.');
-        return $this->redirectToRoute('app_account');
+        return $this->render('payment_success.html.twig', [
+            'items' => $items,
+            'total' => $total,
+        ]);
     }
 }

@@ -1,0 +1,266 @@
+h1 {
+    display: none;
+}
+
+/* MAIN CONTENT */
+main.main-content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* HERO */
+.packs-hero {
+    background-color: #000000;
+    margin-top: 40px;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.packs-hero h2 {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    color: #F5F5F5;
+}
+
+.packs-hero p {
+    font-family: 'Arimo', serif;
+    color: #F5F5F5;
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* PACK CARD */
+.scenario-card {
+    background-color: #1C1C1C;
+    border-radius: 16px;
+    overflow: hidden;
+    width: 400px;
+    padding: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.scenario-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+/* TITRE */
+.scenario-content h3 {
+    font-family: 'Anton', serif;
+    font-size: 1.5rem;
+    color: #F5F5F5;
+    margin-bottom: 10px;
+}
+
+/* PRIX */
+.scenario-price {
+    font-family: 'Anton', serif;
+    color: #9D2137;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* DESCRIPTION */
+.scenario-description {
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    color: #AAAAAA;
+    margin-bottom: 15px;
+}
+
+/* LISTE SCÉNARIOS INCLUS */
+.pack-scenarios-list {
+    list-style: disc;
+    padding-left: 20px;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.pack-scenarios-list li {
+    font-family: 'Arimo', serif;
+    color: #f5f5f5;
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+}
+
+/* BOUTONS */
+.btn-primary, .btn-cart, .btn-play {
+    display: block;
+    width: 80%;
+    max-width: 250px;
+    margin: 10px auto;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-family: 'Arimo', serif;
+    font-weight: bold;
+    font-size: 1rem;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Voir le pack */
+.btn-primary {
+    background-color: #541826;
+    color: #F5F5F5;
+    border: none;
+}
+.btn-primary:hover {
+    background-color: #9D2137;
+    transform: scale(1.05);
+}
+
+/* Ajouter au panier */
+.btn-cart {
+    background-color: #541826;
+    color: #F5F5F5;
+}
+.btn-cart:hover {
+    background-color: #9D2137;
+    transform: scale(1.05);
+}
+
+/* Jouer */
+.btn-play {
+    background-color: #541826;
+    color: #F5F5F5;
+}
+.btn-play:hover {
+    background-color: #9D2137;
+    transform: scale(1.05);
+}
+
+/* GRILLE PACKS */
+.scenario-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+/* PACK SHOW */
+.pack-show {
+    font-family: 'Anton', serif;
+    font-size: 2.5rem;
+    color: #F5F5F5;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.pack-show-hero {
+    width: 100%;
+    color: #F5F5F5;
+    margin: 30px 0;
+}
+
+/* TITRE ET PRIX */
+.pack-show-hero h2 {
+    font-family: 'Anton', serif;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.pack-show-hero h3 {
+    font-family: 'Anton', serif;
+    font-size: 1.7rem;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.scenario-price {
+    font-family: 'Anton', serif;
+    font-size: 1.5rem;
+    color: #9D2137;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.scenario-description {
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    color: #CCCCCC;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* LISTE DES MURDER PARTIES */
+.mp-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.mp-card {
+    width: 100%;
+}
+
+.mp-card h4 {
+    font-family: 'Anton', serif;
+    font-size: 1.2rem;
+    color: #F5F5F5;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.mp-card p {
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    color: #CCCCCC;
+    margin: 0 0 15px 0;
+    text-align: center;
+}
+
+/* ON SUPPRIME LES BOUTONS DANS LES MP */
+.mp-card .btn-see {
+    display: none;
+}
+
+/* ACTIONS DU PACK */
+.pack-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-panier, .btn-jouer {
+    display: inline-block;
+    padding: 12px 30px;
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-panier {
+    background-color: #541826;
+    color: #F5F5F5;
+}
+
+.btn-panier:hover {
+    background-color: #9D2137;
+    transform: scale(1.05);
+}
+
+.btn-jouer {
+    background-color: transparent;
+    border: 2px solid #9D2137;
+    color: #F5F5F5;
+}
+
+.btn-jouer:hover {
+    background-color: #9D2137;
+    color: #F5F5F5;
+    transform: scale(1.05);
+}
+

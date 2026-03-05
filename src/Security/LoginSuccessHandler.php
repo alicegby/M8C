@@ -24,6 +24,13 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             return new RedirectResponse($this->urlGenerator->generate('admin_dashboard'));
         }
 
+        $targetPath = $request->request->get('_target_path')
+        ?? $request->getSession()->get('_security.main.target_path');
+
+        if ($targetPath) {
+            return new RedirectResponse($targetPath);
+        }
+
         return new RedirectResponse($this->urlGenerator->generate('app_account'));
     }
 }

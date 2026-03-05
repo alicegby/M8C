@@ -10,6 +10,10 @@
 <h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
 <h2 class="scenario-show">{{ scenario.title }}</h2>
 
+<p class="intro">
+    Toutes nos Murder Parties peuvent être commandées directement sur le site et se jouent exclusivement via l’application. Plongez dans l’enquête où que vous soyez ! 
+</p>
+
 <section class="scenario-detail animate-block">
     <div class="scenario-container">
         <p class="meta">{{ scenario.duree }} min | {{ scenario.nbPlayers }} joueurs | {{ scenario.averageRating }}/5</p>
@@ -30,9 +34,11 @@
                 <button
                     class="btn-primary btn-add-cart"
                     data-slug="{{ scenario.slug }}"
+                    data-name="{{ scenario.title }}"
+                    data-price="{{ scenario.price }}"
                     id="btn-add-cart"
-                >
-                    Ajouter au panier — {{ scenario.price }} €
+                    >
+                        Ajouter au panier
                 </button>
                 <a href="{{ path('stripe_checkout_cart') }}" class="btn-secondary btn-buy-now" id="btn-buy-now" style="display:none">
                     Voir mon panier et payer
@@ -45,7 +51,7 @@
     <div class="btn-play">
         {% if scenario.isFree or isPurchased %}
             {% if isPurchased %}
-                <p>✅ Vous possédez ce scénario</p>
+                <p>✓ Vous possédez ce scénario</p>
             {% endif %}
             <p><a href="{{ path('telechargement') }}">Téléchargez</a> l'application pour jouer à cette Murder Party</p>
             <div class="download-buttons">
@@ -63,6 +69,8 @@
         {% endif %}
     </div>
 </section>
+
+<a href="{{ path('packs_list') }}" class="btn-primary btn-packs">Découvrez les Murder Parties en packs</a>
 {% endblock %}
 
 {% block javascripts %}
