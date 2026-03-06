@@ -4,15 +4,16 @@ doctrine_mongodb:
     connections:
         default:
             server: '%env(MONGODB_URI)%'
-            options: {}
     default_database: '%env(MONGODB_DB)%'
     document_managers:
         default:
             auto_mapping: true
             mappings:
                 App:
+                    type: attribute
                     dir: '%kernel.project_dir%/src/Document'
                     prefix: 'App\Document'
+                    is_bundle: false
 
 when@prod:
     doctrine_mongodb:
@@ -29,4 +30,3 @@ when@prod:
             pools:
                 doctrine_mongodb.system_cache_pool:
                     adapter: cache.system
-    

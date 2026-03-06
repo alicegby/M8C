@@ -24,13 +24,19 @@ class AdminController extends AbstractController
         ContactMessageRepository $contactRepo,
         StatRepository $statRepo,
     ): Response {
+        try {
+            $totalRevenue = $statRepo->getTotalRevenue();
+        } catch (\Throwable $e) {
+            $totalRevenue = 0;
+        }
+
         return $this->render('admin/dashboard.html.twig', [
-            'user'             => $this->getUser(),
-            'total_mp'         => $mpRepo->count([]),
-            'total_users'      => $userRepo->count(['isDeleted' => false]),
-            'pending_reviews'  => $reviewRepo->count(['status' => 'pending']),
-            'unread_messages'  => $contactRepo->count(['isRead' => false]),
-            'total_revenue'    => $statRepo->getTotalRevenue(),
+            'user'            => $this->getUser(),
+            'total_mp'        => $mpRepo->count([]),
+            'total_users'     => $userRepo->count(['isDeleted' => false]),
+            'pending_reviews' => $reviewRepo->count(['status' => 'pending']),
+            'unread_messages' => $contactRepo->count(['isRead' => false]),
+            'total_revenue'   => $totalRevenue,
         ]);
     }
 }

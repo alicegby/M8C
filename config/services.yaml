@@ -8,8 +8,13 @@ services:
         autowire: true      
         autoconfigure: true 
 
+    App\Repository\StatRepository:
+        arguments:
+            $dm: '@doctrine_mongodb.odm.document_manager'
+
     App\:
         resource: '../src/'
+        
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']

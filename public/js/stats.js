@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // --- Dropdown → tags ---
-    mpDropdown.addEventListener('change', () => {
+    mpDropdown.addEventListener('change', () => { 
         const selectedId = mpDropdown.value;
         if (!selectedId) return;
         const selectedText = mpDropdown.options[mpDropdown.selectedIndex].text;

@@ -27,21 +27,26 @@ class StatsAdminController extends AbstractController
         Request $request,
         StatRepository $statRepo,
         MurderPartyRepository $mpRepo,
-        GameResultRepository $resultRepo,
+        GameResultRepository $resultRepo
     ): JsonResponse {
         try {
             $start = $request->query->get('start') ? new \DateTime($request->query->get('start')) : null;
             $end   = $request->query->get('end')   ? new \DateTime($request->query->get('end'))   : null;
-            $mpIds = $request->query->all('mp') ?? [];
+            $mpIds = $request->query->all('mp');
 
+            // On normalise les MP sélectionnés
+            if (empty($mpIds)) $mpIds = [];
+
+            // Liste des Murder Parties existantes
             $murderParties = array_map(fn($mp) => [
                 'id'    => $mp->getId(),
                 'title' => $mp->getTitle(),
             ], $mpRepo->findAll());
 
+            // Statistiques sécurisées : fallback sur tableau vide ou 0 si pas de données
             return $this->json([
                 'murderParties'       => $murderParties,
-                'sales'               => $statRepo->getSalesByMP($mpIds, $start, $end),
+                'sales'               => $statRepo->getSalesByMP($mpIds ?: null, $start, $end),
                 'success_rate'        => $statRepo->getSuccessRateByMurderParty($mpIds, $start, $end),
                 'promo_vs_full'       => $statRepo->getPromoVsFullPrice($start, $end),
                 'avg_basket'          => $statRepo->getAverageBasket($mpIds, $start, $end),
@@ -52,10 +57,12 @@ class StatsAdminController extends AbstractController
                 'source_distribution' => $statRepo->getSourceDistribution($start, $end),
             ]);
         } catch (\Throwable $e) {
+            // Log ici si nécessaire pour debug
             return $this->json([
-                'error' => $e->getMessage(),
-                'file'  => $e->getFile(),
-                'line'  => $e->getLine(),
+                'error'   => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+                'message' => 'Impossible de récupérer les stats, vérifie les collections ou les filtres.'
             ], 500);
         }
     }
