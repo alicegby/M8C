@@ -96,14 +96,31 @@ p.small {
     text-align: left;
 }
 
+.avertissement {
+    grid-column: 1 / -1; /* prend toute la largeur sous la grid */
+    justify-self: center;
+    color: #F5F5F5;
+    margin-top: 20px;
+    font-family: 'Arimo', serif;
+    font-size: 1.05rem;
+}
+
+.avertissement a {
+    color: #9D2137;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.avertissement a:hover {
+    color: #541826;
+}
+
 /* BOUTON */
 .rules-content .btn-primary {
     grid-column: 1 / -1; /* prend toute la largeur sous la grid */
     justify-self: center;
-
-    margin-top: 50px;
+    margin-top: 20px;
     padding: 14px 35px;
-
     font-family: 'Arimo', serif;
     font-size: 1.1rem;
     text-decoration: none;
@@ -111,7 +128,6 @@ p.small {
     background-color: #541826;
     border-radius: 10px;
     font-weight: bold;
-
     transition: all 0.3s ease;
 }
 

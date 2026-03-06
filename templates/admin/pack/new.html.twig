@@ -28,7 +28,14 @@
 
         <h3>Murder Parties incluses</h3>
         <div class="pack-mp-list">
-            {{ form_row(form.murderParties) }}
+            {% for mp in form.murderParties %}
+                <div class="form-check">
+                    {{ form_widget(mp) }}
+                    {{ form_label(mp) }}
+                </div>
+            {% else %}
+                <p class="empty-message">Aucune Murder Party disponible.</p>
+            {% endfor %}
         </div>
     </div>
 

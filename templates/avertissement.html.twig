@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de Confidentialité — Meurtre à Huis Clos{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/pages.css') }}">
+{% endblock %}
+
+{% block body %}
+<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
+<h2>Avertissements</h2>
+
+<section class="avertissement-section animate-block">
+    <h3>Contenu sensible</h3>
+    <p>
+       Certaines parties de ce jeu contiennent des scènes et du contenu destinés à un public averti. Cela peut inclure :
+    </p>
+    <ul>
+        <li><strong>Violences physiques ou psychologiques</strong></li>
+        <li><strong>Scènes à caractère sexuel</strong></li>
+        <li><strong>Langage offensant ou insultes</strong></li>
+        <li><strong>Thèmes adultes ou perturbants</strong></li>
+    </ul>
+
+    <p>
+        Ces contenus <strong>ne conviennent pas aux personnes mineures ou sensibles.</strong> <br>
+        En accédant au jeu <strong>Meutre à Huis Clos</strong>, vous confirmez être majeur ou capable de gérer ce type de contenu.
+    </p>
+    <p>
+        Merci de votre compréhension et de respecter les avertissements.
+    </p>
+
+</section>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/scroll.js') }}"></script>
+{% endblock %}
