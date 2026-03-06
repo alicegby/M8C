@@ -2,19 +2,111 @@
 
 namespace App\Repository;
 
-use App\Entity\Purchase;
 use App\Entity\GameResult;
+use App\Entity\GameSession;
+use App\Entity\Purchase;
+use App\Entity\User;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Service\MongoService;
 
 class StatRepository
 {
-    public function __construct(
-        private EntityManagerInterface $em,
-        private MongoService $mongo
-    ) {}
+    private Connection $conn;
 
-    // STATS SQL (PostgreSQL via Doctrine ORM)
+    public function __construct(private EntityManagerInterface $em)
+    {
+        $this->conn = $em->getConnection();
+    }
+
+    // =========================================================================
+    // ÉCRITURE — appelées par StatService
+    // =========================================================================
+
+    public function savePurchaseStat(Purchase $purchase, string $source = 'web'): void
+    {
+        $data = [
+            'userId'          => $purchase->getUser()->getId(),
+            'purchaseType'    => $purchase->getPurchaseType(),
+            'amountPaid'      => (float) $purchase->getAmountPaid(),
+            'discountApplied' => (float) $purchase->getDiscountApplied(),
+            'paymentMethod'   => $purchase->getPaymentMethod(),
+            'source'          => $source,
+        ];
+
+        if ($purchase->getMurderParty()) {
+            $data['murderPartyId']    = $purchase->getMurderParty()->getId();
+            $data['murderPartyTitle'] = $purchase->getMurderParty()->getTitle();
+        }
+
+        if ($purchase->getPack()) {
+            $data['packId']   = $purchase->getPack()->getId();
+            $data['packName'] = $purchase->getPack()->getName();
+        }
+
+        if ($purchase->getPromoCode()) {
+            $data['promoCodeId'] = $purchase->getPromoCode()->getId();
+            $data['promoCode']   = $purchase->getPromoCode()->getCode();
+        }
+
+        $this->conn->executeStatement(
+            "INSERT INTO stats (type, data, created_at) VALUES (:type, :data::jsonb, :created_at)",
+            [
+                'type'       => 'purchase',
+                'data'       => json_encode($data),
+                'created_at' => $purchase->getPurchasedAt()->format('Y-m-d H:i:s'),
+            ]
+        );
+    }
+
+    public function saveGameStat(GameSession $session): void
+    {
+        $result = $session->getGameResult();
+        if (!$result) return;
+
+        $data = [
+            'murderPartyId'    => $session->getMurderParty()->getId(),
+            'murderPartyTitle' => $session->getMurderParty()->getTitle(),
+            'gameSessionId'    => $session->getId(),
+            'playerCount'      => $session->getGamePlayers()->count(),
+            'success'          => $result->isSuccess(),
+            'correctVotes'     => $result->getCorrectVotesCount(),
+            'totalVotes'       => $result->getTotalVotesCount(),
+        ];
+
+        if ($session->getStartedAt()) {
+            $data['durationSeconds'] = $result->getCompletedAt()->getTimestamp() - $session->getStartedAt()->getTimestamp();
+        }
+
+        $this->conn->executeStatement(
+            "INSERT INTO stats (type, data, created_at) VALUES (:type, :data::jsonb, :created_at)",
+            [
+                'type'       => 'game',
+                'data'       => json_encode($data),
+                'created_at' => $result->getCompletedAt()->format('Y-m-d H:i:s'),
+            ]
+        );
+    }
+
+    public function saveRegistrationStat(User $user): void
+    {
+        $data = [
+            'userId'       => $user->getId(),
+            'authProvider' => $user->getAuthProvider(),
+        ];
+
+        $this->conn->executeStatement(
+            "INSERT INTO stats (type, data, created_at) VALUES (:type, :data::jsonb, :created_at)",
+            [
+                'type'       => 'registration',
+                'data'       => json_encode($data),
+                'created_at' => $user->getCreatedAt()->format('Y-m-d H:i:s'),
+            ]
+        );
+    }
+
+    // =========================================================================
+    // LECTURE — appelées par StatsAdminController
+    // =========================================================================
 
     public function getTotalRevenue(?\DateTime $start = null, ?\DateTime $end = null): float
     {
@@ -160,7 +252,6 @@ class StatRepository
         }, $qb->getQuery()->getArrayResult());
     }
 
-    // 'web' = achat Stripe sur le site, 'app' = achat in-app sur l'application
     public function getSourceDistribution(?\DateTime $start = null, ?\DateTime $end = null): array
     {
         $qb = $this->em->createQueryBuilder()
@@ -181,10 +272,19 @@ class StatRepository
         ], $qb->getQuery()->getArrayResult());
     }
 
-    // MongoDB — inscriptions par période
-    // Géré via MongoRegistrationService (lazy)
     public function getRegistrationsByPeriod(?\DateTime $start = null, ?\DateTime $end = null): array
     {
-        return $this->mongo->getRegistrationsByPeriod($start, $end);
+        $sql = "SELECT TO_CHAR(created_at, 'YYYY-MM') as month, COUNT(*) as count FROM stats WHERE type = 'registration'";
+        $params = [];
+
+        if ($start) { $sql .= " AND created_at >= :start"; $params['start'] = $start->format('Y-m-d'); }
+        if ($end)   { $sql .= " AND created_at <= :end";   $params['end']   = $end->format('Y-m-d'); }
+
+        $sql .= " GROUP BY month ORDER BY month ASC";
+
+        return array_map(fn($r) => [
+            'month' => $r['month'],
+            'count' => (int) $r['count'],
+        ], $this->conn->executeQuery($sql, $params)->fetchAllAssociative());
     }
 }
