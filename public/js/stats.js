@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
         charts.promoVsFull = new Chart(document.getElementById('promoVsFullPriceChart'), {
             type: 'doughnut',
             data: {
-                labels: ['Avec code promo', 'Prix plein'],
+                labels: ['Code Promo', 'Prix plein'],
                 datasets: [{
                     data: [promoVsFull.withPromo, promoVsFull.withoutPromo],
                     backgroundColor: [COLORS.lightRed, COLORS.grey]
@@ -153,6 +153,8 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
                 plugins: { legend: { labels: { color: '#F5F5F5' } } }
             }
         });
@@ -193,6 +195,8 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
                 plugins: { legend: { labels: { color: '#F5F5F5' } } }
             }
         });
@@ -216,6 +220,8 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
                 plugins: { legend: { labels: { color: '#F5F5F5' } } }
             }
         });
@@ -278,6 +284,8 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 3,
                 plugins: {
                     legend: { labels: { color: '#F5F5F5' } },
                     tooltip: {

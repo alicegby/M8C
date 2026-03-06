@@ -18,9 +18,7 @@ class StatRepository
         $this->conn = $em->getConnection();
     }
 
-    // =========================================================================
     // ÉCRITURE — appelées par StatService
-    // =========================================================================
 
     public function savePurchaseStat(Purchase $purchase, string $source = 'web'): void
     {
@@ -104,9 +102,7 @@ class StatRepository
         );
     }
 
-    // =========================================================================
     // LECTURE — appelées par StatsAdminController
-    // =========================================================================
 
     public function getTotalRevenue(?\DateTime $start = null, ?\DateTime $end = null): float
     {

@@ -80,6 +80,7 @@ class WebhookController extends AbstractController
                         $purchase->setPaymentMethod('card');
                         $purchase->setStripePaymentId($session->payment_intent ?? $session->id);
                         $purchase->setStatus('completed');
+                        $purchase->setSource('web');
                         $em->persist($purchase);
                         $em->flush();
 
@@ -105,6 +106,7 @@ class WebhookController extends AbstractController
                         $purchase->setPaymentMethod('card');
                         $purchase->setStripePaymentId($session->payment_intent ?? $session->id);
                         $purchase->setStatus('completed');
+                        $purchase->setSource('web');
                         $em->persist($purchase);
                         $em->flush();
 

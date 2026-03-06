@@ -36,7 +36,7 @@ h3 {
     display: flex;
     flex-wrap: wrap;
     gap: 24px;
-    align-items: flex-end;
+    align-items: flex-start;
     justify-content: center;
     margin-bottom: 40px;
     background-color: #1A1A1A;
@@ -47,7 +47,7 @@ h3 {
 }
 
 .filter-group {
-    display: flex;
+    justify-content: flex-end;
     flex-direction: column;
     gap: 8px;
     min-width: 200px;
@@ -189,6 +189,7 @@ h3 {
 /* Bouton appliquer */
 .btn-filter {
     padding: 10px 24px;
+    margin-top: 10px;
     background-color: #541826;
     color: #F5F5F5;
     border: none;
@@ -212,6 +213,8 @@ h3 {
     font-family: 'Arimo', serif;
     padding: 40px 0;
 }
+
+
 
 /* Responsive */
 @media (max-width: 768px) {
