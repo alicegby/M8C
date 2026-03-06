@@ -2,92 +2,73 @@
 
 namespace App\Service;
 
-use App\Document\GameStat;
-use App\Document\PurchaseStat;
-use App\Document\UserRegistrationStat;
 use App\Entity\GameSession;
 use App\Entity\Purchase;
 use App\Entity\User;
-use Doctrine\ODM\MongoDB\DocumentManager;
 
 class StatService
 {
-    public function __construct(private DocumentManager $dm) {}
+    public function __construct(private MongoService $mongo) {}
 
-    /**
-     * Appelé après chaque achat complété (WebhookController)
-     */
     public function recordPurchase(Purchase $purchase, string $source = 'web'): void
     {
-        $stat = new PurchaseStat();
-        $stat->setUserId($purchase->getUser()->getId());
-        $stat->setPurchaseType($purchase->getPurchaseType());
-        $stat->setAmountPaid((float) $purchase->getAmountPaid());
-        $stat->setDiscountApplied((float) $purchase->getDiscountApplied());
-        $stat->setPaymentMethod($purchase->getPaymentMethod());
-        $stat->setPurchasedAt($purchase->getPurchasedAt());
-        $stat->setSource($source);
+        $data = [
+            'userId'        => $purchase->getUser()->getId(),
+            'purchaseType'  => $purchase->getPurchaseType(),
+            'amountPaid'    => (float) $purchase->getAmountPaid(),
+            'discountApplied' => (float) $purchase->getDiscountApplied(),
+            'paymentMethod' => $purchase->getPaymentMethod(),
+            'purchasedAt'   => new \MongoDB\BSON\UTCDateTime($purchase->getPurchasedAt()->getTimestamp() * 1000),
+            'source'        => $source,
+        ];
 
         if ($purchase->getMurderParty()) {
-            $stat->setMurderPartyId($purchase->getMurderParty()->getId());
-            $stat->setMurderPartyTitle($purchase->getMurderParty()->getTitle());
+            $data['murderPartyId']    = $purchase->getMurderParty()->getId();
+            $data['murderPartyTitle'] = $purchase->getMurderParty()->getTitle();
         }
 
         if ($purchase->getPack()) {
-            $stat->setPackId($purchase->getPack()->getId());
-            $stat->setPackName($purchase->getPack()->getName());
+            $data['packId']   = $purchase->getPack()->getId();
+            $data['packName'] = $purchase->getPack()->getName();
         }
 
         if ($purchase->getPromoCode()) {
-            $stat->setPromoCodeId($purchase->getPromoCode()->getId());
-            $stat->setPromoCode($purchase->getPromoCode()->getCode());
+            $data['promoCodeId'] = $purchase->getPromoCode()->getId();
+            $data['promoCode']   = $purchase->getPromoCode()->getCode();
         }
 
-        $this->dm->persist($stat);
-        $this->dm->flush();
+        $this->mongo->savePurchase($data);
     }
 
-    /**
-     * Appelé à la fin d'une partie (GameSessionController::finish)
-     */
     public function recordGame(GameSession $session): void
     {
         $result = $session->getGameResult();
-        if (!$result) {
-            return;
-        }
+        if (!$result) return;
 
-        $stat = new GameStat();
-        $stat->setMurderPartyId($session->getMurderParty()->getId());
-        $stat->setMurderPartyTitle($session->getMurderParty()->getTitle());
-        $stat->setGameSessionId($session->getId());
-        $stat->setPlayerCount($session->getGamePlayers()->count());
-        $stat->setSuccess($result->isSuccess());
-        $stat->setCorrectVotes($result->getCorrectVotesCount());
-        $stat->setTotalVotes($result->getTotalVotesCount());
-        $stat->setPlayedAt($result->getCompletedAt());
+        $data = [
+            'murderPartyId'    => $session->getMurderParty()->getId(),
+            'murderPartyTitle' => $session->getMurderParty()->getTitle(),
+            'gameSessionId'    => $session->getId(),
+            'playerCount'      => $session->getGamePlayers()->count(),
+            'success'          => $result->isSuccess(),
+            'correctVotes'     => $result->getCorrectVotesCount(),
+            'totalVotes'       => $result->getTotalVotesCount(),
+            'playedAt'         => new \MongoDB\BSON\UTCDateTime($result->getCompletedAt()->getTimestamp() * 1000),
+        ];
 
-        // Durée si la partie a été démarrée
         if ($session->getStartedAt()) {
-            $duration = $result->getCompletedAt()->getTimestamp() - $session->getStartedAt()->getTimestamp();
-            $stat->setDurationSeconds($duration);
+            $data['durationSeconds'] = $result->getCompletedAt()->getTimestamp() - $session->getStartedAt()->getTimestamp();
         }
 
-        $this->dm->persist($stat);
-        $this->dm->flush();
+        $this->mongo->saveGame($data);
     }
 
-    /**
-     * Appelé à l'inscription d'un utilisateur (RegistrationController)
-     */
     public function recordRegistration(User $user): void
     {
-        $stat = new UserRegistrationStat();
-        $stat->setUserId($user->getId());
-        $stat->setAuthProvider($user->getAuthProvider());
-        $stat->setRegisteredAt($user->getCreatedAt());
-
-        $this->dm->persist($stat);
-        $this->dm->flush();
+        $this->mongo->saveRegistration(
+            $user->getId(),
+            $user->getAuthProvider(),
+            $user->getCreatedAt()
+        );
     }
 }

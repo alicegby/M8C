@@ -4,18 +4,17 @@ namespace App\Repository;
 
 use App\Entity\Purchase;
 use App\Entity\GameResult;
-use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\MongoService;
 
 class StatRepository
 {
     public function __construct(
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private MongoService $mongo
     ) {}
 
-    // ============================================================
-    // STATS SQL (Supabase / PostgreSQL via Doctrine ORM)
-    // ============================================================
+    // STATS SQL (PostgreSQL via Doctrine ORM)
 
     public function getTotalRevenue(?\DateTime $start = null, ?\DateTime $end = null): float
     {
@@ -161,17 +160,31 @@ class StatRepository
         }, $qb->getQuery()->getArrayResult());
     }
 
+    // 'web' = achat Stripe sur le site, 'app' = achat in-app sur l'application
     public function getSourceDistribution(?\DateTime $start = null, ?\DateTime $end = null): array
     {
-        return [];
+        $qb = $this->em->createQueryBuilder()
+            ->select('p.source as source, COUNT(p.id) as count, SUM(p.amountPaid) as totalRevenue')
+            ->from(Purchase::class, 'p')
+            ->where("p.status = 'completed'")
+            ->andWhere('p.source IS NOT NULL')
+            ->groupBy('p.source');
+
+        if ($start) $qb->andWhere('p.purchasedAt >= :start')->setParameter('start', $start);
+        if ($end)   $qb->andWhere('p.purchasedAt <= :end')->setParameter('end', $end);
+
+        return array_map(fn($r) => [
+            'source'       => $r['source'],
+            'label'        => $r['source'] === 'web' ? 'Site web (Stripe)' : 'Application (In-App)',
+            'count'        => (int) $r['count'],
+            'totalRevenue' => round((float) $r['totalRevenue'], 2),
+        ], $qb->getQuery()->getArrayResult());
     }
 
-    // ============================================================
-    // MongoDB — désactivé temporairement (SIGSEGV driver)
-    // Retourne des données mock pour ne pas crasher FPM
-    // ============================================================
+    // MongoDB — inscriptions par période
+    // Géré via MongoRegistrationService (lazy)
     public function getRegistrationsByPeriod(?\DateTime $start = null, ?\DateTime $end = null): array
     {
-        return [];
+        return $this->mongo->getRegistrationsByPeriod($start, $end);
     }
 }

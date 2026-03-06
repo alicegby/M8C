@@ -5,17 +5,17 @@ parameters:
 
 services:
     _defaults:
-        autowire: true      
-        autoconfigure: true 
-
-    App\Repository\StatRepository:
-        arguments:
-            $dm: '@doctrine_mongodb.odm.document_manager'
+        autowire: true
+        autoconfigure: true
 
     App\:
         resource: '../src/'
-        
+
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+    App\Service\MongoService:
+        arguments:
+            $uri: '%env(MONGODB_URI)%'
+            $database: '%env(MONGODB_DB)%'

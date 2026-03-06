@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
         charts.sourceDistribution = new Chart(document.getElementById('sourceDistributionChart'), {
             type: 'doughnut',
             data: {
-                labels: sourceDistribution.map(s => s.source === 'web' ? 'Web' : 'Application'),
+                labels: sourceDistribution.map(s => s.label),
                 datasets: [{
                     data: sourceDistribution.map(s => s.count),
                     backgroundColor: [COLORS.red, COLORS.lightRed],

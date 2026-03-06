@@ -44,8 +44,11 @@ class Purchase
     #[ORM\Column(length: 20)]
     private string $paymentMethod; // 'card', 'paypal', 'apple_pay', 'google_pay'
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private string $stripePaymentId;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $source = null; // 'web', 'app'
 
     #[ORM\Column(length: 20)]
     private string $status = 'pending'; // 'pending', 'completed', 'refunded'
@@ -81,6 +84,8 @@ class Purchase
     public function setPaymentMethod(string $paymentMethod): static { $this->paymentMethod = $paymentMethod; return $this; }
     public function getStripePaymentId(): string { return $this->stripePaymentId; }
     public function setStripePaymentId(string $stripePaymentId): static { $this->stripePaymentId = $stripePaymentId; return $this; }
+    public function getSource(): ?string { return $this->source; }
+    public function setSource(?string $source): static { $this->source = $source; return $this; }
     public function getStatus(): string { return $this->status; }
     public function setStatus(string $status): static { $this->status = $status; return $this; }
     public function getPurchasedAt(): \DateTimeInterface { return $this->purchasedAt; }
