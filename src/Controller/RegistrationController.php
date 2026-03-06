@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Service\StatService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,7 @@ class RegistrationController extends AbstractController
     public function __construct()
     {
         $this->supabaseUrl = $_ENV['SUPABASE_URL'];
-        $this->supabaseKey = $_ENV['SUPABASE_SERVICE_ROLE_KEY']; // ou ANON KEY si limité
+        $this->supabaseKey = $_ENV['SUPABASE_SERVICE_ROLE_KEY'];
     }
 
     #[Route('/inscription', name: 'app_register')]
@@ -31,7 +32,8 @@ class RegistrationController extends AbstractController
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $em,
-        MailerInterface $mailer
+        MailerInterface $mailer,
+        StatService $statService
     ): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_account');
@@ -52,7 +54,7 @@ class RegistrationController extends AbstractController
 
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // ── 1️⃣ Création utilisateur dans Supabase Auth ─────────
+            // ── 1 Création utilisateur dans Supabase Auth ─────────
             try {
                 $client = new Client(); // GuzzleHttp\Client
                 $response = $client->request('POST', "{$this->supabaseUrl}/auth/v1/admin/users", [
@@ -81,7 +83,7 @@ class RegistrationController extends AbstractController
                 return $this->redirectToRoute('app_register');
             }
 
-            // ── 2️⃣ Hash mot de passe et setup Symfony ─────────────
+            // ── 2 Hash mot de passe et setup Symfony ─────────────
             $user->setPasswordHash($passwordHasher->hashPassword($user, $plainPassword));
 
             // Génère token de vérification email
@@ -92,7 +94,10 @@ class RegistrationController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            // ── 3️⃣ Envoi email de vérification ────────────────────
+             // ── 3 Enregistrement stat ────────────────────
+            $statService->recordRegistration($user);
+
+            // ── 4 Envoi email de vérification ────────────────────
             $verificationUrl = $this->generateUrl(
                 'app_verify_email',
                 ['token' => $token, 'email' => $user->getEmail()],

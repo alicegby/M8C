@@ -6,6 +6,7 @@ use App\Entity\Purchase;
 use App\Repository\MurderPartyRepository;
 use App\Repository\PackRepository;
 use App\Repository\UserRepository;
+use App\Service\StatService;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Stripe;
 use Stripe\Webhook;
@@ -24,6 +25,7 @@ class WebhookController extends AbstractController
         UserRepository $userRepository,
         MurderPartyRepository $murderPartyRepository,
         PackRepository $packRepository,
+        StatService $statService,
     ): Response {
         $payload = $request->getContent();
         $sigHeader = $request->headers->get('stripe-signature');
@@ -45,7 +47,6 @@ class WebhookController extends AbstractController
                 return new Response('Non payé', 200);
             }
 
-            // Récupère l'utilisateur via son email (getUserIdentifier)
             $userEmail = $session->metadata->user_id ?? null;
             if (!$userEmail) {
                 return new Response('User manquant', 200);
@@ -56,7 +57,6 @@ class WebhookController extends AbstractController
                 return new Response('User introuvable', 200);
             }
 
-            // Récupère les line items de la session
             Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
             $lineItems = Session::allLineItems($session->id);
 
@@ -81,6 +81,9 @@ class WebhookController extends AbstractController
                         $purchase->setStripePaymentId($session->payment_intent ?? $session->id);
                         $purchase->setStatus('completed');
                         $em->persist($purchase);
+                        $em->flush();
+
+                        $statService->recordPurchase($purchase, 'web');
                     }
                     continue;
                 }
@@ -103,6 +106,9 @@ class WebhookController extends AbstractController
                         $purchase->setStripePaymentId($session->payment_intent ?? $session->id);
                         $purchase->setStatus('completed');
                         $em->persist($purchase);
+                        $em->flush();
+
+                        $statService->recordPurchase($purchase, 'web');
 
                         // Débloque aussi chaque scénario du pack
                         foreach ($pack->getMurderParties() as $mp) {
@@ -121,14 +127,15 @@ class WebhookController extends AbstractController
                                 $mpPurchase->setStripePaymentId($session->payment_intent ?? $session->id);
                                 $mpPurchase->setStatus('completed');
                                 $em->persist($mpPurchase);
+                                $em->flush();
+                                // On n'enregistre pas de stat pour les MPs offerts dans un pack
                             }
                         }
                     }
                 }
             }
 
-            $em->flush();
-
+            // Gestion code promo
             $promoCodeStr = $session->metadata->promo_code ?? null;
             if ($promoCodeStr) {
                 $promoCode = $em->getRepository(\App\Entity\PromoCode::class)->findOneBy([

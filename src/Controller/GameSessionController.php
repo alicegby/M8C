@@ -7,6 +7,7 @@ use App\Entity\GamePlayer;
 use App\Entity\MurderParty;
 use App\Repository\GameSessionRepository;
 use App\Service\JoinCodeGenerator;
+use App\Service\StatService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -63,7 +64,6 @@ class GameSessionController extends AbstractController
             return new JsonResponse(['error' => 'Code invalide ou partie terminée'], 400);
         }
 
-        // Vérifie si déjà dans la session
         foreach ($session->getGamePlayers() as $player) {
             if ($player->getUser() === $user) {
                 return new JsonResponse(['message' => 'Déjà dans la partie']);
@@ -98,7 +98,6 @@ class GameSessionController extends AbstractController
             return new JsonResponse(['error' => 'Only host can start'], 403);
         }
 
-        // 🔥 Distribution des personnages
         $characters = $session->getMurderParty()->getCharacters()->toArray();
         $players = $session->getGamePlayers()->toArray();
 
@@ -127,7 +126,8 @@ class GameSessionController extends AbstractController
     public function finish(
         string $code,
         GameSessionRepository $repository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        StatService $statService,
     ): JsonResponse {
         $user = $this->getUser();
         $session = $repository->findOneBy(['joinCode' => strtoupper($code)]);
@@ -143,7 +143,9 @@ class GameSessionController extends AbstractController
         $session->setStatus('finished');
         $em->flush();
 
-        // 🔥 Suppression automatique
+        // Enregistrement stat avant suppression
+        $statService->recordGame($session);
+
         $em->remove($session);
         $em->flush();
 

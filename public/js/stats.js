@@ -81,6 +81,8 @@ document.addEventListener('DOMContentLoaded', function () {
         renderPaymentMethodsChart(data.payment_methods);
         renderReturningPlayersChart(data.returning_players);
         renderRatedVsSoldChart(data.rated_vs_sold);
+        renderRegistrationsChart(data.registrations);
+        renderSourceDistributionChart(data.source_distribution);
     }
 
     function destroyIfExists(key) {
@@ -234,6 +236,60 @@ document.addEventListener('DOMContentLoaded', function () {
                 ]
             },
             options: { responsive: true, ...CHART_DEFAULTS }
+        });
+    }
+
+    // 8. Inscriptions par mois
+    function renderRegistrationsChart(registrations) {
+        destroyIfExists('registrations');
+        if (!registrations || registrations.length === 0) { showEmpty('registrationsChart'); return; }
+        hideEmpty('registrationsChart');
+        charts.registrations = new Chart(document.getElementById('registrationsChart'), {
+            type: 'line',
+            data: {
+                labels: registrations.map(r => r.month),
+                datasets: [{
+                    label: 'Inscriptions',
+                    data: registrations.map(r => r.count),
+                    borderColor: COLORS.lightRed,
+                    backgroundColor: 'rgba(157, 33, 55, 0.15)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: COLORS.lightRed,
+                }]
+            },
+            options: { responsive: true, ...CHART_DEFAULTS }
+        });
+    }
+
+    // 9. Web vs App
+    function renderSourceDistributionChart(sourceDistribution) {
+        destroyIfExists('sourceDistribution');
+        if (!sourceDistribution || sourceDistribution.length === 0) { showEmpty('sourceDistributionChart'); return; }
+        hideEmpty('sourceDistributionChart');
+        charts.sourceDistribution = new Chart(document.getElementById('sourceDistributionChart'), {
+            type: 'doughnut',
+            data: {
+                labels: sourceDistribution.map(s => s.source === 'web' ? 'Web' : 'Application'),
+                datasets: [{
+                    data: sourceDistribution.map(s => s.count),
+                    backgroundColor: [COLORS.red, COLORS.lightRed],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: '#F5F5F5' } },
+                    tooltip: {
+                        callbacks: {
+                            afterLabel: (ctx) => {
+                                const rev = sourceDistribution[ctx.dataIndex].totalRevenue;
+                                return `CA : ${rev} €`;
+                            }
+                        }
+                    }
+                }
+            }
         });
     }
 

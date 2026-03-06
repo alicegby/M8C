@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Repository\GameResultRepository;
 use App\Repository\MurderPartyRepository;
-use App\Repository\PurchaseRepository;
+use App\Repository\StatRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,30 +25,38 @@ class StatsAdminController extends AbstractController
     #[Route('/data', name: 'admin_stats_data', methods: ['GET'])]
     public function data(
         Request $request,
-        PurchaseRepository $purchaseRepo,
+        StatRepository $statRepo,
         MurderPartyRepository $mpRepo,
-        GameResultRepository $resultRepo
+        GameResultRepository $resultRepo,
     ): JsonResponse {
+        try {
+            $start = $request->query->get('start') ? new \DateTime($request->query->get('start')) : null;
+            $end   = $request->query->get('end')   ? new \DateTime($request->query->get('end'))   : null;
+            $mpIds = $request->query->all('mp') ?? [];
 
-        // Récupération des filtres
-        $start = $request->query->get('start') ? new \DateTime($request->query->get('start')) : null;
-        $end = $request->query->get('end') ? new \DateTime($request->query->get('end')) : null;
-        $mpIds = $request->query->all('mp') ?? [];
+            $murderParties = array_map(fn($mp) => [
+                'id'    => $mp->getId(),
+                'title' => $mp->getTitle(),
+            ], $mpRepo->findAll());
 
-        $murderParties = array_map(fn($mp) => [
-            'id' => $mp->getId(),
-            'title' => $mp->getTitle()
-        ], $mpRepo->findAll());
-
-        return $this->json([
-            'murderParties' => $murderParties,
-            'sales' => $purchaseRepo->getSalesByMP($mpIds, $start, $end),
-            'success_rate' => $resultRepo->getSuccessRateByMurderParty($mpIds, $start, $end),
-            'promo_vs_full' => $purchaseRepo->getPromoVsFullPrice($start, $end),
-            'avg_basket' => $purchaseRepo->getAverageBasket($mpIds, $start, $end),
-            'payment_methods' => $purchaseRepo->getPaymentMethodDistribution($start, $end),
-            'returning_players' => $purchaseRepo->getReturningPlayersRate($start, $end),
-            'rated_vs_sold' => $resultRepo->getRatedVsSold($mpIds),
-        ]);
+            return $this->json([
+                'murderParties'       => $murderParties,
+                'sales'               => $statRepo->getSalesByMP($mpIds, $start, $end),
+                'success_rate'        => $statRepo->getSuccessRateByMurderParty($mpIds, $start, $end),
+                'promo_vs_full'       => $statRepo->getPromoVsFullPrice($start, $end),
+                'avg_basket'          => $statRepo->getAverageBasket($mpIds, $start, $end),
+                'payment_methods'     => $statRepo->getPaymentMethodDistribution($start, $end),
+                'returning_players'   => $statRepo->getReturningPlayersRate($start, $end),
+                'rated_vs_sold'       => $resultRepo->getRatedVsSold($mpIds),
+                'registrations'       => $statRepo->getRegistrationsByPeriod($start, $end),
+                'source_distribution' => $statRepo->getSourceDistribution($start, $end),
+            ]);
+        } catch (\Throwable $e) {
+            return $this->json([
+                'error' => $e->getMessage(),
+                'file'  => $e->getFile(),
+                'line'  => $e->getLine(),
+            ], 500);
+        }
     }
 }
