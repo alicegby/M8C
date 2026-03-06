@@ -83,6 +83,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const prototype = container.dataset.prototype;
         const addBtn = document.getElementById('add-character-btn');
 
+        // Fonction pour activer les toggles de tous les personnages
+        function attachCharacterToggles() {
+            container.querySelectorAll('.mp-character-item').forEach(wrapper => {
+                const header = wrapper.querySelector('.character-header');
+                const body = wrapper.querySelector('.character-body');
+                const toggleBtn = wrapper.querySelector('.btn-toggle-character');
+
+                // On enlève les anciens events pour éviter les doublons
+                header.replaceWith(header.cloneNode(true));
+                const newHeader = wrapper.querySelector('.character-header');
+
+                newHeader.addEventListener('click', () => {
+                    body.classList.toggle('hidden');
+                    toggleBtn.textContent = body.classList.contains('hidden') ? '▼' : '▲';
+                });
+            });
+        }
+
+        // Initialisation des personnages existants
+        attachCharacterToggles();
+
+        // Ajouter un nouveau personnage
         addBtn?.addEventListener('click', () => {
             if (!prototype) return;
 
@@ -105,18 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
             container.appendChild(wrapper);
             container.querySelector('.empty-message')?.remove();
 
-            const header = wrapper.querySelector('.character-header');
-            const body = wrapper.querySelector('.character-body');
-            const toggleBtn = wrapper.querySelector('.btn-toggle-character');
-
-            header.addEventListener('click', () => {
-                body.classList.toggle('hidden');
-                toggleBtn.textContent = body.classList.contains('hidden') ? '▼' : '▲';
-            });
-
-            body.classList.remove('hidden');
-            toggleBtn.textContent = '▲';
-
+            // Suppression du personnage
             wrapper.querySelector('.btn-remove')?.addEventListener('click', () => {
                 wrapper.remove();
                 container.querySelectorAll('.mp-character-item h4').forEach((h4, i) => {
@@ -127,12 +138,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
+            // Mettre à jour les toggles
+            attachCharacterToggles();
+
             characterIndex++;
         });
     }
 
     // COLLECTIONS DYNAMIQUES (INDICES) 
-    function initDynamicClues() {
+   function initDynamicClues() {
         const container = document.getElementById('clues-list');
         if (!container) return;
 
@@ -140,22 +154,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const prototype = container.dataset.prototype;
         const addBtn = document.getElementById('add-clue-btn');
 
-        container.querySelectorAll('.mp-clue-item').forEach(item => {
-            const header = item.querySelector('.clue-header');
-            const body = item.querySelector('.clue-body');
-            const toggleBtn = item.querySelector('.btn-toggle-clue');
+        // Fonction pour activer les toggles de tous les indices
+        function attachClueToggles() {
+            container.querySelectorAll('.mp-clue-item').forEach(wrapper => {
+                const header = wrapper.querySelector('.clue-header');
+                const body = wrapper.querySelector('.clue-body');
+                const toggleBtn = wrapper.querySelector('.btn-toggle-clue');
 
-            header?.addEventListener('click', () => {
-                body.classList.toggle('hidden');
-                toggleBtn.textContent = body.classList.contains('hidden') ? '▼' : '▲';
+                header.replaceWith(header.cloneNode(true));
+                const newHeader = wrapper.querySelector('.clue-header');
+
+                newHeader.addEventListener('click', () => {
+                    body.classList.toggle('hidden');
+                    toggleBtn.textContent = body.classList.contains('hidden') ? '▼' : '▲';
+                });
             });
+        }
 
-            item.querySelector('.btn-remove')?.addEventListener('click', () => {
-                item.remove();
-                reindexClues();
-            });
-        });
+        // Initialisation des indices existants
+        attachClueToggles();
 
+        // Ajouter un nouvel indice
         addBtn?.addEventListener('click', () => {
             if (!prototype) return;
 
@@ -165,32 +184,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const wrapper = document.createElement('div');
             wrapper.classList.add('mp-clue-item');
             wrapper.innerHTML = `
-                <button type="button" class="btn-remove">Supprimer</button>
                 <div class="clue-header">
                     <h4>Indice ${number}</h4>
-                    <button type="button" class="btn-toggle-clue">▲</button>
+                    <button type="button" class="btn-toggle-clue">▼</button>
                 </div>
-                <div class="clue-body">
+                <div class="clue-body hidden">
                     ${html}
+                    <button type="button" class="btn btn-remove">Supprimer</button>
                 </div>
             `;
 
             container.appendChild(wrapper);
             container.querySelector('.empty-message')?.remove();
 
-            const header = wrapper.querySelector('.clue-header');
-            const body = wrapper.querySelector('.clue-body');
-            const toggleBtn = wrapper.querySelector('.btn-toggle-clue');
-
-            header.addEventListener('click', () => {
-                body.classList.toggle('hidden');
-                toggleBtn.textContent = body.classList.contains('hidden') ? '▼' : '▲';
-            });
-
+            // Suppression de l’indice
             wrapper.querySelector('.btn-remove')?.addEventListener('click', () => {
                 wrapper.remove();
                 reindexClues();
             });
+
+            // Mettre à jour les toggles
+            attachClueToggles();
 
             clueIndex++;
         });

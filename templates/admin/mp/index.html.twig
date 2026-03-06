@@ -33,6 +33,8 @@
             <th>Nb joueurs</th>
             <th>Durée</th>
             <th>Créé le</th>
+            <th>Prix</th>
+            <th>Publiée</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -43,6 +45,8 @@
                 <td>{{ mp.nbPlayers }}</td>
                 <td>{{ mp.duree }} min</td>
                 <td>{{ mp.createdAt|date('d/m/Y') }}</td>
+                <td>{{ mp.price == 0 or mp.price == 0.00 ? 'Gratuite' : mp.price ~ ' €' }}</td>
+                <td>{{ mp.isPublished ? 'Oui' : 'Non' }}</td>
                 <td>
                     <a href="{{ path('admin_mp_show', {id: mp.id}) }}" class="btn btn-show">Voir</a>
                     <a href="{{ path('admin_mp_edit', {id: mp.id}) }}" class="btn btn-modify">Modifier</a>
