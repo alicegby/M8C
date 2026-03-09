@@ -57,6 +57,7 @@ Le projet se compose de deux parties complémentaires :
 - **Système d'exploitation** : macOS Sequoia 15.7.3
 - **Serveur local** : Symfony CLI 5.16.1
 - **IDE** : VS Code
+- **Versioning** : Git + GitHub
 - **Navigateur de test** : Chrome
 - **Base de données locale** : Supabase (cloud)
 - **Tests paiements** : Stripe CLI
@@ -64,7 +65,6 @@ Le projet se compose de deux parties complémentaires :
 --- 
 
 ## Architecture du projet
-
 Application Web Symfony -> Vitrine publique (catalogue, téléchargement du jeu, panier, checkout, pages d'informations)  
                                             -> Authentification Symfony (admin / user)  
                                             -> Backoffice admin (gestion des Murder Parties, des codes promos, des avatars, des packs, des avis, des achats, vue clients)  
@@ -179,7 +179,7 @@ Branche de développement principale, une fois validé, migration vers la branch
 ---
 
 ## Structure du projet
-M8CWebsite  
+M8CWebsite/  
     config/ : configuration Symfony  
     migrations/ : migrations Doctrine  
     public/  
