@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             options: { responsive: true, ...CHART_DEFAULTS }
         });
-    }
+    } 
 
     // 9. Web vs App
     function renderSourceDistributionChart(sourceDistribution) {
