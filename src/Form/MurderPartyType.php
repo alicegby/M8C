@@ -55,7 +55,7 @@ class MurderPartyType extends AbstractType
                 'by_reference' => false,
                 'label' => false,
                 'entry_options' => [
-                    'murder_party' => null, // sera écrasé par l'event
+                    'murder_party' => null, 
                 ],
             ]);
 

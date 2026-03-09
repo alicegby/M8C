@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\CharacterRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: CharacterRepository::class)]
 #[ORM\Table(name: 'characters')]
@@ -54,10 +56,14 @@ class Character
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private \DateTimeInterface $updatedAt;
 
+    #[ORM\OneToMany(mappedBy: 'character', targetEntity: GamePlayer::class)]
+    private Collection $gamePlayers;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTime();
+        $this->gamePlayers = new ArrayCollection();
     }
 
     #[ORM\PreUpdate]
@@ -90,4 +96,5 @@ class Character
     public function setIsGuilty(bool $isGuilty): static { $this->isGuilty = $isGuilty; return $this; }
     public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
     public function getUpdatedAt(): \DateTimeInterface { return $this->updatedAt; }
+    public function getGamePlayers(): Collection { return $this->gamePlayers; }
 }

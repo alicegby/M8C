@@ -11,8 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 class GamePlayer
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[ORM\GeneratedValue(strategy: 'NONE')]
     private ?string $id = null;
 
     #[ORM\ManyToOne(targetEntity: GameSession::class, inversedBy: 'gamePlayers')]
@@ -24,7 +25,7 @@ class GamePlayer
     private ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: Character::class)]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
     private ?Character $character = null;
 
     #[ORM\Column(length: 100, nullable: true)]

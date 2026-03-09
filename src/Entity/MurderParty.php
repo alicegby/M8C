@@ -65,10 +65,10 @@ class MurderParty
     private \DateTimeInterface $updatedAt;
 
     // Relations
-    #[ORM\OneToMany(mappedBy: 'murderParty', targetEntity: Character::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'murderParty', targetEntity: Character::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $characters;
 
-    #[ORM\OneToMany(mappedBy: 'murderParty', targetEntity: Clue::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'murderParty', targetEntity: Clue::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $clues;
 
     #[ORM\ManyToMany(targetEntity: Pack::class, mappedBy: 'murderParties')]

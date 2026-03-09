@@ -6,8 +6,7 @@ use App\Entity\MurderParty;
 use App\Entity\Character;
 use App\Entity\Clue;
 use App\Form\MurderPartyType;
-use App\Form\CharacterType;
-use App\Form\ClueType;
+use App\Form\GamePlayer;
 use App\Repository\MurderPartyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -151,8 +150,14 @@ class MurderPartyAdminController extends AbstractController
     #[Route('/character/{id}/delete', name: 'admin_character_delete', methods: ['POST'])]
     public function deleteCharacter(Character $character, Request $request, EntityManagerInterface $em): Response
     {
-        $mpId = $character->getMurderParty()->getId();
+       $mpId = $character->getMurderParty()->getId();
         if ($this->isCsrfTokenValid('delete_char_' . $character->getId(), $request->request->get('_token'))) {
+
+            // Déconnecter tous les GamePlayers liés
+            foreach ($character->getGamePlayers() as $gp) {
+                $gp->setCharacter(null);
+            }
+
             $em->remove($character);
             $em->flush();
             $this->addFlash('success', 'Personnage supprimé.');

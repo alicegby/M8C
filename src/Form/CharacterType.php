@@ -27,7 +27,7 @@ class CharacterType extends AbstractType
             ->add('isGuilty', CheckboxType::class, [
                 'label' => 'Coupable',
                 'required' => false,
-                'row_attr' => ['class' => 'form-group--checkbox'], // <-- ici
+                'row_attr' => ['class' => 'form-group--checkbox'], 
             ]);
     }
 
