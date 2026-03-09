@@ -11,9 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 class GamePlayer
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     private ?string $id = null;
 
     #[ORM\ManyToOne(targetEntity: GameSession::class, inversedBy: 'gamePlayers')]
@@ -28,22 +27,22 @@ class GamePlayer
     #[ORM\JoinColumn(nullable: true)]
     private ?Character $character = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100, nullable: true)]
     private string $pseudoInGame;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatarInGame = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ["default" => false])]
     private bool $isHost = false;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ["default" => false])]
     private bool $isReady = false;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $notes = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ["default" => "now()"])]
     private \DateTimeImmutable $createdAt;
 
     public function __construct()

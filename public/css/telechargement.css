@@ -108,7 +108,7 @@ h1 {
 }
 
 .feature img {
-    height: 80px;
+    height: 400px;
     margin-bottom: 20px;
 }
 
@@ -150,7 +150,7 @@ h1 {
 }
 
 .screenshot-grid img {
-    width: 300px;
+    width: 250px;
     border-radius: 20px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.5);
     transition: transform 0.3s ease;

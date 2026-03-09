@@ -101,8 +101,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Initialisation des personnages existants
+       // Initialisation des personnages existants
         attachCharacterToggles();
+        container.querySelectorAll('.mp-character-item .btn-remove').forEach(btn => {
+            btn.addEventListener('click', e => removeCharacter(e));
+        });
 
         // Ajouter un nouveau personnage
         addBtn?.addEventListener('click', () => {
@@ -127,22 +130,33 @@ document.addEventListener('DOMContentLoaded', () => {
             container.appendChild(wrapper);
             container.querySelector('.empty-message')?.remove();
 
-            // Suppression du personnage
-            wrapper.querySelector('.btn-remove')?.addEventListener('click', () => {
-                wrapper.remove();
-                container.querySelectorAll('.mp-character-item h4').forEach((h4, i) => {
-                    h4.textContent = `Personnage ${i + 1}`;
-                });
-                if (container.querySelectorAll('.mp-character-item').length === 0) {
-                    container.innerHTML = '<p class="empty-message">Aucun personnage ajouté.</p>';
-                }
-            });
+            // Listener juste pour le nouveau personnage
+            wrapper.querySelector('.btn-remove')?.addEventListener('click', e => removeCharacter(e));
 
-            // Mettre à jour les toggles
             attachCharacterToggles();
-
             characterIndex++;
         });
+
+        // Fonction de suppression
+        function removeCharacter(e) {
+            const wrapper = e.target.closest('.mp-character-item');
+            if (!wrapper) return;
+
+            // Marquer pour suppression (Symfony)
+            const deleteInput = wrapper.querySelector('input[type="hidden"][name*="_delete"]');
+            if (deleteInput) deleteInput.value = '1';
+
+            wrapper.remove();
+
+            // Réindexer
+            container.querySelectorAll('.mp-character-item h4').forEach((h4, i) => {
+                h4.textContent = `Personnage ${i + 1}`;
+            });
+
+            if (container.querySelectorAll('.mp-character-item').length === 0) {
+                container.innerHTML = '<p class="empty-message">Aucun personnage ajouté.</p>';
+            }
+        }
     }
 
     // COLLECTIONS DYNAMIQUES (INDICES) 
