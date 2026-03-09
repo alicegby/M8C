@@ -15,8 +15,8 @@
 
 ## Description
 **Meurtre à Huis Clos — Murder Party en ligne**
-**Meutre à Huis Clos** est une plateforme de Murder Party numérique permettant à des groupes d'amis, de collègues ou des familles de vivre des expériences d'enquête immersives directement depuis leur smartphone.
-L'idée est simple : proposer des scénarios de Murder Party clé en main, achetables en ligne (sur l'application web ou l'application mobile) et jouables via l'application mobile. Chaque scénario plonge les joueurs dans une enquête où ils incarnent des personnages, votent pour désigner le coupable et découvrent le dénouement.
+**Meutre à Huis Clos** est une plateforme de Murder Party numérique permettant à des groupes d'amis, de collègues ou des familles de vivre des expériences d'enquête immersives directement depuis leur smartphone.  
+L'idée est simple : proposer des scénarios de Murder Party clé en main, achetables en ligne (sur l'application web ou l'application mobile) et jouables via l'application mobile. Chaque scénario plonge les joueurs dans une enquête où ils incarnent des personnages, votent pour désigner le coupable et découvrent le dénouement.  
 Toutes les Murder Parties sont écrites par mes soins et sont des **productions originales***. 
 Le projet se compose de deux parties complémentaires : 
 - Un **site web Symfony** - vitrine commerciale, système d'achat et backoffice d'administration
@@ -65,16 +65,16 @@ Le projet se compose de deux parties complémentaires :
 
 ## Architecture du projet
 
-Application Web Symfony -> Vitrine publique (catalogue, téléchargement du jeu, panier, checkout, pages d'informations)
-                                            -> Authentification Symfony (admin / user)
-                                            -> Backoffice admin (gestion des Murder Parties, des codes promos, des avatars, des packs, des avis, des achats, vue clients)
-                                            -> Webhooks Stripe (confirmation achats)
-                                            -> API REST interne (game sessions pour l'app Flutter)
-                                            --> Supabase (PostgreSQL + Auth + Storage)
-                                            ---> Application Mobile Flutter (repo séparé)
+Application Web Symfony -> Vitrine publique (catalogue, téléchargement du jeu, panier, checkout, pages d'informations)  
+                                            -> Authentification Symfony (admin / user)  
+                                            -> Backoffice admin (gestion des Murder Parties, des codes promos, des avatars, des packs, des avis, des achats, vue clients)  
+                                            -> Webhooks Stripe (confirmation achats)  
+                                            -> API REST interne (game sessions pour l'app Flutter)  
+                                            --> Supabase (PostgreSQL + Auth + Storage)  
+                                            ---> Application Mobile Flutter (repo séparé)  
 
 ### Flux d'achat
-Utilisateur -> Catalogue Murder Parties et/ou Packs -> Panier -> Stripe Checkout -> Webhood -> Purchase créé -> UserMurderParty débloquée
+Utilisateur -> Catalogue Murder Parties et/ou Packs -> Panier -> Stripe Checkout -> Webhood -> Purchase créé -> UserMurderParty débloquée  
 Les joueurs ont la possibilité d'acheter également directement sur l'application, géré directement par Apple et Android. 
 
 --- 
@@ -138,13 +138,13 @@ Toutes les fonctionnalités sont filtrables :
 - Stripe CLI
 
 ### Étapes
-**1. Cloner le repo**
+**1. Cloner le repo**  
     ''bash - git clone https://github.com/alicegby/M8C.git 
 
-**2. Installer les dépendances**
+**2. Installer les dépendances**  
     ''bash - composer install
 
-**3. Configurer les variables d'environnement**
+**3. Configurer les variables d'environnement**  
     ''bash - cp .env .env.local
 
     Remplir .env.local avec : 
@@ -158,13 +158,13 @@ Toutes les fonctionnalités sont filtrables :
     - STRIPE_WEBHOOK_SECRET
     - Admin & User Fixtures (emails, mots de passe, noms, prénoms, dates de naissances)
 
-**4. Créer la base de données et migrer**
+**4. Créer la base de données et migrer**  
     ''bash - php bin/console doctrine:migrations:migrate
 
-**5. Lancer le serveur local**
+**5. Lancer le serveur local**  
     ''bash - symfony serve
 
-**6. Lancer le tunnel Stripe (webhooks en local)**
+**6. Lancer le tunnel Stripe (webhooks en local)**  
     ''bash - stripe listen --forward-to localhost:8000/webhook/stripe
 
 --- 
@@ -179,40 +179,40 @@ Branche de développement principale, une fois validé, migration vers la branch
 ---
 
 ## Structure du projet
-M8CWebsite
-    config/ : configuration Symfony
-    migrations/ : migrations Doctrine
-    public/
-        css/ : Styles custom
-        fonts/ : Polices du projet
-        icones/ : Iconographie du projet
-        images/ : images du projet
-        js/ : Dynamisme des pages
-        uploads/ : géré avec les paramètres dans config/services.yaml pour les avatars majoritairement
-    src/ 
-        Command/ : Commandes Symfony
-        Controller/ : Controllers public, admin, API
-            Admin/ : Controllers backoffice
-        DataFixtures/ : Données BDD
-        Entity/ : Entités Doctrine
-        Form/ : Formulaires Symfony
-        Repository/ : Repositories Doctrine
-        Security/ : Gestion des routes après connexion selon les rôles
-        Service/ : Services métier (Cart, Stat, JoinCode)
-    templates/ 
-        account/ : Template de modification des informations des utilisateurs
-        admin/ : Templates backoffice
-        emails/ : Templates emails
-        security/ : Template de connexion
-        *.html.twig : Templates publics
-    .env : Variables d'environnement non commitées
-    .env.local
-    composer.json
-    README.md
+M8CWebsite  
+    config/ : configuration Symfony  
+    migrations/ : migrations Doctrine  
+    public/  
+        css/ : Styles custom  
+        fonts/ : Polices du projet  
+        icones/ : Iconographie du projet  
+        images/ : images du projet  
+        js/ : Dynamisme des pages  
+        uploads/ : géré avec les paramètres dans config/services.yaml pour les avatars majoritairement  
+    src/  
+        Command/ : Commandes Symfony  
+        Controller/ : Controllers public, admin, API  
+            Admin/ : Controllers backoffice  
+        DataFixtures/ : Données BDD  
+        Entity/ : Entités Doctrine  
+        Form/ : Formulaires Symfony  
+        Repository/ : Repositories Doctrine  
+        Security/ : Gestion des routes après connexion selon les rôles  
+        Service/ : Services métier (Cart, Stat, JoinCode)  
+    templates/  
+        account/ : Template de modification des informations des utilisateurs  
+        admin/ : Templates backoffice  
+        emails/ : Templates emails  
+        security/ : Template de connexion  
+        *.html.twig : Templates publics  
+    .env : Variables d'environnement non commitées  
+    .env.local  
+    composer.json  
+    README.md  
     
 --- 
 
 ## Auteur
-Alice Gruby
-Étudiante en Formation - Graduate Développeur Web & Web Mobile
+Alice Gruby  
+Étudiante en Formation - Graduate Développeur Web & Web Mobile  
 **Ce projet est une production originale, et un projet personnelle. Les scénarios des Murder Parties sont protégés par des droits d'auteur.**
