@@ -94,6 +94,20 @@ class RegistrationController extends AbstractController
             $em->persist($user);
             $em->flush();
 
+            // ── Inscription newsletter si cochée ────────────────────────
+            if ($user->isNewsletter()) {
+                $existing = $em->getRepository(\App\Entity\NewsletterSubscription::class)
+                    ->findOneBy(['email' => $user->getEmail()]);
+
+                if (!$existing) {
+                    $subscription = new \App\Entity\NewsletterSubscription();
+                    $subscription->setEmail($user->getEmail());
+                    $subscription->setUnsubscribeToken(bin2hex(random_bytes(32)));
+                    $em->persist($subscription);
+                    $em->flush();
+                }
+            }
+
              // ── 3 Enregistrement stat ────────────────────
             $statService->recordRegistration($user);
 

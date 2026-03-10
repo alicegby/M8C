@@ -13,6 +13,7 @@ h2 {
 .legal-section,
 .confidentialite-section,
 .cgv-section,
+.cgu-section,
 .avertissement-section {
     max-width: 1000px;
     margin: 30px auto;
@@ -28,6 +29,7 @@ h2 {
 .legal-section h3,
 .confidentialite-section h3,
 .cgv-section h3,
+.cgu-section h3,
 .avertissement-section h3 {
     font-family: 'Anton', serif;
     font-size: 1.6rem;
@@ -35,7 +37,8 @@ h2 {
     margin-bottom: 15px;
 }
 
-.confidentialite-section h4 {
+.confidentialite-section h4,
+.cgu-section h4 {
     font-family: 'Arimo', serif;
     font-size: 1.1rem;
     color: #F5F5F5;
@@ -47,6 +50,7 @@ h2 {
 .legal-section p,
 .confidentialite-section p,
 .cgv-section p,
+.cgu-section p,
 .avertissement-section p {
     font-size: 1rem;
     margin-bottom: 15px;
@@ -55,7 +59,8 @@ h2 {
 /* LIENS */
 .legal-section a,
 .confidentialite-section a,
-.cgv-section a {
+.cgv-section a,
+.cgu-section a {
     color: #F5F5F5;
     text-decoration: underline;
     transition: color 0.3s ease;
@@ -63,7 +68,8 @@ h2 {
 
 .legal-section a:hover,
 .confidentialite-section a:hover,
-.cgv-section a:hover {
+.cgv-section a:hover,
+.cgu-section a:hover {
     color: #9D2137;
 }
 
@@ -71,6 +77,7 @@ h2 {
 .legal-section strong,
 .confidentialite-section strong,
 .cgv-section strong,
+.cgu-section strong,
 .avertissement-section strong {
     color: #F5F5F5;
     font-weight: bold;
@@ -78,6 +85,7 @@ h2 {
 
 .confidentialite-section ul,
 .cgv-section ul,
+.cgu-section ul,
 .avertissement-section ul {
     list-style-type: disc;
     padding-left: 25px;
@@ -86,6 +94,7 @@ h2 {
 
 .confidentialite-section li,
 .cgv-section li,
+.cgu-section li,
 .avertissement-section li {
     margin-bottom: 10px;
     font-size: 1rem;
@@ -95,18 +104,21 @@ h2 {
 
 .confidentialite-section li strong,
 .cgv-section li strong,
+.cgu-section li strong,
 .avertissement-section li strong {
     color: #F5F5F5;
 }
 
 .confidentialite-section li a,
-.cgv-section li a {
+.cgv-section li a,
+.cgu-section li a {
     color: #F5F5F5;
     text-decoration: underline;
 }
 
 .confidentialite-section li a:hover,
-.cgv-section li a:hover {
+.cgv-section li a:hover,
+.cgu-section li a:hover {
     color: #9D2137;
 }
 

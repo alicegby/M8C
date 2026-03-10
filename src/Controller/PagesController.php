@@ -25,6 +25,12 @@ class PagesController extends AbstractController
         return $this->render('cgv.html.twig');
     }
 
+    #[Route('/cgu', name: 'cgu')]
+    public function cgu()
+    {
+        return $this->render('cgu.html.twig');
+    }
+
     #[Route('/avertissement', name: 'avertissement')]
     public function avertissement()
     {
