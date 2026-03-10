@@ -8,44 +8,47 @@
 
 {% block body %}
 <h1>Meurtre à Huis Clos - Packs de Murder Parties</h1>
-<h2 class="pack-show">{{ pack.name }}</h2>
 
 <section class="pack-show-hero animate-block">
-    <div class="container">
-        
+    <div class="pack-show-header">
+        <div class="pack-show-tag">PACK</div>
+        <h2 class="pack-show-title">{{ pack.name }}</h2>
+
         {% if pack.price > 0 %}
-            <p class="scenario-price">{{ pack.price }} €</p>
-        {% else %}
-            <p class="scenario-price">Gratuit</p>
-        {% endif %}
+            {% set totalOriginal = 0 %}
+            {% for scenario in pack.getMurderParties() %}
+                {% set totalOriginal = totalOriginal + scenario.price %}
+            {% endfor %}
 
-        <p class="scenario-description">{{ pack.description }}</p>
-
-        {% if pack.getMurderParties()|length > 0 %}
-            <h3>Scénarios inclus :</h3>
-            <div class="mp-list">
-                {% for scenario in pack.getMurderParties() %}
-                    <div class="mp-card">
-                        <h4>{{ scenario.title }}</h4>
-                        <p>{{ scenario.duree }} minutes | {{ scenario.nbPlayers }} joueurs
-                            {% if scenario.averageRating is not empty and scenario.averageRating != 0 %}
-                                | {{ scenario.averageRating }}/5
-                            {% endif %}
-                        </p>
-                        <p class="scenario-synopsis">{{ scenario.synopsis }}</p>
-                        <a href="{{ path('scenario_show', {'slug': scenario.slug}) }}" class="btn-see">Voir la Murder Party</a>
+            {% if totalOriginal > pack.price %}
+                <div class="pack-price-block">
+                    <div class="pack-price-row">
+                        <span class="price-original">{{ totalOriginal|number_format(2, ',', ' ') }} €</span>
+                        <span class="price-final">{{ pack.price|number_format(2, ',', ' ') }} €</span>
                     </div>
-                {% endfor %}
+                    <span class="price-saving">🎉 Économisez {{ (totalOriginal - pack.price)|number_format(2, ',', ' ') }} €</span>
+                </div>
+            {% else %}
+                <div class="pack-price-block">
+                    <span class="price-final">{{ pack.price|number_format(2, ',', ' ') }} €</span>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="pack-price-block">
+                <span class="price-final">Gratuit</span>
             </div>
         {% endif %}
+
+        <p class="pack-show-description">{{ pack.description }}</p>
 
         <div class="pack-actions">
             {% if pack.price > 0 %}
                 <button
                     class="btn-primary btn-add-cart"
-                    data-slug="{{ scenario.slug }}"
-                    data-name="{{ scenario.title }}"
-                    data-price="{{ scenario.price }}"
+                    data-id="{{ pack.id }}"
+                    data-name="{{ pack.name }}"
+                    data-price="{{ pack.price }}"
+                    data-type="pack"
                     id="btn-add-cart"
                 >
                     Ajouter au panier
@@ -56,6 +59,40 @@
         </div>
     </div>
 </section>
+
+{% if pack.getMurderParties()|length > 0 %}
+<section class="pack-scenarios-section animate-block">
+    <div class="container">
+        <h3 class="pack-scenarios-title">
+            <span class="scenarios-count">{{ pack.getMurderParties()|length }}</span>
+            scénario{{ pack.getMurderParties()|length > 1 ? 's' : '' }} inclus
+        </h3>
+        <div class="mp-grid">
+            {% for scenario in pack.getMurderParties() %}
+                <div class="mp-card">
+                    <div class="mp-card-header">
+                        <h4>{{ scenario.title }}</h4>
+                        <div class="mp-card-meta">
+                            <span class="mp-meta-item">{{ scenario.duree }} min</span>
+                            <span class="mp-meta-item">{{ scenario.nbPlayers }} joueurs</span>
+                            {% if scenario.averageRating is not empty and scenario.averageRating != 0 %}
+                                <span class="mp-meta-item">{{ scenario.averageRating }}/5</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="mp-card-body">
+                        <p class="mp-synopsis">{{ scenario.synopsis }}</p>
+                    </div>
+                    <div class="mp-card-footer">
+                        <a href="{{ path('scenario_show', {'slug': scenario.slug}) }}" class="btn-see">Voir la Murder Party →</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
 {% endblock %}
 
 {% block javascripts %}

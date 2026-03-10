@@ -27,10 +27,23 @@
                         <h3>{{ pack.name }}</h3>
 
                         {% if pack.price > 0 %}
-                            <p class="scenario-price">{{ pack.price }} €</p>
-                        {% else %}
-                            <p class="scenario-price">Gratuit</p>
-                        {% endif %}
+                                {% set totalOriginal = 0 %}
+                                {% for scenario in pack.getMurderParties() %}
+                                    {% set totalOriginal = totalOriginal + scenario.price %}
+                                {% endfor %}
+                                
+                                {% if totalOriginal > pack.price %}
+                                    <p class="scenario-price">
+                                        <span class="price-original">{{ totalOriginal|number_format(2, ',', ' ') }} €</span>
+                                        {{ pack.price|number_format(2, ',', ' ') }} €
+                                        <span class="price-saving">Économisez {{ (totalOriginal - pack.price)|number_format(2, ',', ' ') }} €</span>
+                                    </p>
+                                {% else %}
+                                    <p class="scenario-price">{{ pack.price }} €</p>
+                                {% endif %}
+                            {% else %}
+                                <p class="scenario-price">Gratuit</p>
+                            {% endif %}
 
                         <p class="scenario-description">{{ pack.description }}</p>
 

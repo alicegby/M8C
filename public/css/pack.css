@@ -39,12 +39,21 @@ main.main-content {
     padding: 20px;
     margin-bottom: 30px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .scenario-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.scenario-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
 }
 
 /* TITRE */
@@ -74,6 +83,7 @@ main.main-content {
 
 /* LISTE SCÉNARIOS INCLUS */
 .pack-scenarios-list {
+    flex: 1;
     list-style: disc;
     padding-left: 20px;
     text-align: left;
@@ -179,6 +189,31 @@ main.main-content {
     color: #9D2137;
     text-align: center;
     margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center; 
+    gap: 8px;
+}
+
+.price-original {
+    text-decoration: line-through;
+    color: #AAAAAA;
+    font-size: 0.9em;
+    margin-right: 8px;
+}
+
+.price-saving {
+    display: block;
+    width: 80%;
+    background-color: #541826;
+    font-family: 'Arimo', serif;
+    color: #F5F5F5;
+    font-size: 1rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 0; 
+    text-align: center; 
 }
 
 .scenario-description {
@@ -216,11 +251,6 @@ main.main-content {
     color: #CCCCCC;
     margin: 0 0 15px 0;
     text-align: center;
-}
-
-/* ON SUPPRIME LES BOUTONS DANS LES MP */
-.mp-card .btn-see {
-    display: none;
 }
 
 /* ACTIONS DU PACK */
@@ -264,6 +294,219 @@ main.main-content {
     transform: scale(1.05);
 }
 
+/*  PACK SHOW HERO  */
+
+.pack-show-hero {
+    width: 100%;
+    background: linear-gradient(180deg, #0E0E0E 0%, #1A0A0F 100%);
+    padding: 60px 20px 50px;
+    text-align: center;
+    border-bottom: 1px solid #2A0F17;
+}
+
+.pack-show-header {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.pack-show-tag {
+    display: inline-block;
+    font-family: 'Arimo', sans-serif;
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 0.2em;
+    color: #9D2137;
+    border: 1px solid #9D2137;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+}
+
+.pack-show-title {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    color: #F5F5F5;
+    margin: 0 0 24px 0;
+    line-height: 1.1;
+}
+
+/* PRIX */
+
+.pack-price-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.pack-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.price-original {
+    text-decoration: line-through;
+    color: #666666;
+    font-family: 'Anton', serif;
+    font-size: 1.4rem;
+}
+
+.price-final {
+    font-family: 'Anton', serif;
+    font-size: 2.2rem;
+    color: #9D2137;
+}
+
+.price-saving {
+    display: inline-block;
+    background-color: #1E0810;
+    border: 1px solid #541826;
+    color: #F5F5F5;
+    font-family: 'Arimo', sans-serif;
+    font-size: 0.9rem;
+    padding: 5px 16px;
+    border-radius: 20px;
+}
+
+/* DESCRIPTION */
+
+.pack-show-description {
+    font-family: 'Arimo', sans-serif;
+    font-size: 1.1rem;
+    color: #AAAAAA;
+    line-height: 1.7;
+    margin-bottom: 32px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ACTIONS  */
+
+.pack-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* SECTION SCÉNARIOS  */
+
+.pack-scenarios-section {
+    padding: 60px 20px;
+    background-color: #0E0E0E;
+}
+
+.pack-scenarios-section .container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.pack-scenarios-title {
+    font-family: 'Anton', serif;
+    font-size: 1.8rem;
+    color: #F5F5F5;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.scenarios-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background-color: #541826;
+    color: #F5F5F5;
+    border-radius: 50%;
+    font-size: 1rem;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/*  GRILLE MP  */
+
+.mp-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.mp-card {
+    background-color: #1A1A1A;
+    border: 1px solid #2A2A2A;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.mp-card:hover {
+    border-color: #541826;
+    transform: translateX(4px);
+}
+
+.mp-card-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #2A2A2A;
+}
+
+.mp-card-header h4 {
+    font-family: 'Anton', serif;
+    font-size: 1.3rem;
+    color: #F5F5F5;
+    margin: 0 0 10px 0;
+}
+
+.mp-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.mp-meta-item {
+    font-family: 'Arimo', sans-serif;
+    font-size: 0.85rem;
+    color: #888888;
+    background-color: #111111;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.mp-card-body {
+    padding: 16px 24px;
+}
+
+.mp-synopsis {
+    font-family: 'Arimo', sans-serif;
+    font-size: 0.95rem;
+    color: #AAAAAA;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.mp-card-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #2A2A2A;
+    text-align: right;
+}
+
+.btn-see {
+    font-family: 'Arimo', sans-serif;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #9D2137;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    letter-spacing: 0.03em;
+}
+
+.btn-see:hover {
+    color: #F5F5F5;
+}
+
  /* MEDIA QUERY */
  /* TABLETTE */
 @media (max-width: 1024px) {
@@ -289,6 +532,38 @@ main.main-content {
         font-size: 2.2rem;
     }
 
+}
+
+@media (max-width: 768px) {
+    .pack-show-title {
+        font-size: 2.2rem;
+    }
+
+    .price-final {
+        font-size: 1.8rem;
+    }
+
+    .price-original {
+        font-size: 1.2rem;
+    }
+
+    .mp-card-header {
+        padding: 16px 18px 12px;
+    }
+
+    .mp-card-body,
+    .mp-card-footer {
+        padding: 12px 18px;
+    }
+
+    .mp-card-footer {
+        text-align: center;
+    }
+
+    .pack-actions {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
 /* MOBILE */
