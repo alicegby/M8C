@@ -1,14 +1,3 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}{{ promo.code }} — Admin{% endblock %}
-
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/admin/promo.css') }}">
-{% endblock %}
-
-{% block body %}
-
-<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
 <h2>{{ promo.code }}</h2>
 
 <div class="show-wrapper">
@@ -85,9 +74,3 @@
     </div>
 
 </div>
-
-{% endblock %}
-
-{% block javascripts %}
-    <script src="{{ asset('js/admin.js') }}"></script>
-{% endblock %}
