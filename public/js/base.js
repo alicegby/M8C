@@ -13,12 +13,18 @@ closeMenu.addEventListener('click', () => {
 });
 
 function updateCartBadge(count) {
-    const badge = document.getElementById('cart-badge');
-    if (!badge) return;
-    if (count > 0) {
-        badge.textContent = count;
-        badge.style.display = 'flex';
-    } else {
-        badge.style.display = 'none';
-    }
+    const badges = [
+        document.getElementById('cart-badge'),
+        document.getElementById('cart-badge-desktop')
+    ];
+
+    badges.forEach(badge => {
+        if (!badge) return;
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    });
 }

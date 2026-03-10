@@ -43,7 +43,8 @@
                     {% if cartCount > 0 %}
                         <span class="cart-badge" id="cart-badge">{{ cartCount }}</span>
                     {% else %}
-                        <span class="cart-badge" id="cart-badge" style="display:none">0</span>
+                        {% set cartCount = cartService.getCount() %}
+                        <span class="cart-badge" id="cart-badge" {% if cartCount == 0 %}style="display:none"{% endif %}>{{ cartCount }}</span>
                     {% endif %}
                 </div>
             </a>
@@ -63,9 +64,10 @@
                     <img src="{{ asset('icones/panier.png') }}" alt="Panier" class="cart-img">
                     {% set cartCount = cartService.getCount() %}
                     {% if cartCount > 0 %}
-                        <span class="cart-badge">{{ cartCount }}</span>
+                        <span class="cart-badge" id="cart-badge">{{ cartCount }}</span>
                     {% else %}
-                        <span class="cart-badge" style="display:none">0</span>
+                        {% set cartCount = cartService.getCount() %}
+                        <span class="cart-badge" id="cart-badge-desktop" {% if cartCount == 0 %}style="display:none"{% endif %}>{{ cartCount }}</span>
                     {% endif %}
                 </div>
             </a>
