@@ -10,13 +10,14 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Form\ContactType;
 use App\Entity\ContactMessage;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'contact')]
     public function contact(
         Request $request,
-        MailerInterface $mailer,
+        #[Target('gmail')] MailerInterface $mailer,
         EntityManagerInterface $em
     ) {
         $form = $this->createForm(ContactType::class);

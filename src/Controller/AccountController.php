@@ -7,6 +7,7 @@ use App\Form\UserType;
 use App\Entity\GamePlayer;
 use App\Entity\Purchase;
 use App\Repository\NewsletterSubscriptionRepository;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -154,33 +155,76 @@ class AccountController extends AbstractController
 
     #[Route('/mon-compte/newsletter/toggle', name: 'account_toggle_newsletter', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-    public function toggleNewsletter(EntityManagerInterface $em, \App\Repository\NewsletterSubscriptionRepository $newsletterRepo): Response
-    {
+    public function toggleNewsletter(
+        EntityManagerInterface $em,
+        NewsletterSubscriptionRepository $newsletterRepo,
+        \App\Service\PromoCodeService $promoCodeService,
+        #[Target('brevo')] MailerInterface $mailer
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
 
-        if (!$user) {
-            throw $this->createAccessDeniedException('Utilisateur non connecté.');
-        }
-
-        // Vérifie si l'utilisateur est déjà inscrit
         $subscription = $newsletterRepo->findOneBy(['email' => $user->getEmail()]);
 
         if ($subscription) {
-            // Si oui, on se désinscrit
+            // Désinscription
             $em->remove($subscription);
             $em->flush();
             $this->addFlash('success', 'Vous avez été désinscrit de la newsletter.');
         } else {
-            // Sinon, on crée une nouvelle inscription
+            // Inscription
             $subscription = new \App\Entity\NewsletterSubscription();
             $subscription->setEmail($user->getEmail());
+            $subscription->setUnsubscribeToken(bin2hex(random_bytes(16)));
             $em->persist($subscription);
             $em->flush();
+
+            // Vérifie si l'utilisateur a déjà reçu un code newsletter dans le passé
+            $alreadyHadPromo = $em->getRepository(\App\Entity\PromoCode::class)
+                ->createQueryBuilder('p')
+                ->where('p.code LIKE :prefix')
+                ->setParameter('prefix', 'HELLO-%')
+                ->getQuery()
+                ->getResult();
+
+            // On envoie le code seulement si c'est la première inscription
+            if (empty($alreadyHadPromo) || !$this->userAlreadyReceivedNewsletterCode($user, $em)) {
+                $promo = $promoCodeService->generateNewsletterCode();
+
+                $email = (new TemplatedEmail())
+                    ->from('meurtrehuisclos@gmail.com')
+                    ->to($user->getEmail())
+                    ->subject('Bienvenue chez Meurtre à Huis Clos | Voici votre code promo')
+                    ->htmlTemplate('emails/welcome.html.twig')
+                    ->context([
+                        'promoCode' => $promo->getCode(),
+                        'app_url' => $this->generateUrl('app_home', [], UrlGeneratorInterface::ABSOLUTE_URL),
+                        'unsubscribeToken' => $subscription->getUnsubscribeToken(),
+                    ]);
+
+                $mailer->send($email);
+            }
+
             $this->addFlash('success', 'Vous êtes maintenant inscrit à la newsletter.');
         }
 
         return $this->redirectToRoute('app_account');
+    }
+
+    private function userAlreadyReceivedNewsletterCode(User $user, EntityManagerInterface $em): bool
+    {
+        // Vérifie dans promo_code_usages si l'user a déjà utilisé un code HELLO-
+        $usage = $em->getRepository(\App\Entity\PromoCodeUsage::class)
+            ->createQueryBuilder('u')
+            ->join('u.promoCode', 'p')
+            ->where('u.user = :user')
+            ->andWhere('p.code LIKE :prefix')
+            ->setParameter('user', $user)
+            ->setParameter('prefix', 'HELLO-%')
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $usage !== null;
     }
 
     #[Route('/mon-compte/suppression', name: 'account_delete', methods: ['POST'])]

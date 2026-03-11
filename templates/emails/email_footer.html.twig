@@ -1,0 +1,51 @@
+{# Footer commun à tous les emails publics #}
+<table width="100%" cellpadding="0" cellspacing="0" style="margin-top:0;">
+    <!-- Séparateur -->
+    <tr>
+        <td style="background-color:#541826; height:3px;"></td>
+    </tr>
+
+    <!-- Liens app -->
+    <tr>
+        <td style="background-color:#0E0E0E; padding:25px 30px; text-align:center;">
+            <p style="color:#888; font-size:0.8rem; margin:0 0 15px 0; text-transform:uppercase; letter-spacing:1px;">Télécharger l'application</p>
+            <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+                <tr>
+                    <td style="padding:0 8px;">
+                        <a href="#" style="display:inline-block; background-color:#1a1a1a; color:#F5F5F5; padding:10px 20px; border-radius:8px; text-decoration:none; font-size:0.85rem; border:1px solid #333;">App Store</a>
+                    </td>
+                    <td style="padding:0 8px;">
+                        <a href="#" style="display:inline-block; background-color:#1a1a1a; color:#F5F5F5; padding:10px 20px; border-radius:8px; text-decoration:none; font-size:0.85rem; border:1px solid #333;">Google Play</a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <!-- Liens sociaux + site -->
+    <tr>
+        <td style="background-color:#0E0E0E; padding:0 30px 20px 30px; text-align:center;">
+            <a href="https://www.meurtrehuisclos.fr" style="color:#888; font-size:0.8rem; text-decoration:none; margin:0 10px;">meurtrehuisclos.fr</a>
+            <a href="https://www.instagram.com/meurtrehuisclos/" style="color:#888; font-size:0.8rem; text-decoration:none; margin:0 10px;">Suivez-nous sur Instagram</a>
+        </td>
+    </tr>
+
+    <!-- Désinscription -->
+    {% if unsubscribeToken is defined %}
+    <tr>
+        <td style="background-color:#0E0E0E; padding:0 30px 25px 30px; text-align:center;">
+            <p style="color:#555; font-size:0.75rem; margin:0;">
+                Vous ne souhaitez plus recevoir nos emails ?
+                <a href="{{ absolute_url(path('newsletter_unsubscribe', {'token': unsubscribeToken})) }}" style="color:#9D2137; text-decoration:none;">Se désinscrire</a>
+            </p>
+        </td>
+    </tr>
+    {% endif %}
+
+    <!-- Copyright -->
+    <tr>
+        <td style="background-color:#080808; padding:15px 30px; text-align:center; border-radius:0 0 12px 12px;">
+            <p style="color:#444; font-size:0.75rem; margin:0;">© {{ "now"|date("Y") }} Meurtre à Huis Clos — Tous droits réservés</p>
+        </td>
+    </tr>
+</table>

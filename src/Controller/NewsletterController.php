@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\NewsletterSubscription;
+use App\Service\PromoCodeService;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,8 +17,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class NewsletterController extends AbstractController
 {
     #[Route('/newsletter/subscribe', name: 'newsletter_subscribe', methods: ['POST'])]
-    public function subscribe(Request $request, EntityManagerInterface $em, MailerInterface $mailer): Response
-    {
+    public function subscribe(
+        Request $request,
+        EntityManagerInterface $em,
+        #[Target('brevo')] MailerInterface $mailer,
+        PromoCodeService $promoCodeService
+    ): Response {
         $emailInput = $request->request->get('email');
 
         if (!$emailInput) {
@@ -24,7 +30,6 @@ class NewsletterController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        // Vérifie si l'email existe déjà
         $existing = $em->getRepository(NewsletterSubscription::class)
                        ->findOneBy(['email' => $emailInput]);
 
@@ -33,24 +38,22 @@ class NewsletterController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        // Crée le subscriber avec token unique
         $subscriber = new NewsletterSubscription();
         $subscriber->setEmail($emailInput);
-        $subscriber->setUnsubscribeToken(bin2hex(random_bytes(16))); // 32 caractères hex
+        $subscriber->setUnsubscribeToken(bin2hex(random_bytes(16)));
         $em->persist($subscriber);
         $em->flush();
 
-        // Génère un code promo
-        $promoCode = strtoupper(bin2hex(random_bytes(3))); // ex: 6 caractères
+        // Génère et persiste le vrai code promo en base
+        $promo = $promoCodeService->generateNewsletterCode();
 
-        // Envoie l'email avec le code promo
         $email = (new TemplatedEmail())
             ->from('meurtrehuisclos@gmail.com')
             ->to($emailInput)
             ->subject('Bienvenue chez Meurtre à Huis Clos | Voici votre code promo')
             ->htmlTemplate('emails/welcome.html.twig')
             ->context([
-                'promoCode' => $promoCode,
+                'promoCode' => $promo->getCode(), // le vrai code en base
                 'app_url' => $this->generateUrl('app_home', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 'unsubscribeToken' => $subscriber->getUnsubscribeToken(),
             ]);

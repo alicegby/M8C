@@ -74,9 +74,9 @@ main.main-content {
 .scenario-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 40px;
-    margin-top: 20px;
-    margin-bottom: 40px;
+    gap: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
     justify-items: center; /* centre les cartes */
     align-items: stretch;
 }

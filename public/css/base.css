@@ -280,6 +280,9 @@ body {
     text-align: center;
     margin-top: 30px;
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: right;
 }
 
 .footer-credit a {
@@ -291,6 +294,16 @@ body {
 .footer-credit a:hover {
     color: #9D2137;
     opacity: 0.8;
+}
+
+.instagram-link {
+    align-self: flex-end;
+    margin-top: 5px;
+}
+
+.instagram-link img {
+    width: 40px;
+    height: auto;
 }
 
 .cookie-credit {
@@ -308,6 +321,10 @@ body {
     }
     .cart-icon-desktop {
         display: flex;
+    }
+    .instagram-link {
+        align-self: center;
+        margin-top: 10px;
     }
 }
 
@@ -379,9 +396,13 @@ body {
     .footer-credit,
     .cookie-credit {
         order: 2;
-        margin-top: 30px;
+        margin-top: 10px;
         width: 100%;
         text-align: center;
+    }
+    .instagram-link {
+        align-self: center;
+        margin-top: 10px;
     }
 }
 

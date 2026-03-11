@@ -7,6 +7,9 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+    
+    mailer.default_transport:
+        alias: mailer.transport.brevo
 
     App\:
         resource: '../src/'
