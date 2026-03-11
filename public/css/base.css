@@ -322,10 +322,6 @@ body {
     .cart-icon-desktop {
         display: flex;
     }
-    .instagram-link {
-        align-self: center;
-        margin-top: 10px;
-    }
 }
 
 /* MEDIA QUERIES TABLETTE */

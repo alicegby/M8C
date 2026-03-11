@@ -2,22 +2,27 @@
 
 namespace App\Controller;
 
+use App\Entity\NewsletterSubscription;
+use App\Entity\PromoCode;
+use App\Entity\PromoCodeUsage;
 use App\Entity\User;
-use App\Form\UserType;
 use App\Entity\GamePlayer;
 use App\Entity\Purchase;
+use App\Form\UserType;
 use App\Repository\NewsletterSubscriptionRepository;
-use Symfony\Component\DependencyInjection\Attribute\Target;
+use App\Service\BrevoService;
+use App\Service\PromoCodeService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class AccountController extends AbstractController
 {
@@ -26,8 +31,7 @@ class AccountController extends AbstractController
     public function index(
         NewsletterSubscriptionRepository $newsletterRepo,
         EntityManagerInterface $em
-    ): Response
-    {
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
 
@@ -37,7 +41,6 @@ class AccountController extends AbstractController
 
         $isSubscribed = $newsletterRepo->findOneBy(['email' => $user->getEmail()]) !== null;
 
-        // Récupération des parties jouées par l'utilisateur
         $playedMPs = $em->getRepository(GamePlayer::class)
             ->createQueryBuilder('gp')
             ->join('gp.gameSession', 'gs')
@@ -49,20 +52,19 @@ class AccountController extends AbstractController
             ->getQuery()
             ->getResult();
 
-        // Récupération des parties achetées par l'utilisateur 
         $purchases = $em->getRepository(Purchase::class)
-        ->createQueryBuilder('p')
-        ->andWhere('p.user = :user')
-        ->setParameter('user', $user)
-        ->orderBy('p.purchasedAt', 'DESC')
-        ->getQuery()
-        ->getResult();
+            ->createQueryBuilder('p')
+            ->andWhere('p.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('p.purchasedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
 
         return $this->render('account.html.twig', [
-            'user' => $user,
+            'user'        => $user,
             'isSubscribed' => $isSubscribed,
-            'playedMPs' => $playedMPs, 
-            'purchases' => $purchases,
+            'playedMPs'   => $playedMPs,
+            'purchases'   => $purchases,
         ]);
     }
 
@@ -85,31 +87,24 @@ class AccountController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        if (!$user) {
-            throw $this->createAccessDeniedException('Utilisateur non connecté.');
-        }
-
-        // Génère un token unique
         $token = bin2hex(random_bytes(32));
         $user->setEmailVerificationToken($token);
         $user->setIsVerified(false);
         $em->flush();
 
-        // Génère le lien complet
         $verificationUrl = $this->generateUrl(
             'app_verify_email',
             ['token' => $token, 'email' => $user->getEmail()],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        // Envoie l'email
         $emailMessage = (new TemplatedEmail())
-            ->from(new Address('meurtrehuisclos@gmail.com', 'Meurtre à Huis Clos'))
+            ->from(new Address('contact@meurtrehuisclos.fr', 'Meurtre à Huis Clos'))
             ->to($user->getEmail())
             ->subject('Confirmez votre adresse email')
             ->htmlTemplate('emails/verify_email.html.twig')
             ->context([
-                'user' => $user,
+                'user'            => $user,
                 'verificationUrl' => $verificationUrl,
             ]);
 
@@ -118,6 +113,7 @@ class AccountController extends AbstractController
         $this->addFlash('success', 'Un nouvel email de confirmation a été envoyé.');
         return $this->redirectToRoute('app_verification_pending');
     }
+
     #[Route('/mon-compte/modification', name: 'account_edit')]
     public function edit(Request $request, EntityManagerInterface $em): Response
     {
@@ -128,16 +124,13 @@ class AccountController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // Gestion de l'upload d'avatar
             $avatarFile = $form->get('avatarFile')->getData();
             if ($avatarFile) {
-                $newFilename = uniqid().'.'.$avatarFile->guessExtension();
+                $newFilename = uniqid() . '.' . $avatarFile->guessExtension();
                 $avatarFile->move($this->getParameter('avatars_directory'), $newFilename);
-                $user->setAvatarUrl('/uploads/avatars/'.$newFilename);
+                $user->setAvatarUrl('/uploads/avatars/' . $newFilename);
             }
 
-            // Gestion de la suppression d'avatar
             $removeAvatar = $form->get('removeAvatar')->getData();
             if ($removeAvatar) {
                 $user->setAvatarUrl(null);
@@ -158,7 +151,8 @@ class AccountController extends AbstractController
     public function toggleNewsletter(
         EntityManagerInterface $em,
         NewsletterSubscriptionRepository $newsletterRepo,
-        \App\Service\PromoCodeService $promoCodeService,
+        PromoCodeService $promoCodeService,
+        BrevoService $brevoService,
         #[Target('brevo')] MailerInterface $mailer
     ): Response {
         /** @var User $user */
@@ -168,37 +162,33 @@ class AccountController extends AbstractController
 
         if ($subscription) {
             // Désinscription
+            $brevoService->unsubscribeContact($user->getEmail());
             $em->remove($subscription);
             $em->flush();
             $this->addFlash('success', 'Vous avez été désinscrit de la newsletter.');
         } else {
             // Inscription
-            $subscription = new \App\Entity\NewsletterSubscription();
+            $subscription = new NewsletterSubscription();
             $subscription->setEmail($user->getEmail());
             $subscription->setUnsubscribeToken(bin2hex(random_bytes(16)));
             $em->persist($subscription);
             $em->flush();
 
-            // Vérifie si l'utilisateur a déjà reçu un code newsletter dans le passé
-            $alreadyHadPromo = $em->getRepository(\App\Entity\PromoCode::class)
-                ->createQueryBuilder('p')
-                ->where('p.code LIKE :prefix')
-                ->setParameter('prefix', 'HELLO-%')
-                ->getQuery()
-                ->getResult();
+            // Synchronisation avec Brevo
+            $brevoService->syncContact($user->getEmail());
 
-            // On envoie le code seulement si c'est la première inscription
-            if (empty($alreadyHadPromo) || !$this->userAlreadyReceivedNewsletterCode($user, $em)) {
+            // Envoie le code promo uniquement si jamais reçu
+            if (!$this->userAlreadyReceivedNewsletterCode($user, $em)) {
                 $promo = $promoCodeService->generateNewsletterCode();
 
                 $email = (new TemplatedEmail())
-                    ->from('meurtrehuisclos@gmail.com')
+                    ->from('contact@meurtrehuisclos.fr')
                     ->to($user->getEmail())
                     ->subject('Bienvenue chez Meurtre à Huis Clos | Voici votre code promo')
                     ->htmlTemplate('emails/welcome.html.twig')
                     ->context([
-                        'promoCode' => $promo->getCode(),
-                        'app_url' => $this->generateUrl('app_home', [], UrlGeneratorInterface::ABSOLUTE_URL),
+                        'promoCode'        => $promo->getCode(),
+                        'app_url'          => $this->generateUrl('app_home', [], UrlGeneratorInterface::ABSOLUTE_URL),
                         'unsubscribeToken' => $subscription->getUnsubscribeToken(),
                     ]);
 
@@ -211,10 +201,32 @@ class AccountController extends AbstractController
         return $this->redirectToRoute('app_account');
     }
 
+    #[Route('/mon-compte/suppression', name: 'account_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function deleteAccount(Request $request, EntityManagerInterface $em): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $submittedToken = $request->request->get('_token');
+        if (!$this->isCsrfTokenValid('delete_account', $submittedToken)) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
+
+        $em->remove($user);
+        $em->flush();
+
+        $this->container->get('security.token_storage')->setToken(null);
+        $request->getSession()->invalidate();
+
+        $this->addFlash('success', 'Votre compte a été supprimé avec succès.');
+
+        return $this->redirectToRoute('app_home');
+    }
+
     private function userAlreadyReceivedNewsletterCode(User $user, EntityManagerInterface $em): bool
     {
-        // Vérifie dans promo_code_usages si l'user a déjà utilisé un code HELLO-
-        $usage = $em->getRepository(\App\Entity\PromoCodeUsage::class)
+        $usage = $em->getRepository(PromoCodeUsage::class)
             ->createQueryBuilder('u')
             ->join('u.promoCode', 'p')
             ->where('u.user = :user')
@@ -225,35 +237,5 @@ class AccountController extends AbstractController
             ->getOneOrNullResult();
 
         return $usage !== null;
-    }
-
-    #[Route('/mon-compte/suppression', name: 'account_delete', methods: ['POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function deleteAccount(Request $request, EntityManagerInterface $em): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-
-        if (!$user) {
-            throw $this->createAccessDeniedException('Utilisateur non connecté.');
-        }
-
-        // Vérifie le token CSRF
-        $submittedToken = $request->request->get('_token');
-        if (!$this->isCsrfTokenValid('delete_account', $submittedToken)) {
-            throw $this->createAccessDeniedException('Token CSRF invalide.');
-        }
-
-        // Supprime l'utilisateur
-        $em->remove($user);
-        $em->flush();
-
-        // Déconnecte l'utilisateur
-        $this->container->get('security.token_storage')->setToken(null);
-        $request->getSession()->invalidate();
-
-        $this->addFlash('success', 'Votre compte a été supprimé avec succès.');
-
-        return $this->redirectToRoute('app_home'); // redirige vers l'accueil ou une page spécifique
     }
 }

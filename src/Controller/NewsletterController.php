@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\NewsletterSubscription;
+use App\Service\BrevoService;
 use App\Service\PromoCodeService;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,7 +22,8 @@ class NewsletterController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         #[Target('brevo')] MailerInterface $mailer,
-        PromoCodeService $promoCodeService
+        PromoCodeService $promoCodeService,
+        BrevoService $brevoService
     ): Response {
         $emailInput = $request->request->get('email');
 
@@ -38,23 +40,28 @@ class NewsletterController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
+        // Inscription en base
         $subscriber = new NewsletterSubscription();
         $subscriber->setEmail($emailInput);
         $subscriber->setUnsubscribeToken(bin2hex(random_bytes(16)));
         $em->persist($subscriber);
         $em->flush();
 
-        // Génère et persiste le vrai code promo en base
+        // Synchronisation avec Brevo
+        $brevoService->syncContact($emailInput);
+
+        // Génère le code promo
         $promo = $promoCodeService->generateNewsletterCode();
 
+        // Envoi email
         $email = (new TemplatedEmail())
-            ->from('meurtrehuisclos@gmail.com')
+            ->from('contact@meurtrehuisclos.fr')
             ->to($emailInput)
             ->subject('Bienvenue chez Meurtre à Huis Clos | Voici votre code promo')
             ->htmlTemplate('emails/welcome.html.twig')
             ->context([
-                'promoCode' => $promo->getCode(), // le vrai code en base
-                'app_url' => $this->generateUrl('app_home', [], UrlGeneratorInterface::ABSOLUTE_URL),
+                'promoCode'        => $promo->getCode(),
+                'app_url'          => $this->generateUrl('app_home', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 'unsubscribeToken' => $subscriber->getUnsubscribeToken(),
             ]);
 
@@ -66,8 +73,11 @@ class NewsletterController extends AbstractController
     }
 
     #[Route('/newsletter/unsubscribe/{token}', name: 'newsletter_unsubscribe')]
-    public function unsubscribe(string $token, EntityManagerInterface $em): Response
-    {
+    public function unsubscribe(
+        string $token,
+        EntityManagerInterface $em,
+        BrevoService $brevoService
+    ): Response {
         $subscriber = $em->getRepository(NewsletterSubscription::class)
                         ->findOneBy(['unsubscribeToken' => $token]);
 
@@ -75,6 +85,9 @@ class NewsletterController extends AbstractController
             $this->addFlash('error', 'Lien de désinscription invalide.');
             return $this->redirectToRoute('app_home');
         }
+
+        // Désabonnement dans Brevo
+        $brevoService->unsubscribeContact($subscriber->getEmail());
 
         $em->remove($subscriber);
         $em->flush();

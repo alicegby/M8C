@@ -17,3 +17,7 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+    App\Service\BrevoService:
+        arguments:
+            $brevoApiKey: '%env(BREVO_API_KEY)%'

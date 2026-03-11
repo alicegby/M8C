@@ -141,7 +141,7 @@ class MurderParty
     public function removeCharacter(Character $character): static
     {
         if ($this->characters->removeElement($character)) {
-            // Si la FK ne peut pas être null, on ne touche pas à murderParty
+           
         }
         return $this;
     }
