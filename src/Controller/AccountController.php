@@ -221,8 +221,7 @@ class AccountController extends AbstractController
             $em->remove($usage);
         }
 
-        foreach ($em->getRepository(\App\Entity\GameSession::class)->findBy(['host' => $user]) as $gs) {
-            // Supprimer d'abord les GamePlayers liés à cette session
+        foreach ($em->getRepository(\App\Entity\GameSession::class)->findBy(['hostUser' => $user]) as $gs) {
             foreach ($em->getRepository(\App\Entity\GamePlayer::class)->findBy(['gameSession' => $gs]) as $gp) {
                 $em->remove($gp);
             }
@@ -240,7 +239,7 @@ class AccountController extends AbstractController
         foreach ($em->getRepository(\App\Entity\PushToken::class)->findBy(['user' => $user]) as $pt) {
             $em->remove($pt);
         }
-        
+
         $newsletter = $em->getRepository(\App\Entity\NewsletterSubscription::class)
             ->findOneBy(['email' => $user->getEmail()]);
         if ($newsletter) {
