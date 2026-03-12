@@ -19,6 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class WebhookController extends AbstractController
 {
     #[Route('/webhook/stripe', name: 'stripe_webhook', methods: ['POST'])]
+    #[Route('/webhook/stripe/', methods: ['POST'])]
     public function stripeWebhook(
         Request $request,
         EntityManagerInterface $em,
