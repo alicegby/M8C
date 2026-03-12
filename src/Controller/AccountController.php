@@ -216,24 +216,37 @@ class AccountController extends AbstractController
         foreach ($em->getRepository(\App\Entity\Purchase::class)->findBy(['user' => $user]) as $purchase) {
         $em->remove($purchase);
         }
+
         foreach ($em->getRepository(\App\Entity\PromoCodeUsage::class)->findBy(['user' => $user]) as $usage) {
             $em->remove($usage);
         }
+
+        foreach ($em->getRepository(\App\Entity\GameSession::class)->findBy(['host' => $user]) as $gs) {
+            // Supprimer d'abord les GamePlayers liés à cette session
+            foreach ($em->getRepository(\App\Entity\GamePlayer::class)->findBy(['gameSession' => $gs]) as $gp) {
+                $em->remove($gp);
+            }
+            $em->remove($gs);
+        }
+
         foreach ($em->getRepository(\App\Entity\GamePlayer::class)->findBy(['user' => $user]) as $gp) {
             $em->remove($gp);
         }
+
         foreach ($em->getRepository(\App\Entity\UserMurderParty::class)->findBy(['user' => $user]) as $ump) {
             $em->remove($ump);
         }
+
         foreach ($em->getRepository(\App\Entity\PushToken::class)->findBy(['user' => $user]) as $pt) {
             $em->remove($pt);
         }
+        
         $newsletter = $em->getRepository(\App\Entity\NewsletterSubscription::class)
             ->findOneBy(['email' => $user->getEmail()]);
         if ($newsletter) {
             $em->remove($newsletter);
         }
-        
+
         $em->flush();
 
         $em->remove($user);
