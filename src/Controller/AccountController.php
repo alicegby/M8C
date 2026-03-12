@@ -248,6 +248,24 @@ class AccountController extends AbstractController
 
         $em->flush();
 
+        // Suppression dans Supabase auth.users
+        if ($user->getSupabaseId()) {
+            $supabaseUrl = $_ENV['SUPABASE_URL'];
+            $supabaseServiceKey = $_ENV['SUPABASE_SERVICE_ROLE_KEY'];
+            
+            $client = new \GuzzleHttp\Client();
+            try {
+                $client->delete("{$supabaseUrl}/auth/v1/admin/users/{$user->getSupabaseId()}", [
+                    'headers' => [
+                        'Authorization' => "Bearer {$supabaseServiceKey}",
+                        'apikey' => $supabaseServiceKey,
+                    ]
+                ]);
+            } catch (\Exception $e) {
+                // Log l'erreur mais continue la suppression
+            }
+        }
+
         $em->remove($user);
         $em->flush();
 
