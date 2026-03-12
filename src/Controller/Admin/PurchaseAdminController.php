@@ -12,6 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/admin/achats')]
 #[IsGranted('ROLE_ADMIN')]
@@ -35,6 +38,7 @@ class PurchaseAdminController extends AbstractController
         Purchase $purchase,
         Request $request,
         EntityManagerInterface $em,
+        MailerInterface $mailer,
     ): Response {
         // Vérifie le token CSRF
         if (!$this->isCsrfTokenValid('refund_' . $purchase->getId(), $request->request->get('_token'))) {
@@ -64,6 +68,17 @@ class PurchaseAdminController extends AbstractController
 
             $purchase->setStatus('refunded');
             $em->flush();
+
+            $email = (new TemplatedEmail())
+                ->from('contact@meurtrehuisclos.fr')
+                ->to($purchase->getUser()->getEmail())
+                ->subject('Votre remboursement a été effectué')
+                ->htmlTemplate('emails/refund_confirmation.html.twig')
+                ->context([
+                    'purchase' => $purchase,
+                    'user' => $purchase->getUser(),
+                ]);
+            $mailer->send($email);
 
             return $this->json(['success' => true]);
 

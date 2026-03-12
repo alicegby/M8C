@@ -15,6 +15,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 class WebhookController extends AbstractController
 {
@@ -27,6 +29,7 @@ class WebhookController extends AbstractController
         MurderPartyRepository $murderPartyRepository,
         PackRepository $packRepository,
         StatService $statService,
+        MailerInterface $mailer
     ): Response {
         $payload = $request->getContent();
         $sigHeader = $request->headers->get('stripe-signature');
@@ -154,8 +157,18 @@ class WebhookController extends AbstractController
                     $em->flush();
                 }
             }
-        }
+            $email = (new TemplatedEmail())
+            ->from('contact@meurtrehuisclos.fr')
+            ->to($user->getEmail())
+            ->subject('Confirmation de votre achat')
+            ->htmlTemplate('emails/purchase_confirmation.html.twig')
+            ->context([
+                'user' => $user,
+                'session' => $session,
+            ]);
+        $mailer->send($email);
 
+        }
         return new Response('OK', 200);
     }
 }

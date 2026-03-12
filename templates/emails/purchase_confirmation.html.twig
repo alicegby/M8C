@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation de votre achat</title>
+</head>
+<body style="margin:0; padding:20px; background-color:#080808; font-family: Arial, sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" style="background-color:#0E0E0E; border-radius:12px; overflow:hidden;">
+
+                    <!-- Logo -->
+                    <tr>
+                        <td align="center" style="padding:30px 30px 20px 30px;">
+                            <img src="{{ absolute_url(asset('images/logo.JPG')) }}" alt="Meurtre à Huis Clos" width="120" style="display:block; margin:0 auto;">
+                        </td>
+                    </tr>
+
+                    <!-- Bande rouge -->
+                    <tr>
+                        <td style="background-color:#541826; height:3px;"></td>
+                    </tr>
+
+                    <!-- Contenu -->
+                    <tr>
+                        <td style="padding:35px 30px; text-align:center;">
+                            <h2 style="color:#F5F5F5; font-size:1.6rem; margin:0 0 20px 0;">Merci pour votre achat, {{ user.prenom }} !</h2>
+                            <p style="color:#CCCCCC; font-size:1rem; line-height:1.7; margin:0 0 25px 0;">
+                                Votre paiement a bien été confirmé. Vous pouvez dès maintenant accéder à vos scénarios depuis votre compte.
+                            </p>
+
+                            <!-- Bouton CTA -->
+                            <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 25px 0;">
+                                <tr>
+                                    <td align="center">
+                                        <table cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="background-color:#541826; border-radius:8px;">
+                                                    <a href="{{ absolute_url(path('app_account')) }}" style="display:inline-block; padding:14px 30px; color:#F5F5F5; text-decoration:none; font-weight:bold; font-size:1rem;">
+                                                        Accéder à mon compte
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="color:#888; font-size:0.85rem; line-height:1.5; margin:0;">
+                                Une question ? Contactez-nous à <a href="mailto:contact@meurtrehuisclos.fr" style="color:#9D2137; text-decoration:none;">contact@meurtrehuisclos.fr</a>
+                            </p>
+                        </td>
+                    </tr>
+
+                    {% include 'emails/email_footer.html.twig' %}
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
