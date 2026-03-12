@@ -28,7 +28,4 @@ ENV SERVER_NAME=":8080"
 # Document root Symfony
 ENV DOCUMENT_ROOT=/app/public
 
-# Cache Symfony
-RUN echo "APP_ENV=prod" > .env && php bin/console cache:clear --env=prod --no-debug && rm .env
-
 EXPOSE 8080
