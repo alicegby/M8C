@@ -18,7 +18,7 @@ COPY . .
 
 # Installation des dépendances Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 # Variables d'environnement
 ENV APP_ENV=prod
