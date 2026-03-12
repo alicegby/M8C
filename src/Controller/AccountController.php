@@ -213,6 +213,23 @@ class AccountController extends AbstractController
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
+        foreach ($em->getRepository(\App\Entity\Purchase::class)->findBy(['user' => $user]) as $purchase) {
+        $em->remove($purchase);
+        }
+        foreach ($em->getRepository(\App\Entity\PromoCodeUsage::class)->findBy(['user' => $user]) as $usage) {
+            $em->remove($usage);
+        }
+        foreach ($em->getRepository(\App\Entity\GamePlayer::class)->findBy(['user' => $user]) as $gp) {
+            $em->remove($gp);
+        }
+
+        $newsletter = $em->getRepository(\App\Entity\NewsletterSubscription::class)
+            ->findOneBy(['email' => $user->getEmail()]);
+        if ($newsletter) {
+            $em->remove($newsletter);
+        }
+        $em->flush();
+
         $em->remove($user);
         $em->flush();
 
