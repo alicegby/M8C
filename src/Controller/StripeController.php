@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\CartService;
 use App\Repository\PromoCodeRepository;
 use Stripe\Stripe;
+use Stripe\Coupon;
 use Stripe\Checkout\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,20 +48,6 @@ class StripeController extends AbstractController
             ];
         }
 
-        // Ajoute une ligne de réduction si code promo appliqué
-        if ($cart['promo'] && $cart['promo']['discount'] > 0) {
-            $lineItems[] = [
-                'price_data' => [
-                    'currency' => 'eur',
-                    'product_data' => [
-                        'name' => 'Code promo : ' . $cart['promo']['code'],
-                    ],
-                    'unit_amount' => -(int)($cart['promo']['discount'] * 100),
-                ],
-                'quantity' => 1,
-            ];
-        }
-
         // Métadonnées pour le webhook
         $metadata = [
             'user_id' => $this->getUser()->getUserIdentifier(),
@@ -69,10 +56,22 @@ class StripeController extends AbstractController
             $metadata['promo_code'] = $cart['promo']['code'];
         }
 
+        // Coupon Stripe si code promo appliqué
+        $discounts = [];
+        if ($cart['promo'] && $cart['promo']['discount'] > 0) {
+            $coupon = Coupon::create([
+                'amount_off' => (int)($cart['promo']['discount'] * 100),
+                'currency' => 'eur',
+                'duration' => 'once',
+            ]);
+            $discounts = [['coupon' => $coupon->id]];
+        }
+
         $session = Session::create([
             'payment_method_types' => ['card'],
             'line_items' => $lineItems,
             'mode' => 'payment',
+            'discounts' => $discounts,
             'success_url' => $this->generateUrl(
                 'stripe_success_cart',
                 [],
