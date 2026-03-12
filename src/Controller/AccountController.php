@@ -222,12 +222,18 @@ class AccountController extends AbstractController
         foreach ($em->getRepository(\App\Entity\GamePlayer::class)->findBy(['user' => $user]) as $gp) {
             $em->remove($gp);
         }
-
+        foreach ($em->getRepository(\App\Entity\UserMurderParty::class)->findBy(['user' => $user]) as $ump) {
+            $em->remove($ump);
+        }
+        foreach ($em->getRepository(\App\Entity\PushToken::class)->findBy(['user' => $user]) as $pt) {
+            $em->remove($pt);
+        }
         $newsletter = $em->getRepository(\App\Entity\NewsletterSubscription::class)
             ->findOneBy(['email' => $user->getEmail()]);
         if ($newsletter) {
             $em->remove($newsletter);
         }
+        
         $em->flush();
 
         $em->remove($user);
