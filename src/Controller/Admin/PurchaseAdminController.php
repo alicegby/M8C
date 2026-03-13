@@ -66,6 +66,30 @@ class PurchaseAdminController extends AbstractController
                 'amount' => (int)(floatval($purchase->getAmountPaid()) * 100),
             ]);
 
+            // Supprime les UserMurderParty liés à cet achat
+            $umps = $em->getRepository(\App\Entity\UserMurderParty::class)->findBy(['purchase' => $purchase]);
+            foreach ($umps as $ump) {
+                $em->remove($ump);
+            }
+
+            // Si c'est un pack, supprime aussi les UMP et purchases des scénarios offerts
+            if ($purchase->getPack()) {
+                foreach ($purchase->getPack()->getMurderParties() as $mp) {
+                    $mpPurchases = $em->getRepository(\App\Entity\Purchase::class)->findBy([
+                        'user' => $purchase->getUser(),
+                        'murderParty' => $mp,
+                        'amountPaid' => '0.00',
+                    ]);
+                    foreach ($mpPurchases as $mpPurchase) {
+                        $umps2 = $em->getRepository(\App\Entity\UserMurderParty::class)->findBy(['purchase' => $mpPurchase]);
+                        foreach ($umps2 as $ump) {
+                            $em->remove($ump);
+                        }
+                        $em->remove($mpPurchase);
+                    }
+                }
+            }
+
             $purchase->setStatus('refunded');
             $em->flush();
 
