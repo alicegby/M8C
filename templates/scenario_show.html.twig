@@ -3,81 +3,111 @@
 {% block title %}{{ scenario.title }} — Meurtre à Huis Clos{% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ asset('css/scenario.css') }}">
+<link rel="stylesheet" href="{{ asset('css/scenarioshow.css') }}">
 {% endblock %}
 
 {% block body %}
-<h1>Meurtre à Huis Clos - Jeu de Murder Party - Jeu de rôles - Jeu d'enquêtes</h1>
-<h2 class="scenario-show">{{ scenario.title }}</h2>
 
-<p class="intro">
-    Toutes nos Murder Parties peuvent être commandées directement sur le site et se jouent exclusivement via l’application. Plongez dans l’enquête où que vous soyez ! 
-</p>
+<h1>Meurtre à Huis Clos - Jeu de Murder Party</h1>
 
-<section class="scenario-detail animate-block">
-    <div class="scenario-container">
-        <p class="meta">{{ scenario.duree }} min | {{ scenario.nbPlayers }} joueurs | {{ scenario.averageRating }}/5</p>
-        <p class="tarif">
-            {% if scenario.isFree %}
-                Gratuit
-            {% else %}
-               {{ scenario.price|number_format(2, ',', ' ') }} €
-                    <br>
-                    <span class="price-per-player">
-                        seulement {{ (scenario.price / scenario.nbPlayers)|number_format(2, ',', ' ') }} € / joueur
-                    </span>
-            {% endif %}
-        </p>
-        <h2>Synopsis</h2>
-        <p>{{ scenario.synopsis }}</p>
+<section class="scenario-show-page">
 
-        <div class="scenario-btns">
-            {% if scenario.isFree or isPurchased %}
-                <a href="#" class="btn-jouer">Jouer</a>
-            {% else %}
-                <button
-                    class="btn-primary btn-add-cart"
-                    data-slug="{{ scenario.slug }}"
-                    data-name="{{ scenario.title }}"
-                    data-price="{{ scenario.price }}"
-                    id="btn-add-cart"
-                    >
-                        Ajouter au panier
-                </button>
-                <a href="{{ path('stripe_checkout_cart') }}" class="btn-secondary btn-buy-now" id="btn-buy-now" style="display:none">
-                    Voir mon panier et payer
-                </a>
-            {% endif %}
-            <a href="{{ path('rules') }}" class="btn-rules">Voir les règles du jeu</a>
-        </div>
-    </div>
+    <h2 class="scenario-title">{{ scenario.title }}</h2>
 
-    <div class="btn-play">
-        {% if scenario.isFree or isPurchased %}
-            {% if isPurchased %}
-                <p>✓ Vous possédez ce scénario</p>
-            {% endif %}
-            <p><a href="{{ path('telechargement') }}">Téléchargez</a> l'application pour jouer à cette Murder Party</p>
-            <div class="download-buttons">
-                <a href="#"><img src="{{ asset('icones/apple_darkred.png') }}" alt="Téléchargement Apple"></a>
-                <a href="#"><img src="{{ asset('icones/android_darkred.png') }}" alt="Téléchargement Android"></a>
-            </div>
-        {% else %}
-            <p class="download-notice">
-                <a href="{{ path('telechargement') }}">Téléchargez</a> l'application pour jouer
+    <div class="scenario-layout">
+
+        {# COLONNE GAUCHE #}
+        <div class="scenario-left">
+
+            <p class="scenario-meta">
+                {{ scenario.nbPlayers }} joueurs | {{ scenario.duree }} min
+                {% if scenario.averageRating %}
+                    | {{ scenario.averageRating }}/5
+                {% endif %}
             </p>
-            <div class="download-buttons">
-                <a href="#"><img src="{{ asset('icones/apple_darkred.png') }}" alt="Apple"></a>
-                <a href="#"><img src="{{ asset('icones/android_darkred.png') }}" alt="Android"></a>
+
+            <p class="scenario-synopsis">
+                {{ scenario.synopsis }}
+            </p>
+
+            <p class="scenario-secret">
+                Le scénario vous sera dévoilé complètement au lancement de la partie.
+            </p>
+
+            <a href="{{ path('rules') }}" class="btn-rules">
+                Voir les règles
+            </a>
+
+        </div>
+
+
+        {# COLONNE DROITE #}
+        <div class="scenario-right">
+
+            <p class="tarif">
+                {% if scenario.isFree %}
+                    Gratuit
+                {% else %}
+                    {{ scenario.price|number_format(2, ',', ' ') }} €
+                    <span class="price-per-player">
+                        Seulement {{ (scenario.price / scenario.nbPlayers)|number_format(2, ',', ' ') }} € / joueur
+                    </span>
+                {% endif %}
+            </p>
+
+            <div class="scenario-btns">
+
+                {% if scenario.isFree or isPurchased %}
+
+                    <a href="#" class="btn-jouer">Jouer</a>
+
+                {% else %}
+
+                    <button
+                        class="btn-primary btn-add-cart"
+                        data-slug="{{ scenario.slug }}"
+                        data-name="{{ scenario.title }}"
+                        data-price="{{ scenario.price }}"
+                        id="btn-add-cart">
+                        Ajouter au panier
+                    </button>
+
+                {% endif %}
+
             </div>
-        {% endif %}
+
+            <a href="{{ path('packs_list') }}" class="btn-packs">
+                Découvrez les Murder Parties en packs
+            </a>
+
+        </div>
+
     </div>
+
+
+    {# SECTION TELECHARGEMENT #}
+
+    <div class="download-section">
+
+        <h3>Téléchargez le jeu</h3>
+
+        <div class="download-buttons">
+            <a href="#">
+                <img src="{{ asset('icones/apple_red.png') }}" alt="Téléchargement Apple">
+            </a>
+
+            <a href="#">
+                <img src="{{ asset('icones/android_red.png') }}" alt="Téléchargement Android">
+            </a>
+        </div>
+
+    </div>
+
 </section>
 
-<a href="{{ path('packs_list') }}" class="btn-primary btn-packs">Découvrez les Murder Parties en packs</a>
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('js/scroll.js') }}"></script>
-    <script src="{{ asset('js/addtocart.js') }}"></script>
+<script src="{{ asset('js/scroll.js') }}"></script>
+<script src="{{ asset('js/addtocart.js') }}"></script>
 {% endblock %}

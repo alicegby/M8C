@@ -1,0 +1,229 @@
+h1 {
+    display: none;
+}
+
+/* FORCE MAIN-CONTENT À PRENDRE TOUT L'ESPACE RESTANT */
+main.main-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.scenarios-list {
+    flex: 1;
+}
+
+
+h1 {
+    display: none;
+}
+
+/* PAGE */
+.scenario-show-page {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* TITRE */
+.scenario-title {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    text-align: center;
+    color: #F5F5F5;
+    margin-bottom: 40px;
+}
+
+
+/* LAYOUT PRINCIPAL */
+.scenario-layout {
+    display: flex;
+    gap: 40px;
+    background: #1C1C1C;
+    border-radius: 16px;
+    padding: 40px;
+}
+
+
+/* COLONNE GAUCHE */
+.scenario-left {
+    flex: 2;
+    color: #F5F5F5;
+}
+
+.scenario-meta {
+    font-family: 'Arimo', serif;
+    color: #AAAAAA;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.scenario-synopsis {
+    font-family: 'Arimo', serif;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #F5F5F5;
+    margin-bottom: 20px;
+}
+
+.scenario-secret {
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: #AAAAAA;
+    margin-bottom: 25px;
+}
+
+
+/* COLONNE DROITE */
+.scenario-right {
+    flex: 1;
+    border-left: 1px solid #333;
+    padding-left: 40px;
+    text-align: center;
+}
+
+
+/* PRIX */
+.tarif {
+    font-family: 'Anton', serif;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #9D2137;
+    margin-bottom: 10px;
+}
+
+.price-per-player {
+    display: block;
+    background :#541826;
+    font-family: 'Arimo', serif;
+    color: #F5F5F5;
+    font-size: 1rem;
+    padding: 5px 10px;
+    border-radius: 12px;
+    width: fit-content;
+    margin: 10px auto 25px auto;
+}
+
+
+/* BOUTONS */
+.scenario-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+
+/* BTN JOUER */
+.btn-jouer {
+    width:100%;
+    padding:12px 30px;
+    font-family:'Arimo', serif;
+    font-size:1.1rem;
+    text-decoration:none;
+    color:#F5F5F5;
+    background:#541826;
+    border-radius:8px;
+    font-weight:bold;
+    text-align:center;
+    transition:all 0.3s ease;
+}
+
+.btn-jouer:hover {
+    background:#9D2137;
+    transform:scale(1.03);
+}
+
+/* BOUTON AJOUTER PANIER */
+
+.btn-add-cart{
+    width:100%;
+    padding:12px 30px;
+    font-family:'Arimo', serif;
+    font-size:1.1rem;
+    text-decoration:none;
+    color:#F5F5F5;
+    background:#541826;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:all 0.3s ease;
+}
+
+.btn-add-cart:hover{
+    background:#9D2137;
+    transform:scale(1.03);
+}
+
+
+/* BTN RULES */
+
+.btn-rules{
+    display:inline-block;
+    padding:12px 30px;
+    font-family:'Arimo', serif;
+    font-size:1rem;
+    text-decoration:none;
+    color:#AAAAAA;
+    border:2px solid #AAAAAA;
+    border-radius:8px;
+    transition:all 0.3s ease;
+}
+
+.btn-rules:hover{
+    border-color:#9D2137;
+    color:#9D2137;
+    transform:scale(1.05);
+}
+
+
+/* BTN PACKS */
+
+.btn-packs{
+    display:block;
+    margin-top:20px;
+    padding:12px 25px;
+    background:#541826;
+    color:#F5F5F5;
+    border-radius:8px;
+    text-decoration:none;
+    font-family:'Arimo', serif;
+    font-weight:bold;
+    transition:all 0.3s ease;
+}
+
+.btn-packs:hover{
+    background:#9D2137;
+    transform:scale(1.05);
+}
+
+
+/* SECTION TELECHARGEMENT */
+
+.download-section{
+    text-align:center;
+    margin-top:60px;
+}
+
+.download-section h3{
+    font-family:'Anton', serif;
+    font-size:2rem;
+    color:#F5F5F5;
+    margin-bottom:20px;
+}
+
+.download-buttons{
+    display:flex;
+    justify-content:center;
+    gap:25px;
+}
+
+.download-buttons img{
+    height:55px;
+    transition:transform 0.3s ease;
+}
+
+.download-buttons img:hover{
+    transform:scale(1.15);
+}

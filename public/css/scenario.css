@@ -123,9 +123,9 @@ main.main-content {
 
 .scenario-price {
     font-family: 'Arimo', serif;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     color: #9D2137;
 }
 
@@ -213,88 +213,16 @@ main.main-content {
     margin: 0 auto;
 }
 
-/* SCENARIO SHOW */
-.scenario-show {
-    color: #F5F5F5;
-    font-family: 'Anton', serif;
-    font-size: 3rem;
-    margin-top: 40px;
-    text-align: center;
-}
-
-.scenario-detail {
-    padding: 50px 50px;
-}
-
-.scenario-container {
-    background-color: #1C1C1C;
-    color: #F5F5F5;
-    border-radius: 15px;
-    padding: 30px 30px;
-}
-
-.scenario-container h2 {
-    font-family: 'Anton', serif;
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    text-align: center;
-}
-
-.scenario-container p {
-    font-family: 'Arimo', serif;
-    font-size: 1.1rem;
-    text-align: center;
-}
-
-/* Lien générique dans scenario-container (ex: "Voir les règles") */
-.scenario-container > a {
-    display: block;
-    width: fit-content;
-    margin: 20px auto;
-    padding: 12px 30px;
-    font-family: 'Arimo', serif;
-    font-size: 1.1rem;
-    text-decoration: none;
-    color: #F5F5F5;
-    background-color: #541826;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    text-align: center;
-}
-
-.scenario-container > a:hover {
-    background-color: #9D2137;
-    transform: scale(1.05);
-}
-
-.meta {
-    text-align: center;
-    font-size: 1.3rem;
-    font-family: 'Arimo', serif;
-    color: #AAAAAA;
-}
-
-.tarif {
-    text-align: center;
-    font-family: 'Anton', serif;
-    color: #9D2137;
-    font-size: 3rem;
-    font-weight: bold;
-    margin-top: 15px;
-}
-
 .price-per-player {
     width: 80%;
     background-color: #541826;
     font-family: 'Arimo', serif;
-    color: #AAAAAA;
+    color: #F5F5F5;
     font-size: 1rem;
     padding: 2px 8px;
     border-radius: 12px;
     margin-left: 0; 
-    margin-top: 10px;
+    margin-top: 15px;
     text-align: center; 
 }
 
