@@ -285,6 +285,15 @@ main.main-content {
     margin-top: 15px;
 }
 
+.price-per-player {
+    text-align: center;
+    font-family: 'Anton', serif;
+    color: #AAAAAA;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
 /* BOUTONS JOUER + RÈGLES */
 .scenario-btns {
     display: flex;
