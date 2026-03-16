@@ -280,18 +280,22 @@ main.main-content {
     text-align: center;
     font-family: 'Anton', serif;
     color: #9D2137;
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: bold;
     margin-top: 15px;
 }
 
 .price-per-player {
-    text-align: center;
-    font-family: 'Anton', serif;
+    width: 80%;
+    background-color: #541826;
+    font-family: 'Arimo', serif;
     color: #AAAAAA;
     font-size: 1rem;
-    font-weight: bold;
-    margin-top: 15px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 0; 
+    margin-top: 10px;
+    text-align: center; 
 }
 
 /* BOUTONS JOUER + RÈGLES */

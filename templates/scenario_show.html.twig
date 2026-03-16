@@ -21,10 +21,10 @@
             {% if scenario.isFree %}
                 Gratuit
             {% else %}
-               {{ scenario.price }} €  
+               {{ scenario.price|number_format(2, ',', ' ') }} €
                     <br>
                     <span class="price-per-player">
-                        {{ (scenario.price / scenario.nbPlayers)|number_format(2, ',', ' ') }} € / joueur
+                        seulement {{ (scenario.price / scenario.nbPlayers)|number_format(2, ',', ' ') }} € / joueur
                     </span>
             {% endif %}
         </p>
