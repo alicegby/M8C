@@ -17,28 +17,25 @@ document.addEventListener('DOMContentLoaded', function() {
         document.cookie = name + "=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     }
 
-    function getCookie() {
-        return document.cookie.includes(COOKIE_NAME + "=accepted");
-    }
-
-    function enableCookies() {
-        console.log("Cookies activés");
-        // loadGoogleAnalytics();
+    function getCookieValue() {
+        const match = document.cookie.match(new RegExp('(^| )' + COOKIE_NAME + '=([^;]+)'));
+        return match ? match[2] : null;
     }
 
     function disableCookies() {
-        console.log("Cookies refusés");
-
-        // Supprime cookies analytics si présents
         deleteCookie("_ga");
         deleteCookie("_gid");
         deleteCookie("_gat");
     }
 
+    const cookieValue = getCookieValue();
+
     // Vérification au chargement
-    if (getCookie()) {
+    if (cookieValue === 'accepted') {
         banner.style.display = 'none';
-        enableCookies();
+    } else if (cookieValue === 'rejected') {
+        banner.style.display = 'none';
+        disableCookies();
     } else {
         banner.style.display = 'block';
     }
@@ -47,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
     acceptBtn?.addEventListener('click', function() {
         setCookie("accepted");
         banner.style.display = 'none';
-        enableCookies();
+        location.reload(); // Recharge pour activer GTM côté serveur
     });
 
     // Refuser
