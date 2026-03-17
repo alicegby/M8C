@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Meurtre à Huis Clos{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Meurtre à Huis Clos - L'application murder party immersive. Vivez des enquêtes captivantes entre amis, en famille ou entre collègues.{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}Meurtre à Huis Clos{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Le jeu de Murder Party ultime à vivre entre proches.{% endblock %}">
+    <meta property="og:image" content="https://meurtrehuisclos.fr/images/logo.JPG">
+    <meta property="og:url" content="{% block og_url %}https://meurtrehuisclos.fr{% endblock %}">
+    <meta property="og:type" content="website">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {% if app.request.cookies.get('cookies_consent') == 'accepted' %}
@@ -17,14 +23,14 @@
 
     <link rel="stylesheet" href="{{ asset('css/base.css') }}">
 
-    <link rel="icon" type="image/jpg" sizes="32x32" href="{{ asset('images/logo.JPG') }}">
-    <link rel="shortcut icon" href="{{ asset('images/logo.JPG') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}">
     <script type="application/ld+json">
         {
         "@context": "https://schema.org",
         "@type": "Organization",
         "url": "https://www.meurtrehuisclos.fr",
-        "logo": "https://www.meurtrehuisclos.fr/images/logo.JPG"
+        "logo": "https://www.meurtrehuisclos.fr/images/logo.png"
         }
     </script>
     {% block stylesheets %}{% endblock %}
@@ -41,7 +47,7 @@
     <div class="container">
         <div class="logo">
             <a href="{{ path('app_home') }}">
-                <img src="{{ asset('images/logo.JPG')}}" alt="Logo Meurtre à Huis Clos">
+                <img src="{{ asset('images/logo.png')}}" alt="Logo Meurtre à Huis Clos">
             </a>
         </div>
 
