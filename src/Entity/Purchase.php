@@ -45,7 +45,7 @@ class Purchase
     private string $paymentMethod; // 'card', 'paypal', 'apple_pay', 'google_pay'
 
     #[ORM\Column(length: 255, nullable: true)]
-    private string $stripePaymentId;
+    private ?string $stripePaymentId = null;
 
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $source = null; // 'web', 'app'
