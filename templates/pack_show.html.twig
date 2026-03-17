@@ -26,7 +26,7 @@
                         <span class="price-original">{{ totalOriginal|number_format(2, ',', ' ') }} €</span>
                         <span class="price-final">{{ pack.price|number_format(2, ',', ' ') }} €</span>
                     </div>
-                    <span class="price-saving">🎉 Économisez {{ (totalOriginal - pack.price)|number_format(2, ',', ' ') }} €</span>
+                    <span class="price-saving">Économisez {{ (totalOriginal - pack.price)|number_format(2, ',', ' ') }} €</span>
                 </div>
             {% else %}
                 <div class="pack-price-block">
