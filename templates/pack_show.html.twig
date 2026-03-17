@@ -73,11 +73,12 @@
                     <div class="mp-card-header">
                         <h4>{{ scenario.title }}</h4>
                         <div class="mp-card-meta">
-                            <span class="mp-meta-item">{{ scenario.duree }} min</span>
-                            <span class="mp-meta-item">{{ scenario.nbPlayers }} joueurs</span>
-                            {% if scenario.averageRating is not empty and scenario.averageRating != 0 %}
-                                <span class="mp-meta-item">{{ scenario.averageRating }}/5</span>
-                            {% endif %}
+                            <span class="mp-meta-item">
+                                ⏱︎ {{ scenario.duree }} min | {{ scenario.nbPlayers }} joueurs 
+                                {% if scenario.averageRating %}
+                                    | {{ scenario.averageRating }}/5 ★
+                                {% endif %}
+                            </span>
                         </div>
                     </div>
                     <div class="mp-card-body">

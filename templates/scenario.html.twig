@@ -38,11 +38,16 @@
             {% for scenario in scenarios %}
                 <div class="scenario-card">
                     <div class="scenario-content">
+                        {% if scenario.coverImageUrl %}
+                            <div class="scenario-image">
+                                <img src="{{ asset('uploads/covers/' ~ scenario.coverImageUrl) }}" alt="{{ scenario.title }}">
+                            </div>
+                        {% endif %}
                         <h3>{{ scenario.title }}</h3>
                         <p class="scenario-meta">
-                            {{ scenario.duree }} minutes | {{ scenario.nbPlayers }} joueurs
+                            ⏱︎ {{ scenario.duree }} minutes | {{ scenario.nbPlayers }} joueurs
                             {% if scenario.averageRating is not empty and scenario.averageRating != 0 %}
-                                | {{ scenario.averageRating }}/5
+                                | {{ scenario.averageRating }}/5 ★
                             {% endif %}
                         </p>
                         <p class="scenario-price">

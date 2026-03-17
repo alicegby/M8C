@@ -19,6 +19,19 @@ main.main-content {
     text-align: center;
 }
 
+.scenario-image {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.scenario-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
 .scenarios-hero h2 {
     font-family: 'Anton', serif;
     font-size: 3rem;
