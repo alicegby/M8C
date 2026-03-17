@@ -33,7 +33,7 @@
         {% for scenario in topScenarios %}
         <div class="scenario">
             <h3>{{ scenario.title }}</h3>
-            <p class="scenario-meta">{{ scenario.duree }} minutes | {{ scenario.nbPlayers }} joueurs | {% if scenario.averageRating > 0 %} | {{ scenario.averageRating }}/5{% endif %}</p>
+            <p class="scenario-meta">⏱︎ {{ scenario.duree }} minutes | {{ scenario.nbPlayers }} joueurs | {% if scenario.averageRating > 0 %} {{ scenario.averageRating }}/5 ★{% endif %}</p>
             <p>{{ scenario.synopsis }}</p>
         </div>
         {% endfor %}
