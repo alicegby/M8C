@@ -49,6 +49,7 @@ class GamePlayer
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->pseudoInGame = '';
     }
 
     // Getters & Setters

@@ -83,9 +83,9 @@ class GameSessionController extends AbstractController
         ]);
 
         $data = array_map(fn($p) => [
-            'id'           => $p->getId(),
-            'pseudo'       => $p->getPseudoInGame(),
-            'avatar'       => $p->getAvatarInGame(),
+            'id'     => $p->getId(),
+            'pseudo' => $p->getPseudoInGame() ?? '',
+            'avatar' => $p->getAvatarInGame(),
         ], $players);
 
         return $this->json($data);
