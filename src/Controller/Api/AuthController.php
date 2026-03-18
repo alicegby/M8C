@@ -77,12 +77,18 @@ class AuthController extends AbstractController
     }
 
     #[Route('/profile', name: 'api_profile', methods: ['GET'])]
-    public function profile(PurchaseRepository $purchaseRepository): JsonResponse
-    {
+    public function profile(
+        PurchaseRepository $purchaseRepository,
+        EntityManagerInterface $em,
+        ): JsonResponse{
         /** @var User $user */
         $user = $this->getUser();
 
         $purchases = $purchaseRepository->findBy(['user' => $user]);
+
+        $playedGames = $em->getRepository(\App\Entity\GamePlayer::class)->findBy([
+            'user' => $user,
+        ]);
 
         return $this->json([
             'id'        => $user->getId(),
@@ -100,7 +106,15 @@ class AuthController extends AbstractController
                 'murderParty' => $p->getMurderParty() ? [
                     'title' => $p->getMurderParty()->getTitle(),
                 ] : null,
-            ], $purchases),
+                ], $purchases),
+                'playedGames' => array_map(fn($gp) => [
+                'gameSession' => [
+                    'createdAt'   => $gp->getGameSession()->getCreatedAt()->format('Y-m-d'),
+                    'murderParty' => [
+                        'title' => $gp->getGameSession()->getMurderParty()->getTitle(),
+                    ],
+                ],
+            ], array_filter($playedGames, fn($gp) => $gp->getGameSession()->getStatus() === 'finished')),
         ]);
     }
 }
