@@ -8,18 +8,20 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     private UrlGeneratorInterface $urlGenerator;
+    private JWTTokenManagerInterface $jwtManager;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, JWTTokenManagerInterface $jwtManager)
     {
         $this->urlGenerator = $urlGenerator;
         $this->jwtManager = $jwtManager;
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token): Response
     {
         $user = $token->getUser();
 
