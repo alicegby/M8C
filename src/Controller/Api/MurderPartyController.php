@@ -201,7 +201,6 @@ class MurderPartyController extends AbstractController
         $purchase->setStripePaymentId($appleReceiptId);
         $purchase->setSource('app');
         $purchase->setStatus('completed');
-        $purchase->setPurchasedAt(new \DateTimeImmutable());
         $em->persist($purchase);
 
         $ump = new UserMurderParty();
