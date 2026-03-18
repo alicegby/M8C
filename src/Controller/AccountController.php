@@ -47,7 +47,9 @@ class AccountController extends AbstractController
             ->join('gs.murderParty', 'mp')
             ->addSelect('gs', 'mp')
             ->where('gp.user = :user')
+            ->andWhere('gs.status = :status')
             ->setParameter('user', $user)
+            ->setParameter('status', 'finished')
             ->orderBy('gs.createdAt', 'DESC')
             ->getQuery()
             ->getResult();

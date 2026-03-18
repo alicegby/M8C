@@ -82,28 +82,72 @@ class GameSessionController extends AbstractController
             'gameSession' => $session,
         ]);
 
-        $data = array_map(fn($p) => [
-            'id'     => $p->getId(),
-            'user_id'  => $p->getUser()?->getId(),
-            'pseudo' => $p->getPseudoInGame() ?? '',
-            'avatar'   => $p->getAvatarInGame()
-                ? 'https://meurtrehuisclos.fr' . $p->getAvatarInGame()
-                : null,
-            'is_ready' => $p->isReady(),
-            'character' => $p->getCharacter() ? [
-                'id'   => $p->getCharacter()->getId(),
-                'nom' => $p->getCharacter()->getNom(),
-                'prenom' => $p->getCharacter()->getPrenom(),
-                'age' => $p->getCharacter()->getAge(),
-                'job' => $p->getCharacter()->getJob(),
-                'histoire' => $p->getCharacter()->getHistoire(),
-                'mobile' => $p->getCharacter()->getMobile(),
-                'alibi' => $p->getCharacter()->getAlibi(),
-                'extra' => $p->getCharacter()->getExtraInfo(),
-                'isGuilty' => $p->getCharacter()->isGuilty(),
-            ] : null,
-        ], $players);
+        $data = array_map(function($p) {
+            $character = $p->getCharacter(); // ← récupère le personnage ici
+            return [
+                'id'           => $p->getId(),
+                'user_id'      => $p->getUser()?->getId(),
+                'pseudo'       => $p->getPseudoInGame() ?? '',
+                'avatar'       => $p->getAvatarInGame() ? 'https://meurtrehuisclos.fr' . $p->getAvatarInGame() : null,
+                'is_ready'     => $p->isReady(),
+                'character_id' => $character?->getId(), // maintenant OK
+                'character'    => $character ? [
+                    'id'       => $character->getId(),
+                    'nom'      => $character->getNom(),
+                    'prenom'   => $character->getPrenom(),
+                    'age'      => $character->getAge(),
+                    'job'      => $character->getJob(),
+                    'histoire' => $character->getHistoire(),
+                    'mobile'   => $character->getMobile(),
+                    'alibi'    => $character->getAlibi(),
+                    'extra'    => $character->getExtraInfo(),
+                    'isGuilty' => $character->isGuilty(),
+                ] : null,
+            ];
+        }, $players);
 
         return $this->json($data);
+    }
+
+    #[Route('/my-character/{joinCode}', name: 'api_game_session_my_character', methods: ['GET'])]
+    public function myCharacter(string $joinCode, EntityManagerInterface $em): JsonResponse
+    {
+        /** @var User|null $user */
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'Utilisateur non connecté'], 401);
+        }
+
+        $session = $em->getRepository(GameSession::class)
+            ->findOneBy(['joinCode' => strtoupper($joinCode)]);
+        if (!$session) {
+            return $this->json(['error' => 'Partie introuvable'], 404);
+        }
+
+        $player = $em->getRepository(GamePlayer::class)
+            ->findOneBy(['gameSession' => $session, 'user' => $user]);
+        if (!$player) {
+            return $this->json(['error' => 'Joueur non trouvé dans la partie'], 404);
+        }
+
+        $character = $player->getCharacter();
+        if (!$character) {
+            return $this->json(['error' => 'Personnage non assigné'], 404);
+        }
+
+        return $this->json([
+            'character' => [
+                'id'        => $character->getId(),
+                'prenom'    => $character->getPrenom(),
+                'nom'       => $character->getNom(),
+                'age'       => $character->getAge(),
+                'job'       => $character->getJob(),
+                'histoire'  => $character->getHistoire(),
+                'mobile'    => $character->getMobile(),
+                'alibi'     => $character->getAlibi(),
+                'extraInfo' => $character->getExtraInfo(),
+                'isGuilty'  => $character->isGuilty(),
+            ],
+        ]);
     }
 }
