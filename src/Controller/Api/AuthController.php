@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\User;
+use App\Repository\PurchaseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -72,6 +73,33 @@ class AuthController extends AbstractController
             'nom'       => $user->getNom(),
             'avatarUrl' => $user->getAvatarUrl(),
             'roles'     => $user->getRoles(),
+        ]);
+    }
+
+    #[Route('/profile', name: 'api_profile', methods: ['GET'])]
+    public function profile(PurchaseRepository $purchaseRepository): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $purchases = $purchaseRepository->findBy(['user' => $user]);
+
+        return $this->json([
+            'id'        => $user->getId(),
+            'email'     => $user->getEmail(),
+            'prenom'    => $user->getPrenom(),
+            'nom'       => $user->getNom(),
+            'pseudo'    => $user->getPseudo(),
+            'dob'       => $user->getDob()?->format('Y-m-d'),
+            'avatarUrl' => $user->getAvatarUrl(),
+            'createdAt' => $user->getCreatedAt()->format('Y-m-d'),
+            'purchases' => array_map(fn($p) => [
+                'id'          => $p->getId(),
+                'createdAt'   => $p->getPurchasedAt()->format('Y-m-d'),
+                'murderParty' => $p->getMurderParty() ? [
+                    'title' => $p->getMurderParty()->getTitle(),
+                ] : null,
+            ], $purchases),
         ]);
     }
 }
