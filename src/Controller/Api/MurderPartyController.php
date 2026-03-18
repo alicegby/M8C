@@ -7,6 +7,11 @@ use App\Entity\UserMurderParty;
 use App\Repository\MurderPartyRepository;
 use App\Repository\UserMurderPartyRepository;
 use App\Entity\User;
+use App\Entity\GameSession;
+use App\Entity\GamePlayer;
+use App\Entity\Purchase;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -95,4 +100,130 @@ class MurderPartyController extends AbstractController
             'withinRetractionWindow' => $withinRetractionWindow,
         ]);
     }
+
+    #[Route('/{id}/session', name: 'api_murder_party_create_session', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function createSession(
+        string $id,
+        MurderPartyRepository $murderPartyRepository,
+        UserMurderPartyRepository $userMurderPartyRepository,
+        EntityManagerInterface $em,
+    ): JsonResponse {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $murderParty = $murderPartyRepository->find($id);
+        if (!$murderParty) {
+            return $this->json(['error' => 'Scénario introuvable'], 404);
+        }
+
+        // Vérif ownership si payant
+        if (!$murderParty->isFree()) {
+            $ump = $userMurderPartyRepository->findOneBy([
+                'user' => $user,
+                'murderParty' => $murderParty,
+            ]);
+            if (!$ump) {
+                return $this->json(['error' => 'Scénario non acheté'], 403);
+            }
+        }
+
+        // Génère un join code unique
+        $joinCode = null;
+        $attempts = 0;
+        do {
+            $candidate = $this->generateJoinCode();
+            $existing = $em->getRepository(GameSession::class)->findOneBy(['joinCode' => $candidate]);
+            if (!$existing) {
+                $joinCode = $candidate;
+            }
+            if (++$attempts > 5) {
+                return $this->json(['error' => 'Impossible de générer un code'], 500);
+            }
+        } while ($joinCode === null);
+
+        // Crée la session
+        $session = new GameSession();
+        $session->setMurderParty($murderParty);
+        $session->setHostUser($user);
+        $session->setJoinCode($joinCode);
+        $session->setStatus('waiting');
+        $em->persist($session);
+
+        // Ajoute le host comme premier joueur
+        $player = new GamePlayer();
+        $player->setGameSession($session);
+        $player->setUser($user);
+        $em->persist($player);
+
+        $em->flush();
+
+        return $this->json(['joinCode' => $joinCode]);
+    }
+
+    #[Route('/purchases/confirm', name: 'api_purchase_confirm', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function confirmPurchase(
+        Request $request,
+        MurderPartyRepository $murderPartyRepository,
+        UserMurderPartyRepository $userMurderPartyRepository,
+        EntityManagerInterface $em,
+    ): JsonResponse {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $body = json_decode($request->getContent(), true);
+        $murderPartyId = $body['murderPartyId'] ?? null;
+        $appleReceiptId = $body['appleReceiptId'] ?? '';
+        $amount = $body['amount'] ?? '0.00';
+
+        $murderParty = $murderPartyRepository->find($murderPartyId);
+        if (!$murderParty) {
+            return $this->json(['error' => 'Scénario introuvable'], 404);
+        }
+
+        // Évite les doublons
+        $existing = $userMurderPartyRepository->findOneBy([
+            'user' => $user,
+            'murderParty' => $murderParty,
+        ]);
+        if ($existing) {
+            return $this->json(['success' => true, 'message' => 'Déjà acheté']);
+        }
+
+        $purchase = new Purchase();
+        $purchase->setUser($user);
+        $purchase->setMurderParty($murderParty);
+        $purchase->setPurchaseType('single');
+        $purchase->setAmountPaid($amount);
+        $purchase->setDiscountApplied('0.00');
+        $purchase->setPaymentMethod('apple_pay');
+        $purchase->setStripePaymentId($appleReceiptId);
+        $purchase->setSource('app');
+        $purchase->setStatus('completed');
+        $purchase->setPurchasedAt(new \DateTimeImmutable());
+        $em->persist($purchase);
+
+        $ump = new UserMurderParty();
+        $ump->setUser($user);
+        $ump->setMurderParty($murderParty);
+        $ump->setPurchase($purchase);
+        $ump->setIsPlayed(false);
+        $em->persist($ump);
+
+        $em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+    private function generateJoinCode(): string
+    {
+        $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        $code = '';
+        for ($i = 0; $i < 8; $i++) {
+            $code .= $chars[random_int(0, strlen($chars) - 1)];
+        }
+        return $code;
+    }
+
 }
