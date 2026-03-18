@@ -67,4 +67,56 @@ class GameSessionController extends AbstractController
             'maxPlayers' => $mp->getNbPlayers(),
         ]);
     }
+
+    #[Route('/{sessionId}/players', name: 'api_game_session_players', methods: ['GET'])]
+    public function players(
+        string $sessionId,
+        EntityManagerInterface $em,
+    ): JsonResponse {
+        $session = $em->getRepository(GameSession::class)->find($sessionId);
+        if (!$session) {
+            return $this->json(['error' => 'Session introuvable'], 404);
+        }
+
+        $players = $em->getRepository(GamePlayer::class)->findBy([
+            'gameSession' => $session,
+        ]);
+
+        $data = array_map(fn($p) => [
+            'id'           => $p->getId(),
+            'pseudo'       => $p->getPseudoInGame(),
+            'avatar'       => $p->getAvatarInGame(),
+        ], $players);
+
+        return $this->json($data);
+    }
+
+    #[Route('/api/game-players/{id}', name: 'api_game_player_update', methods: ['PATCH'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function update(
+        string $id,
+        Request $request,
+        EntityManagerInterface $em,
+    ): JsonResponse {
+        $player = $em->getRepository(GamePlayer::class)->find($id);
+        if (!$player) {
+            return $this->json(['error' => 'Joueur introuvable'], 404);
+        }
+
+        $body = json_decode($request->getContent(), true);
+
+        if (isset($body['pseudo_in_game'])) {
+            $player->setPseudoInGame($body['pseudo_in_game']);
+        }
+        if (isset($body['avatar_in_game'])) {
+            $player->setAvatarInGame($body['avatar_in_game']);
+        }
+        if (isset($body['is_ready'])) {
+            $player->setIsReady($body['is_ready']);
+        }
+
+        $em->flush();
+
+        return $this->json(['success' => true]);
+    }
 }
