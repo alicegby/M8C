@@ -34,6 +34,8 @@ security:
     access_control:
         - { path: ^/webhook/stripe, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/murder-parties$, roles: PUBLIC_ACCESS }
+        - { path: ^/api/murder-parties/.*/ownership, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/admin, roles: ROLE_ADMIN } 
         - { path: ^/mon-compte, roles: ROLE_USER }
