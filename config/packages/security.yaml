@@ -20,7 +20,7 @@ security:
             jwt: ~
 
         main:
-            lazy: true
+            lazy: true 
             provider: app_user_provider
             form_login:
                 login_path: app_login

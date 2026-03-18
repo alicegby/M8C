@@ -44,6 +44,7 @@ class WebhookController extends AbstractController
             return new Response('Signature invalide', 400);
         }
 
+        // ─── CHECKOUT COMPLÉTÉ ────────────────────────────────────────────────────
         if ($event->type === 'checkout.session.completed') {
             $session = $event->data->object;
 
@@ -71,9 +72,9 @@ class WebhookController extends AbstractController
                 $mp = $murderPartyRepository->findOneBy(['title' => $productName]);
                 if ($mp) {
                     $existing = $em->getRepository(Purchase::class)->findOneBy([
-                        'user' => $user,
+                        'user'        => $user,
                         'murderParty' => $mp,
-                        'status' => 'completed',
+                        'status'      => 'completed',
                     ]);
                     if (!$existing) {
                         $purchase = new Purchase();
@@ -97,8 +98,8 @@ class WebhookController extends AbstractController
                 $pack = $packRepository->findOneBy(['name' => $productName]);
                 if ($pack) {
                     $existing = $em->getRepository(Purchase::class)->findOneBy([
-                        'user' => $user,
-                        'pack' => $pack,
+                        'user'   => $user,
+                        'pack'   => $pack,
                         'status' => 'completed',
                     ]);
                     if (!$existing) {
@@ -119,9 +120,9 @@ class WebhookController extends AbstractController
                         // Débloque aussi chaque scénario du pack
                         foreach ($pack->getMurderParties() as $mp) {
                             $existingMp = $em->getRepository(Purchase::class)->findOneBy([
-                                'user' => $user,
+                                'user'        => $user,
                                 'murderParty' => $mp,
-                                'status' => 'completed',
+                                'status'      => 'completed',
                             ]);
                             if (!$existingMp) {
                                 $mpPurchase = new Purchase();
@@ -134,7 +135,6 @@ class WebhookController extends AbstractController
                                 $mpPurchase->setStatus('completed');
                                 $em->persist($mpPurchase);
                                 $em->flush();
-                                // On n'enregistre pas de stat pour les MPs offerts dans un pack
                             }
                         }
                     }
@@ -145,7 +145,7 @@ class WebhookController extends AbstractController
             $promoCodeStr = $session->metadata->promo_code ?? null;
             if ($promoCodeStr) {
                 $promoCode = $em->getRepository(\App\Entity\PromoCode::class)->findOneBy([
-                    'code' => $promoCodeStr
+                    'code' => $promoCodeStr,
                 ]);
                 if ($promoCode) {
                     $promoCode->setCurrentUses($promoCode->getCurrentUses() + 1);
@@ -157,18 +157,75 @@ class WebhookController extends AbstractController
                     $em->flush();
                 }
             }
-            $email = (new TemplatedEmail())
-            ->from('contact@meurtrehuisclos.fr')
-            ->to($user->getEmail())
-            ->subject('Confirmation de votre achat')
-            ->htmlTemplate('emails/purchase_confirmation.html.twig')
-            ->context([
-                'user' => $user,
-                'session' => $session,
-            ]);
-        $mailer->send($email);
 
+            $mailer->send(
+                (new TemplatedEmail())
+                    ->from('contact@meurtrehuisclos.fr')
+                    ->to($user->getEmail())
+                    ->subject('Confirmation de votre achat')
+                    ->htmlTemplate('emails/purchase_confirmation.html.twig')
+                    ->context(['user' => $user, 'session' => $session])
+            );
         }
+
+        // ─── REMBOURSEMENT ────────────────────────────────────────────────────────
+        if ($event->type === 'charge.refunded') {
+            $charge = $event->data->object;
+            $paymentIntentId = $charge->payment_intent;
+
+            if (!$paymentIntentId) {
+                return new Response('Pas de payment_intent', 200);
+            }
+
+            $purchase = $em->getRepository(Purchase::class)->findOneBy([
+                'stripePaymentId' => $paymentIntentId,
+            ]);
+
+            if (!$purchase || $purchase->getStatus() === 'refunded') {
+                return new Response('Purchase introuvable ou déjà remboursé', 200);
+            }
+
+            // Supprime les UserMurderParty liés
+            $umps = $em->getRepository(\App\Entity\UserMurderParty::class)->findBy([
+                'purchase' => $purchase,
+            ]);
+            foreach ($umps as $ump) {
+                $em->remove($ump);
+            }
+
+            // Si c'est un pack, supprime aussi les UMP des scénarios offerts
+            if ($purchase->getPack()) {
+                foreach ($purchase->getPack()->getMurderParties() as $mp) {
+                    $mpPurchases = $em->getRepository(Purchase::class)->findBy([
+                        'user'        => $purchase->getUser(),
+                        'murderParty' => $mp,
+                        'amountPaid'  => '0.00',
+                    ]);
+                    foreach ($mpPurchases as $mpPurchase) {
+                        $umps2 = $em->getRepository(\App\Entity\UserMurderParty::class)->findBy([
+                            'purchase' => $mpPurchase,
+                        ]);
+                        foreach ($umps2 as $ump) {
+                            $em->remove($ump);
+                        }
+                        $em->remove($mpPurchase);
+                    }
+                }
+            }
+
+            $purchase->setStatus('refunded');
+            $em->flush();
+
+            $mailer->send(
+                (new TemplatedEmail())
+                    ->from('contact@meurtrehuisclos.fr')
+                    ->to($purchase->getUser()->getEmail())
+                    ->subject('Votre remboursement a été effectué')
+                    ->htmlTemplate('emails/refund_confirmation.html.twig')
+                    ->context(['purchase' => $purchase, 'user' => $purchase->getUser()])
+            );
+        }
+
         return new Response('OK', 200);
     }
 }

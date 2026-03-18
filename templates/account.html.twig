@@ -105,7 +105,12 @@
                                     Achat inconnu
                                 {% endif %}
                             </strong>
-                            <span>{{ p.purchasedAt|date('d/m/Y') }}</span>
+                            <div class="account-purchase-meta">
+                                <span>{{ p.purchasedAt|date('d/m/Y') }}</span>
+                                {% if p.status == 'refunded' %}
+                                    <span class="badge-refunded">Remboursé</span>
+                                {% endif %}
+                            </div>
                         </li>
                     {% endfor %}
                 </ul>

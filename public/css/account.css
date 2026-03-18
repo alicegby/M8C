@@ -136,6 +136,22 @@ h2 {
     transform: scale(1.05);
 }
 
+.account-purchase-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.badge-refunded {
+    background-color: #6b7280;
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
 /* Footer */
 .account-footer {
     margin-top: 40px;
