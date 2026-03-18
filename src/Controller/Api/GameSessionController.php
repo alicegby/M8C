@@ -88,7 +88,7 @@ class GameSessionController extends AbstractController
                 'id'           => $p->getId(),
                 'user_id'      => $p->getUser()?->getId(),
                 'pseudo'       => $p->getPseudoInGame() ?? '',
-                'avatar'       => $p->getAvatarInGame() ? 'https://meurtrehuisclos.fr' . $p->getAvatarInGame() : null,
+                'avatar'       => $p->getAvatarInGame(),
                 'is_ready'     => $p->isReady(),
                 'character_id' => $character?->getId(), // maintenant OK
                 'character'    => $character ? [

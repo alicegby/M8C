@@ -39,6 +39,7 @@ security:
         - { path: ^/api/avatars, roles: PUBLIC_ACCESS }
         - { path: ^/api/game-sessions/.*/players, roles: PUBLIC_ACCESS }
         - { path: ^/api/murder-parties/.*/ownership, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/game-sessions/.*/epilogue, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/admin, roles: ROLE_ADMIN } 
         - { path: ^/mon-compte, roles: ROLE_USER }
