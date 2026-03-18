@@ -158,7 +158,10 @@ class MurderPartyController extends AbstractController
 
         $em->flush();
 
-        return $this->json(['joinCode' => $joinCode]);
+        return $this->json([
+            'joinCode'  => $joinCode,
+            'sessionId' => $session->getId(),
+        ]);
     }
 
     #[Route('/purchases/confirm', name: 'api_purchase_confirm', methods: ['POST'])]
