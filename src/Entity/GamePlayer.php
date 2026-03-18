@@ -29,7 +29,7 @@ class GamePlayer
     private ?Character $character = null;
 
     #[ORM\Column(length: 100, nullable: true)]
-    private string $pseudoInGame;
+    private ?string $pseudoInGame = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatarInGame = null;
@@ -60,7 +60,7 @@ class GamePlayer
     public function setUser(?User $user): static { $this->user = $user; return $this; }
     public function getCharacter(): ?Character { return $this->character; }
     public function setCharacter(?Character $character): static { $this->character = $character; return $this; }
-    public function getPseudoInGame(): string { return $this->pseudoInGame; }
+    public function getPseudoInGame(): ?string { return $this->pseudoInGame; }
     public function setPseudoInGame(string $pseudoInGame): static { $this->pseudoInGame = $pseudoInGame; return $this; }
     public function getAvatarInGame(): ?string { return $this->avatarInGame; }
     public function setAvatarInGame(?string $avatarInGame): static { $this->avatarInGame = $avatarInGame; return $this; }
