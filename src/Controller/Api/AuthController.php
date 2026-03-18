@@ -95,6 +95,7 @@ class AuthController extends AbstractController
             'createdAt' => $user->getCreatedAt()->format('Y-m-d'),
             'purchases' => array_map(fn($p) => [
                 'id'          => $p->getId(),
+                'status'      => $p->getStatus(),
                 'createdAt'   => $p->getPurchasedAt()->format('Y-m-d'),
                 'murderParty' => $p->getMurderParty() ? [
                     'title' => $p->getMurderParty()->getTitle(),
