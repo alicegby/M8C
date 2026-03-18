@@ -46,6 +46,9 @@ class GamePlayer
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ["default" => "now()"])]
     private \DateTimeImmutable $createdAt;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $votedCharacterId = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -71,4 +74,6 @@ class GamePlayer
     public function getNotes(): ?string { return $this->notes; }
     public function setNotes(?string $notes): static { $this->notes = $notes; return $this; }
     public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
+    public function getVotedCharacterId(): ?string { return $this->votedCharacterId; }
+    public function setVotedCharacterId(?string $v): static { $this->votedCharacterId = $v; return $this; }
 }
