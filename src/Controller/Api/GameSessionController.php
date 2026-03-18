@@ -86,8 +86,22 @@ class GameSessionController extends AbstractController
             'id'     => $p->getId(),
             'user_id'  => $p->getUser()?->getId(),
             'pseudo' => $p->getPseudoInGame() ?? '',
-            'avatar' => $p->getAvatarInGame(),
+            'avatar'   => $p->getAvatarInGame()
+                ? 'https://meurtrehuisclos.fr' . $p->getAvatarInGame()
+                : null,
             'is_ready' => $p->isReady(),
+            'character' => $p->getCharacter() ? [
+                'id'   => $p->getCharacter()->getId(),
+                'nom' => $p->getCharacter()->getNom(),
+                'prenom' => $p->getCharacter()->getPrenom(),
+                'age' => $p->getCharacter()->getAge(),
+                'job' => $p->getCharacter()->getJob(),
+                'histoire' => $p->getCharacter()->getHistoire(),
+                'mobile' => $p->getCharacter()->getMobile(),
+                'alibi' => $p->getCharacter()->getAlibi(),
+                'extra' => $p->getCharacter()->getExtraInfo(),
+                'isGuilty' => $p->getCharacter()->isGuilty(),
+            ] : null,
         ], $players);
 
         return $this->json($data);

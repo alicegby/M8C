@@ -14,11 +14,9 @@ class AvatarController extends AbstractController
     {
         $avatars = $avatarRepository->findBy([], ['id' => 'ASC']);
 
-        $data = array_map(fn($a) => [
+        return $this->json(array_map(fn($a) => [
             'id'        => $a->getId(),
-            'image_url' => $a->getImageUrl(),
-        ], $avatars);
-
-        return $this->json($data);
+            'image_url' => 'https://meurtrehuisclos.fr' . $a->getImageUrl(),
+        ], $avatars));
     }
 }
