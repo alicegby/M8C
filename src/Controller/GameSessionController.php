@@ -146,9 +146,6 @@ class GameSessionController extends AbstractController
         // Enregistrement stat avant suppression
         $statService->recordGame($session);
 
-        $em->remove($session);
-        $em->flush();
-
         return new JsonResponse(['message' => 'Partie terminée et supprimée']);
     }
 
@@ -191,6 +188,7 @@ class GameSessionController extends AbstractController
                 'age' => $character->getAge(),
                 'job' => $character->getJob(),
                 'histoire' => $character->getHistoire(),
+                'mobile' => $character->getMobile(),
                 'alibi' => $character->getAlibi(),
                 'extraInfo' => $character->getExtraInfo(),
                 'isGuilty' => $character->isGuilty(),
