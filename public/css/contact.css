@@ -23,6 +23,15 @@ h2 {
     min-height: 700px; /* évite le redimensionnement au scroll */
 }
 
+.contact-intro {
+    color: #F5F5F5;
+    margin-left: 80px;
+    margin-right: 80px;
+    text-align: center;
+    font-family: 'Arimo';
+    font-size: 1rem;
+}
+
 /* FORM GROUP */
 .form-group {
     display: flex;

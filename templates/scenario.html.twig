@@ -1,16 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Murder Parties — Meurtre à Huis Clos{% endblock %}
-{% block meta_description %}Découvrez tous nos scénarios de Murder Party immersifs. Choisissez votre enquête et incarnez un suspect !{% endblock %}
+{% block title %}Scénarios Murder Party — Meurtre à Huis Clos{% endblock %}
+{% block meta_description %}Découvrez tous nos scénarios de Murder Party immersifs : thrillers, comédies, enquêtes historiques. Choisissez votre enquête et incarnez un suspect dès ce soir !{% endblock %}
 {% block og_title %}Nos Murder Parties - Meurtre à Huis Clos{% endblock %}
 {% block og_url %}https://meurtrehuisclos.fr/scenarios{% endblock %}
+{% block canonical %}<link rel="canonical" href="https://meurtrehuisclos.fr/scenarios">{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/scenario.css') }}">
 {% endblock %}
 
 {% block body %}
-<h1>Meurtre à Huis Clos</h1>
+<h1>Nos Scénarios de Murder Party</h1>
 
 <section class="scenarios-hero animate-block">
     <div class="container">
@@ -84,6 +85,22 @@
                 <p>Aucun scénario publié pour le moment.</p>
             {% endfor %}
         </div>
+    </div>
+</section>
+
+<section class="seo-text animate-block">
+    <div class="container">
+        <h2>Pourquoi choisir Meurtre à Huis Clos ?</h2>
+        <p>
+            Meurtre à Huis Clos propose des scénarios de murder party uniques, jouables directement 
+            depuis votre téléphone grâce à <a href="{{ path('telechargement') }}">l'application</a>. Idéal pour une soirée entre amis, en famille, un anniversaire ou un team building, 
+            chaque enquête plonge les joueurs dans une histoire immersive où chacun incarne un personnage 
+            avec ses secrets et ses motivations. <br><br>
+        </p>
+        <p>
+            Nos scénarios sont conçus pour 4 joueurs et plus, avec des durées adaptées à tous les groupes. 
+            Pas de matériel à imprimer, tout se passe sur l'application.
+        </p>
     </div>
 </section>
 

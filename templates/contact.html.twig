@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Contact — Meurtre à Huis Clos{% endblock %}
-{% block meta_description %}Contactez l'équipe Meurtre à Huis Clos pour toute question, devis ou suggestion.{% endblock %}
+{% block meta_description %}Contactez l'équipe Meurtre à Huis Clos pour toute question, demande de devis ou murder party sur mesure. Réponse rapide garantie.{% endblock %}
 {% block og_title %}Contact - Meurtre à Huis Clos{% endblock %}
 {% block og_url %}https://meurtrehuisclos.fr/contact{% endblock %}
+
+{% block canonical %}<link rel="canonical" href="https://meurtrehuisclos.fr/contact">{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/contact.css') }}">
@@ -11,8 +13,13 @@
 
 {% block body %}
 
-<h1>Meurtre à Huis Clos</h1>
+<h1>Contactez-nous</h1>
 <h2>Nous contacter</h2>
+
+<p class="contact-intro animate-block">
+    Vous souhaitez organiser une murder party personnalisée, vous avez une question sur nos scénarios 
+    ou sur l'application ? Remplissez le formulaire ci-dessous, nous vous répondons rapidement.
+</p>
 
 <div class="contact-container animate-block">
     {% for message in app.flashes('success') %}

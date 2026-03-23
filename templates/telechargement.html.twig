@@ -1,16 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Télécharger Meurtre à Huis Clos{% endblock %}
-{% block meta_description %}Téléchargez gratuitement Meurtre à Huis Clos sur votre téléphone. L'expérience Murder Party ultime sur iOS et Android.{% endblock %}
-{% block og_title %}Télécharger l'app - Meurtre à Huis Clos{% endblock %}
+{% block meta_description %}Téléchargez gratuitement l'application Meurtre à Huis Clos sur iOS et Android. Lancez votre murder party en quelques minutes, sans matériel, entre amis ou en famille.{% endblock %}
+{% block og_title %}Télécharger l'application Murder Party - Meurtre à Huis Clos{% endblock %}
 {% block og_url %}https://meurtrehuisclos.fr/telechargement{% endblock %}
+
+{% block canonical %}<link rel="canonical" href="https://meurtrehuisclos.fr/telechargement">{% endblock %}
+
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/telechargement.css') }}">
 {% endblock %}
 
 {% block body %}
-<h1>Meurtre à Huis Clos</h1>
+<h1>Télécharger l'application Meurtre à Huis Clos</h1>
 
 <section class="telechargement-hero animate-block">
     <div class="telechargement-hero-content">
@@ -61,6 +64,22 @@
             <img src="{{ asset('images/scenario.png')}}" alt="Synopsis">
             <img src="{{ asset('images/jeu.png')}}" alt="Page de jeu">
         </div>
+    </div>
+</section>
+
+<section class="download-seo-text animate-block">
+    <div class="container">
+        <h2>L'application de Murder Party sans matériel</h2>
+        <p>
+            Meurtre à Huis Clos est la seule application qui vous permet de vivre une Murder Party complète 
+            depuis votre téléphone. Fini les impressions de fiches personnages et les préparatifs compliqués : 
+            l'application gère tout, de la distribution des rôles au chronomètre, en passant par le vote final.
+        </p>
+        <p>
+            Compatible iOS et Android, l'application est gratuite au téléchargement. 
+            Consultez nos <a href="{{ path('scenarios_list') }}">scénarios disponibles</a> et lancez votre première 
+            murder party ce soir.
+        </p>
     </div>
 </section>
 

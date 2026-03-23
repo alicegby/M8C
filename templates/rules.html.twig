@@ -1,13 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Règles du jeu — Meurtre à Huis Clos{% endblock %}
+{% block meta_description %}Découvrez comment jouer à Meurtre à Huis Clos : préparation, déroulement de la partie, votes et épilogue. Toutes les règles de notre Murder Party en application.{% endblock %}
+{% block og_title %}Règles du jeu - Meurtre à Huis Clos{% endblock %}
+{% block og_url %}https://meurtrehuisclos.fr/regles-du-jeu{% endblock %}
+
+{% block canonical %}<link rel="canonical" href="https://meurtrehuisclos.fr/regles-du-jeu">{% endblock %}
 
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('css/rules.css') }}">
 {% endblock %}
 
 {% block body %}
-<h1>Meurtre à Huis Clos</h1>
+<h1>Règles du jeu — Murder Party</h1>
 <section class="rules-hero animate-block">
     <div class="container">
         <h2>Règles du jeu</h2>
@@ -55,6 +60,8 @@
         
     </div>
 </section>
+
+
 {% endblock %}
 
 {% block javascripts %}

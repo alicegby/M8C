@@ -507,6 +507,34 @@ main.main-content {
     color: #F5F5F5;
 }
 
+.packs-seo-text {
+    text-align: center;
+    color: #F5F5F5;
+    padding: 20px 20px;
+    margin-bottom: 30px;
+}
+
+.packs-seo-text h2 {
+    font-family: 'Anton', serif;
+    font-size: 2rem;
+}
+
+.packs-seo-text p {
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+}
+
+.packs-seo-text a {
+    text-decoration: none;
+    color: #9D2137;
+    transition: color 0.2s ease;
+    font-weight: bold;
+}
+
+.packs-seo-text a:hover {
+    color: #541826;
+}
+
  /* MEDIA QUERY */
  /* TABLETTE */
 @media (max-width: 1024px) {

@@ -1,16 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Packs — Meurtre à Huis Clos{% endblock %}
-{% block meta_description %}Profitez de nos packs de murder party à prix réduit. Plus de scénarios, plus de fun !{% endblock %}
-{% block og_title %}Nos Packs - Meurtre à Huis Clos{% endblock %}
+{% block meta_description %}
+Découvrez nos packs de murder party à prix réduit : plusieurs scénarios regroupés pour vivre des enquêtes immersives entre amis, en famille ou entre collègues. Jouables sur application.
+{% endblock %}
+{% block og_title %}Packs Murder Party — Meurtre à Huis Clos{% endblock %}
 {% block og_url %}https://meurtrehuisclos.fr/packs{% endblock %}
+
+{% block canonical %}
+<link rel="canonical" href="https://meurtrehuisclos.fr/packs">
+{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/pack.css') }}">
 {% endblock %}
 
 {% block body %}
-<h1>Meurtre à Huis Clos</h1>
+<h1>Nos Packs de Murder Party</h1>
 
 <section class="packs-hero animate-block">
     <div class="container">
@@ -79,6 +85,22 @@
                 <p>Aucun pack disponible pour le moment.</p>
             {% endfor %}
         </div>
+    </div>
+</section>
+
+<section class="packs-seo-text">
+    <div class="container">
+        <h2>Pourquoi choisir un pack ?</h2>
+        <p>
+            Nos packs murder party vous permettent de profiter de plusieurs scénarios d'enquête 
+            à prix réduit. Idéal pour animer plusieurs soirées entre amis, en famille ou lors 
+            d'un team building entre collègues. Chaque enquête est scénarisée, immersive et 
+            entièrement guidée par l'application Meurtre à Huis Clos.
+        </p>
+        <p>
+            Vous aimez un scénario en particulier ? Consultez aussi notre 
+            <a href="{{ path('scenarios_list') }}">catalogue de Murder Party individuel</a>.
+        </p>
     </div>
 </section>
 

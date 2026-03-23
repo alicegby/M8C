@@ -10,6 +10,7 @@
     <meta property="og:url" content="{% block og_url %}https://meurtrehuisclos.fr{% endblock %}">
     <meta property="og:type" content="website">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://meurtrehuisclos.fr/">
 
     {% if app.request.cookies.get('cookies_consent') == 'accepted' %}
         <!-- Google Tag Manager -->
@@ -29,8 +30,8 @@
         {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "url": "https://www.meurtrehuisclos.fr",
-        "logo": "https://www.meurtrehuisclos.fr/images/logo.png"
+        "url": "https://meurtrehuisclos.fr",
+        "logo": "https://meurtrehuisclos.fr/images/logo.png"
         }
     </script>
     {% block stylesheets %}{% endblock %}

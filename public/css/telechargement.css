@@ -160,6 +160,34 @@ h1 {
     transform: scale(1.05);
 }
 
+.download-seo-text {
+    text-align: center;
+    color: #F5F5F5;
+    padding: 20px 20px;
+    margin-bottom: 30px;
+}
+
+.download-seo-text h2 {
+    font-family: 'Anton', serif;
+    font-size: 2rem;
+}
+
+.download-seo-text p {
+    font-family: 'Arimo', serif;
+    font-size: 1rem;
+}
+
+.download-seo-text a {
+    text-decoration: none;
+    color: #9D2137;
+    transition: color 0.2s ease;
+    font-weight: bold;
+}
+
+.download-seo-text a:hover {
+    color: #541826;
+}
+
 /* DOWNLOAD FINAL */
 .download-final {
     background-color: #0E0E0E;
