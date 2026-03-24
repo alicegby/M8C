@@ -117,4 +117,70 @@ class AuthController extends AbstractController
             ], array_filter($playedGames, fn($gp) => $gp->getGameSession()->getStatus() === 'finished')),
         ]);
     }
+
+    #[Route('/account', name: 'api_delete_account', methods: ['DELETE'])]
+    public function deleteAccount(
+        Request $request,
+        EntityManagerInterface $em,
+    ): JsonResponse {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->json(['error' => 'Non authentifié'], 401);
+        }
+
+        // Même logique que AccountController::deleteAccount
+        foreach ($em->getRepository(\App\Entity\Purchase::class)->findBy(['user' => $user]) as $purchase) {
+            $em->remove($purchase);
+        }
+        foreach ($em->getRepository(\App\Entity\PromoCodeUsage::class)->findBy(['user' => $user]) as $usage) {
+            $em->remove($usage);
+        }
+        foreach ($em->getRepository(\App\Entity\GameSession::class)->findBy(['hostUser' => $user]) as $gs) {
+            foreach ($em->getRepository(\App\Entity\GamePlayer::class)->findBy(['gameSession' => $gs]) as $gp) {
+                $em->remove($gp);
+            }
+            $em->remove($gs);
+        }
+        foreach ($em->getRepository(\App\Entity\GamePlayer::class)->findBy(['user' => $user]) as $gp) {
+            $em->remove($gp);
+        }
+        foreach ($em->getRepository(\App\Entity\UserMurderParty::class)->findBy(['user' => $user]) as $ump) {
+            $em->remove($ump);
+        }
+        foreach ($em->getRepository(\App\Entity\PushToken::class)->findBy(['user' => $user]) as $pt) {
+            $em->remove($pt);
+        }
+
+        $newsletter = $em->getRepository(\App\Entity\NewsletterSubscription::class)
+            ->findOneBy(['email' => $user->getEmail()]);
+        if ($newsletter) {
+            $em->remove($newsletter);
+        }
+
+        $em->flush();
+
+        // Suppression dans Supabase auth.users
+        if ($user->getSupabaseId()) {
+            $supabaseUrl = $_ENV['SUPABASE_URL'];
+            $supabaseServiceKey = $_ENV['SUPABASE_SERVICE_ROLE_KEY'];
+            $client = new \GuzzleHttp\Client();
+            try {
+                $client->delete("{$supabaseUrl}/auth/v1/admin/users/{$user->getSupabaseId()}", [
+                    'headers' => [
+                        'Authorization' => "Bearer {$supabaseServiceKey}",
+                        'apikey' => $supabaseServiceKey,
+                    ],
+                ]);
+            } catch (\Exception $e) {
+                // Log mais on continue
+            }
+        }
+
+        $em->remove($user);
+        $em->flush();
+
+        return $this->json(['message' => 'Compte supprimé avec succès'], 200);
+    }
 }
