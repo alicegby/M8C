@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api/game-sessions')]
 class GameSessionController extends AbstractController
@@ -149,5 +150,43 @@ class GameSessionController extends AbstractController
                 'isGuilty'  => $character->isGuilty(),
             ],
         ]);
+    }
+
+    #[Route('/{sessionId}', name: 'api_game_session_get', methods: ['GET'])]
+    public function getSession(
+        string $sessionId,
+        EntityManagerInterface $em,
+    ): JsonResponse {
+        $session = $em->getRepository(GameSession::class)->find($sessionId);
+        if (!$session) {
+            return $this->json(['error' => 'Session introuvable'], 404);
+        }
+
+        return $this->json([
+            'id'         => $session->getId(),
+            'joinCode'   => $session->getJoinCode(),
+            'status'     => $session->getStatus(),
+            'maxPlayers' => $session->getMurderParty()->getNbPlayers(),
+        ]);
+    }
+
+    #[Route('/{joinCode}/start', name: 'api_game_session_start', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function start(
+        string $joinCode,
+        EntityManagerInterface $em,
+    ): JsonResponse {
+        $session = $em->getRepository(GameSession::class)->findOneBy([
+            'joinCode' => strtoupper($joinCode),
+        ]);
+
+        if (!$session) {
+            return $this->json(['error' => 'Session introuvable'], 404);
+        }
+
+        $session->setStatus('started');
+        $em->flush();
+
+        return $this->json(['success' => true]);
     }
 }
