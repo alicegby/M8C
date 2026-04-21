@@ -9,20 +9,15 @@ RUN install-php-extensions \
     zip \
     gd
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Autoriser Composer à tourner en root
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 WORKDIR /app
 
-COPY composer.json composer.lock ./
-
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
 COPY . .
 
-RUN php bin/console cache:clear --env=prod --no-debug || true
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 ENV APP_ENV=prod
 ENV FRANKENPHP_CONFIG="worker ./public/index.php"
