@@ -18,8 +18,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts && \
-    composer dump-autoload --optimize && \
+RUN composer install --no-dev --optimize-autoloader --no-interaction && \
     ls -la vendor/autoload_runtime.php
 
 ENV FRANKENPHP_CONFIG="worker ./public/index.php"
