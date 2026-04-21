@@ -1,6 +1,5 @@
 FROM dunglas/frankenphp:latest
 
-# Installation des extensions PHP nécessaires
 RUN install-php-extensions \
     pdo \
     pdo_pgsql \
@@ -10,22 +9,21 @@ RUN install-php-extensions \
     zip \
     gd
 
-# Dossier de travail
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 WORKDIR /app
 
-# Copie des fichiers
+COPY composer.json composer.lock ./
+
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
 COPY . .
 
-# Installation des dépendances Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+RUN php bin/console cache:clear --env=prod --no-debug || true
 
-# Variables d'environnement
 ENV APP_ENV=prod
 ENV FRANKENPHP_CONFIG="worker ./public/index.php"
 ENV SERVER_NAME=":8080"
-
-# Document root Symfony
 ENV DOCUMENT_ROOT=/app/public
 
 EXPOSE 8080
