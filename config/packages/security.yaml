@@ -17,7 +17,8 @@ security:
         api:
             pattern: ^/api
             stateless: true
-            jwt: ~
+            jwt: 
+                authenticator: lexik_jwt_authentication.authenticator
 
         main:
             lazy: true 
