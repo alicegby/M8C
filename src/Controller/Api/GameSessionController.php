@@ -69,7 +69,7 @@ class GameSessionController extends AbstractController
         ]);
     }
 
-    #[Route('/{sessionId}/players', name: 'api_game_session_players', methods: ['GET'])]
+    #[Route('/{sessionId}/players', name: 'api_game_session_players', methods: ['GET'], requirements: ['sessionId' => '[0-9a-f-]{36}'])]
     public function players(
         string $sessionId,
         EntityManagerInterface $em,
@@ -152,7 +152,7 @@ class GameSessionController extends AbstractController
         ]);
     }
 
-    #[Route('/{sessionId}', name: 'api_game_session_get', methods: ['GET'])]
+    #[Route('/{sessionId}', name: 'api_game_session_get', methods: ['GET'], requirements: ['sessionId' => '[0-9a-f-]{36}'])]
     public function getSession(
         string $sessionId,
         EntityManagerInterface $em,
