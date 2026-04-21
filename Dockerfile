@@ -11,6 +11,9 @@ RUN install-php-extensions \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Autoriser Composer à tourner en root
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 WORKDIR /app
 
 COPY composer.json composer.lock ./
