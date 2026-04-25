@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\GameSession;
 use App\Repository\GameSessionRepository;
+use App\Entity\GameVote;
 use App\Repository\MurderPartyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,17 +16,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class EpilogueController extends AbstractController
 {
     #[Route('/api/game-sessions/{sessionId}/epilogue', name: 'api_epilogue', methods: ['GET'])]
-    public function index(
-        string $sessionId,
-        EntityManagerInterface $em,
-    ): JsonResponse {
+    public function index(string $sessionId, EntityManagerInterface $em): JsonResponse
+    {
         $session = $em->getRepository(GameSession::class)->find($sessionId);
         if (!$session) return $this->json(['error' => 'Session introuvable'], 404);
 
         $players = $session->getGamePlayers()->toArray();
         if (empty($players)) return $this->json(['error' => 'Aucun joueur'], 404);
 
-        // Trouve le coupable
         $killerPlayer = null;
         $killerChar = null;
         foreach ($players as $p) {
@@ -36,35 +34,23 @@ class EpilogueController extends AbstractController
                 break;
             }
         }
-
         if (!$killerPlayer) return $this->json(['error' => 'Coupable introuvable'], 404);
 
-        // Compte les votes corrects
-        $totalVoters = 0;
-        $correctVotes = 0;
-        foreach ($players as $p) {
-            if ($p->getVotedCharacterId()) {
-                $totalVoters++;
-                $votedIds = explode(',', $p->getVotedCharacterId());
-                if (in_array($killerChar->getId(), $votedIds)) {
-                    $correctVotes++;
-                }
-            }
-        }
-
+        $votes = $em->getRepository(GameVote::class)->findBy(['gameSession' => $session]);
+        $totalVoters = count(array_unique(array_map(fn($v) => $v->getVoter()->getId(), $votes)));
+        $correctVotes = count(array_filter($votes, fn($v) => $v->getVotedCharacter()->getId() === $killerChar->getId()));
         $won = $correctVotes > count($players) / 2;
-        $epilogue = $session->getMurderParty()->getEpilogue() ?? '';
 
         return $this->json([
             'won'          => $won,
             'correctVotes' => $correctVotes,
             'totalVoters'  => $totalVoters,
-            'epilogue'     => $epilogue,
+            'epilogue'     => $session->getMurderParty()->getEpilogue() ?? '',
             'killer' => [
-                'pseudo'  => $killerPlayer->getPseudoInGame(),
-                'avatar'  => $killerPlayer->getAvatarInGame(),
-                'prenom'  => $killerChar->getPrenom(),
-                'nom'     => $killerChar->getNom(),
+                'pseudo' => $killerPlayer->getPseudoInGame(),
+                'avatar' => $killerPlayer->getAvatarInGame(),
+                'prenom' => $killerChar->getPrenom(),
+                'nom'    => $killerChar->getNom(),
             ],
         ]);
     }

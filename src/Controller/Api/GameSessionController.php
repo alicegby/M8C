@@ -57,6 +57,7 @@ class GameSessionController extends AbstractController
         return $this->json([
             'sessionId' => $session->getId(),
             'joinCode'  => $session->getJoinCode(),
+            'playerId' => $player->getId(),
             'scenario'  => [
                 'id'         => $mp->getId(),
                 'title'      => $mp->getTitle(),

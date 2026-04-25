@@ -13,7 +13,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class GamePlayerController extends AbstractController
 {
     #[Route('/api/game-players/{id}', name: 'api_game_player_update', methods: ['PATCH'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function update(
         string $id,
         Request $request,
@@ -22,6 +21,12 @@ class GamePlayerController extends AbstractController
         $player = $em->getRepository(GamePlayer::class)->find($id);
         if (!$player) {
             return $this->json(['error' => 'Joueur introuvable'], 404);
+        }
+
+        // Si un user est connecté, vérifier que c'est bien le sien
+        $user = $this->getUser();
+        if ($user !== null && $player->getUser() !== $user) {
+            return $this->json(['error' => 'Non autorisé'], 403);
         }
 
         $body = json_decode($request->getContent(), true);
