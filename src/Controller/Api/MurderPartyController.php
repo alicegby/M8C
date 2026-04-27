@@ -161,6 +161,7 @@ class MurderPartyController extends AbstractController
         return $this->json([
             'joinCode'  => $joinCode,
             'sessionId' => $session->getId(),
+            'playerId'  => $player->getId(),
         ]);
     }
 
