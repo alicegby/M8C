@@ -61,10 +61,11 @@ class GameSessionController extends AbstractController
             'scenario'  => [
                 'id'         => $mp->getId(),
                 'title'      => $mp->getTitle(),
-                'nb_players' => $mp->getNbPlayers(),
+                'nbPlayers'     => $mp->getNbPlayers(),
                 'duree'      => $mp->getDuree(),
                 'synopsis'   => $mp->getSynopsis(),
                 'scenario'   => $mp->getScenario(),
+                'averageRating' => $mp->getAverageRating(),
             ],
             'maxPlayers' => $mp->getNbPlayers(),
         ]);
@@ -173,21 +174,45 @@ class GameSessionController extends AbstractController
 
     #[Route('/{joinCode}/start', name: 'api_game_session_start', methods: ['POST'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function start(
-        string $joinCode,
-        EntityManagerInterface $em,
-    ): JsonResponse {
+    public function start(string $joinCode, EntityManagerInterface $em): JsonResponse
+    {
         $session = $em->getRepository(GameSession::class)->findOneBy([
             'joinCode' => strtoupper($joinCode),
         ]);
+        if (!$session) return $this->json(['error' => 'Session introuvable'], 404);
 
-        if (!$session) {
-            return $this->json(['error' => 'Session introuvable'], 404);
+        // Distribue les personnages
+        $players = $em->getRepository(GamePlayer::class)->findBy([
+            'gameSession' => $session,
+        ]);
+        $characters = $session->getMurderParty()->getCharacters()->toArray();
+
+        if (empty($characters)) {
+            return $this->json(['error' => 'Aucun personnage trouvé pour ce scénario'], 400);
+        }
+        if (empty($players)) {
+            return $this->json(['error' => 'Aucun joueur pour cette session'], 400);
+        }
+        if (count($players) > count($characters)) {
+            return $this->json(['error' => 'Pas assez de personnages (' . count($characters) . ' pour ' . count($players) . ' joueurs)'], 400);
+        }
+
+        shuffle($characters);
+        foreach ($players as $index => $player) {
+            $player->setCharacter($characters[$index]);
+            $player->setIsReady(false);
         }
 
         $session->setStatus('started');
+        $em->persist($session);
         $em->flush();
 
-        return $this->json(['success' => true]);
+        return $this->json([
+            'success' => true,
+            'debug' => [
+                'nbPlayers'    => count($players),
+                'nbCharacters' => count($characters),
+            ],
+        ]);
     }
 }
