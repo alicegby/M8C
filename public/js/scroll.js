@@ -27,3 +27,9 @@ setTimeout(() => {
         block.classList.add('active');
     });
 }, 1000);
+
+
+// Modif auto date
+const today = new Date();
+const formattedDate = today.toLocaleDateString('fr-FR');
+document.getElementById('last-update').textContent = formattedDate;
