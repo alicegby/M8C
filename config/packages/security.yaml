@@ -38,6 +38,7 @@ security:
         - { path: ^/api/murder-parties$, roles: PUBLIC_ACCESS }
         - { path: ^/api/murder-parties/.*/ownership, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/game-sessions/join, roles: PUBLIC_ACCESS }
+        - { path: ^/api/game-sessions/.*/status, roles: PUBLIC_ACCESS }
         - { path: ^/api/game-sessions/.*/players, roles: PUBLIC_ACCESS }
         - { path: ^/api/game-sessions/.*/epilogue, roles: PUBLIC_ACCESS }
         - { path: ^/api/game-sessions/.*/vote, roles: PUBLIC_ACCESS }

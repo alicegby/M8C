@@ -216,6 +216,17 @@ class GameSessionController extends AbstractController
         ]);
     }
 
+    #[Route('/{sessionId}/status', name: 'api_game_session_status', methods: ['GET'], requirements: ['sessionId' => '[0-9a-f-]{36}'])]
+    public function status(string $sessionId, EntityManagerInterface $em): JsonResponse
+    {
+        $session = $em->getRepository(GameSession::class)->find($sessionId);
+        if (!$session) {
+            return $this->json(['error' => 'Session introuvable'], 404);
+        }
+
+        return $this->json(['status' => $session->getStatus()]);
+    }
+
     #[Route('/{joinCode}/next', name: 'api_game_session_next', methods: ['POST'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function next(string $joinCode, EntityManagerInterface $em): JsonResponse
