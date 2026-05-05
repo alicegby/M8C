@@ -45,6 +45,9 @@ security:
         - { path: ^/api/game-sessions/.*/votes, roles: PUBLIC_ACCESS }
         - { path: ^/api/game-sessions/.*/next, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/game-sessions/.*/start, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/game-sessions/.*/launch, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/game-sessions/.*/start-vote, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/game-sessions/.*/reveal, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/game-sessions, roles: PUBLIC_ACCESS }
         - { path: ^/api/game-players, roles: PUBLIC_ACCESS }
         - { path: ^/api/avatars, roles: PUBLIC_ACCESS }

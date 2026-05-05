@@ -241,4 +241,49 @@ class GameSessionController extends AbstractController
 
         return $this->json(['success' => true]);
     }
+
+    #[Route('/{joinCode}/launch', name: 'api_game_session_launch', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function launch(string $joinCode, EntityManagerInterface $em): JsonResponse
+    {
+        $session = $em->getRepository(GameSession::class)->findOneBy([
+            'joinCode' => strtoupper($joinCode),
+        ]);
+        if (!$session) return $this->json(['error' => 'Session introuvable'], 404);
+
+        $session->setStatus('playing');
+        $em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+    #[Route('/{joinCode}/start-vote', name: 'api_game_session_start_vote', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function startVote(string $joinCode, EntityManagerInterface $em): JsonResponse
+    {
+        $session = $em->getRepository(GameSession::class)->findOneBy([
+            'joinCode' => strtoupper($joinCode),
+        ]);
+        if (!$session) return $this->json(['error' => 'Session introuvable'], 404);
+
+        $session->setStatus('voting');
+        $em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+    #[Route('/{joinCode}/reveal', name: 'api_game_session_reveal', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function reveal(string $joinCode, EntityManagerInterface $em): JsonResponse
+    {
+        $session = $em->getRepository(GameSession::class)->findOneBy([
+            'joinCode' => strtoupper($joinCode),
+        ]);
+        if (!$session) return $this->json(['error' => 'Session introuvable'], 404);
+
+        $session->setStatus('epilogue');
+        $em->flush();
+
+        return $this->json(['success' => true]);
+    }
 }
