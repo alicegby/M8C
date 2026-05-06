@@ -236,6 +236,11 @@ class GameSessionController extends AbstractController
         ]);
         if (!$session) return $this->json(['error' => 'Session introuvable'], 404);
 
+        $players = $em->getRepository(GamePlayer::class)->findBy(['gameSession' => $session]);
+        foreach ($players as $player) {
+            $player->setIsReady(false);
+        }
+
         $session->setStatus('characters');
         $em->flush();
 
