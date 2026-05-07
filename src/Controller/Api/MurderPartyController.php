@@ -223,7 +223,7 @@ class MurderPartyController extends AbstractController
     {
         $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
         $code = '';
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $code .= $chars[random_int(0, strlen($chars) - 1)];
         }
         return $code;

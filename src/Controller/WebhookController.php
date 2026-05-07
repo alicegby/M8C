@@ -68,7 +68,7 @@ class WebhookController extends AbstractController
             foreach ($lineItems->data as $lineItem) {
                 $productName = $lineItem->description;
 
-                // Cherche si c'est un scénario
+                // ─── Scénario individuel ──────────────────────────────────────────
                 $mp = $murderPartyRepository->findOneBy(['title' => $productName]);
                 if ($mp) {
                     $existing = $em->getRepository(Purchase::class)->findOneBy([
@@ -87,14 +87,21 @@ class WebhookController extends AbstractController
                         $purchase->setStatus('completed');
                         $purchase->setSource('web');
                         $em->persist($purchase);
-                        $em->flush();
 
+                        $ump = new \App\Entity\UserMurderParty();
+                        $ump->setUser($user);
+                        $ump->setMurderParty($mp);
+                        $ump->setPurchase($purchase);
+                        $ump->setIsPlayed(false);
+                        $em->persist($ump);
+
+                        $em->flush();
                         $statService->recordPurchase($purchase, 'web');
                     }
                     continue;
                 }
 
-                // Cherche si c'est un pack
+                // ─── Pack ─────────────────────────────────────────────────────────
                 $pack = $packRepository->findOneBy(['name' => $productName]);
                 if ($pack) {
                     $existing = $em->getRepository(Purchase::class)->findOneBy([
@@ -117,7 +124,7 @@ class WebhookController extends AbstractController
 
                         $statService->recordPurchase($purchase, 'web');
 
-                        // Débloque aussi chaque scénario du pack
+                        // Débloque chaque scénario du pack
                         foreach ($pack->getMurderParties() as $mp) {
                             $existingMp = $em->getRepository(Purchase::class)->findOneBy([
                                 'user'        => $user,
@@ -134,6 +141,14 @@ class WebhookController extends AbstractController
                                 $mpPurchase->setStripePaymentId($session->payment_intent ?? $session->id);
                                 $mpPurchase->setStatus('completed');
                                 $em->persist($mpPurchase);
+
+                                $umpPack = new \App\Entity\UserMurderParty();
+                                $umpPack->setUser($user);
+                                $umpPack->setMurderParty($mp);
+                                $umpPack->setPurchase($mpPurchase);
+                                $umpPack->setIsPlayed(false);
+                                $em->persist($umpPack);
+
                                 $em->flush();
                             }
                         }
@@ -141,7 +156,7 @@ class WebhookController extends AbstractController
                 }
             }
 
-            // Gestion code promo
+            // ─── Code promo ───────────────────────────────────────────────────────
             $promoCodeStr = $session->metadata->promo_code ?? null;
             if ($promoCodeStr) {
                 $promoCode = $em->getRepository(\App\Entity\PromoCode::class)->findOneBy([

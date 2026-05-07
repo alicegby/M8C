@@ -38,12 +38,18 @@ class EpilogueController extends AbstractController
 
         $votes = $em->getRepository(GameVote::class)->findBy(['gameSession' => $session]);
         $totalVoters = count(array_unique(array_map(fn($v) => $v->getVoter()->getId(), $votes)));
-        $correctVotes = count(array_filter($votes, fn($v) => $v->getVotedCharacter()->getId() === $killerChar->getId()));
-        $won = $correctVotes > count($players) / 2;
+        $votersForKiller = [];
+        foreach ($votes as $vote) {
+            if ($vote->getVotedCharacter()->getId() === $killerChar->getId()) {
+                $votersForKiller[$vote->getVoter()->getId()] = true;
+            }
+        }
+        $correctVoters = count($votersForKiller);
+        $won = $correctVoters > count($players) / 2;
 
         return $this->json([
             'won'          => $won,
-            'correctVotes' => $correctVotes,
+            'correctVotes' => $correctVoters,
             'totalVoters'  => $totalVoters,
             'epilogue'     => $session->getMurderParty()->getEpilogue() ?? '',
             'killer' => [
