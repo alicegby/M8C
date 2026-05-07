@@ -35,14 +35,18 @@ class MurderPartyController extends AbstractController
 
         // Récupère les IDs des scénarios achetés par l'user
         $purchasedIds = [];
+        $playedIds = [];
         if ($user !== null) {
             $userMurderParties = $userMurderPartyRepository->findBy(['user' => $user]);
             foreach ($userMurderParties as $ump) {
                 $purchasedIds[] = $ump->getMurderParty()->getId();
+                if ($ump->isPlayed()) {
+                    $playedIds[] = $ump->getMurderParty()->getId();
+                }
             }
         }
 
-        $data = array_map(function (MurderParty $mp) use ($purchasedIds) {
+        $data = array_map(function (MurderParty $mp) use ($purchasedIds, $playedIds) {
             return [
                 'id'            => $mp->getId(),
                 'title'         => $mp->getTitle(),
@@ -54,6 +58,7 @@ class MurderPartyController extends AbstractController
                 'isFree'        => $mp->isFree(),
                 'averageRating' => $mp->getAverageRating(),
                 'userPurchased' => in_array($mp->getId(), $purchasedIds),
+                'userPlayed'    => in_array($mp->getId(), $playedIds),
             ];
         }, $murderParties);
 
@@ -98,6 +103,7 @@ class MurderPartyController extends AbstractController
         return $this->json([
             'owned'                  => true,
             'withinRetractionWindow' => $withinRetractionWindow,
+            'isPlayed'               => $ump->isPlayed(),
         ]);
     }
 
