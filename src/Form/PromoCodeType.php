@@ -28,6 +28,7 @@ class PromoCodeType extends AbstractType
             ->add('validUntil', DateTimeType::class, ['label' => 'Valide jusqu\'au', 'required' => false, 'widget' => 'single_text'])
             ->add('maxUses', IntegerType::class, ['label' => 'Nombre max d\'utilisations', 'required' => false])
             ->add('isActive', CheckboxType::class, ['label' => 'Actif', 'required' => false])
+            ->add('isWelcomeCode', CheckboxType::class, ['label' => 'Code de bienvenue', 'required' => false])
             ->add('applicableTo', ChoiceType::class, [
                 'label' => 'Applicable sur',
                 'choices' => [

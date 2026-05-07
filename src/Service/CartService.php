@@ -103,51 +103,64 @@ class CartService
     }
 
     public function applyPromoCode(string $code, ?object $user): array
-{
-    $promoCode = $this->promoCodeRepository->findOneBy([
-        'code' => strtoupper($code),
-        'isActive' => true,
-    ]);
-
-    if (!$promoCode) {
-        return ['success' => false, 'error' => 'Code promo invalide ou inactif.'];
-    }
-
-    // Vérifie la date de validité
-    $now = new \DateTime();
-    if ($promoCode->getValidFrom() && $now < $promoCode->getValidFrom()) {
-        return ['success' => false, 'error' => 'Ce code promo n\'est pas encore actif.'];
-    }
-    if ($promoCode->getValidUntil() && $now > $promoCode->getValidUntil()) {
-        return ['success' => false, 'error' => 'Ce code promo a expiré.'];
-    }
-
-    // Vérifie le nombre max d'utilisations global
-    if ($promoCode->getMaxUses() !== null && $promoCode->getCurrentUses() >= $promoCode->getMaxUses()) {
-        return ['success' => false, 'error' => 'Ce code promo a atteint sa limite d\'utilisation.'];
-    }
-
-    // Vérifie si l'utilisateur l'a déjà utilisé
-    if ($user) {
-        $alreadyUsed = $this->promoCodeUsageRepository->findOneBy([
-            'user' => $user,
-            'promoCode' => $promoCode,
+    {
+        $promoCode = $this->promoCodeRepository->findOneBy([
+            'code'     => strtoupper($code),
+            'isActive' => true,
         ]);
-        if ($alreadyUsed) {
-            return ['success' => false, 'error' => 'Vous avez déjà utilisé ce code promo.'];
+
+        if (!$promoCode) {
+            return ['success' => false, 'error' => 'Code promo invalide ou inactif.'];
         }
+
+        $now = new \DateTime();
+
+        // Vérifie la date de début
+        if ($promoCode->getValidFrom() && $now < $promoCode->getValidFrom()) {
+            return ['success' => false, 'error' => 'Ce code promo n\'est pas encore actif.'];
+        }
+
+        // Vérifie la date de fin — et désactive automatiquement si expiré
+        if ($promoCode->getValidUntil() && $now > $promoCode->getValidUntil()) {
+            $promoCode->setIsActive(false);
+            $this->promoCodeRepository->save($promoCode, true); // ou $em->flush()
+            return ['success' => false, 'error' => 'Ce code promo a expiré.'];
+        }
+
+        // Vérifie le nombre max d'utilisations global
+        if ($promoCode->getMaxUses() !== null && $promoCode->getCurrentUses() >= $promoCode->getMaxUses()) {
+            return ['success' => false, 'error' => 'Ce code promo a atteint sa limite d\'utilisation.'];
+        }
+
+        if ($user) {
+            // Vérifie si l'utilisateur l'a déjà utilisé (unicité via PromoCodeUsage)
+            $alreadyUsed = $this->promoCodeUsageRepository->findOneBy([
+                'user'      => $user,
+                'promoCode' => $promoCode,
+            ]);
+            if ($alreadyUsed) {
+                return ['success' => false, 'error' => 'Vous avez déjà utilisé ce code promo.'];
+            }
+
+            // Vérifie la fenêtre de 30 jours après inscription si le code est de type "welcome"
+            if ($promoCode->isWelcomeCode()) {
+                $registeredAt = \DateTime::createFromInterface($user->getCreatedAt());
+                $limit = (clone $registeredAt)->modify('+30 days');
+                if ($now > $limit) {
+                    return ['success' => false, 'error' => 'Ce code promo est réservé aux nouveaux inscrits (30 jours après inscription).'];
+                }
+            }
+        }
+
+        $this->getSession()->set('promo_code', $promoCode->getCode());
+
+        return [
+            'success'       => true,
+            'code'          => $promoCode->getCode(),
+            'discountType'  => $promoCode->getDiscountType(),
+            'discountValue' => $promoCode->getDiscountValue(),
+        ];
     }
-
-    // Stocke le code en session
-    $this->getSession()->set('promo_code', $promoCode->getCode());
-
-    return [
-        'success' => true,
-        'code' => $promoCode->getCode(),
-        'discountType' => $promoCode->getDiscountType(),
-        'discountValue' => $promoCode->getDiscountValue(),
-    ];
-}
 
 public function getAppliedPromoCode(): ?string
 {
