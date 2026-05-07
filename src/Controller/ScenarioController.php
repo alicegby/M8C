@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class ScenarioController extends AbstractController
 {
     #[Route('/scenarios', name: 'scenarios_list')]
-    public function index(MurderPartyRepository $murderPartyRepository): Response
+    public function index(MurderPartyRepository $murderPartyRepository, EntityManagerInterface $em): Response
     {
         // On récupère tous les scénarios publiés
         $scenarios = $murderPartyRepository->findBy(
@@ -20,8 +20,19 @@ class ScenarioController extends AbstractController
             ['createdAt' => 'DESC']
         );
 
+        $purchasedIds = [];
+        if ($this->getUser()) {
+            $umps = $em->getRepository(\App\Entity\UserMurderParty::class)->findBy([
+                'user' => $this->getUser(),
+            ]);
+            foreach ($umps as $ump) {
+                $purchasedIds[] = $ump->getMurderParty()->getId();
+            }
+        }
+
         return $this->render('scenario.html.twig', [
-            'scenarios' => $scenarios,
+            'scenarios'    => $scenarios,
+            'purchasedIds' => $purchasedIds,
         ]);
     }
 

@@ -63,21 +63,25 @@
                         <p class="scenario-synopsis">{{ scenario.synopsis }}</p>
 
                         <div class="scenario-buttons">
-                            <a href="{{ path('scenario_show', {'slug': scenario.slug}) }}" class="btn-primary">Voir la Murder Party</a>
-                            {% if scenario.price > 0 %}
-                               <button
-                                    class="btn-primary btn-add-cart"
-                                    data-slug="{{ scenario.slug }}"
-                                    data-name="{{ scenario.title }}"
-                                    data-price="{{ scenario.price }}"
-                                    id="btn-add-cart"
-                                >
-                                    Ajouter au panier
-                                </button>
-                            {% else %}
-                                <a href="https://apps.apple.com/fr/app/meurtre-%C3%A0-huis-clos/id6760702842" target="_blank" class="btn-cart">Jouer</a>
-                            {% endif %}
-                        </div>
+                                <a href="{{ path('scenario_show', {'slug': scenario.slug}) }}" class="btn-primary">Voir la Murder Party</a>
+                                {% if scenario.price > 0 %}
+                                    {% if scenario.id in purchasedIds %}
+                                        <a href="https://apps.apple.com/fr/app/meurtre-%C3%A0-huis-clos/id6760702842" target="_blank" class="btn-cart">Jouer</a>
+                                    {% else %}
+                                        <button
+                                            class="btn-primary btn-add-cart"
+                                            data-slug="{{ scenario.slug }}"
+                                            data-name="{{ scenario.title }}"
+                                            data-price="{{ scenario.price }}"
+                                            id="btn-add-cart"
+                                        >
+                                            Ajouter au panier
+                                        </button>
+                                    {% endif %}
+                                {% else %}
+                                    <a href="https://apps.apple.com/fr/app/meurtre-%C3%A0-huis-clos/id6760702842" target="_blank" class="btn-cart">Jouer</a>
+                                {% endif %}
+                            </div>
 
                     </div>
                 </div>
