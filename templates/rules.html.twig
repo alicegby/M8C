@@ -1,14 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Règles du jeu — Meurtre à Huis Clos{% endblock %}
+{% block page_title %}Règles du jeu — Murder Party{% endblock %}
 {% block meta_description %}Découvrez comment jouer à Meurtre à Huis Clos : préparation, déroulement de la partie, votes et épilogue. Toutes les règles de notre Murder Party en application.{% endblock %}
-{% block og_title %}Règles du jeu - Meurtre à Huis Clos{% endblock %}
-{% block og_url %}https://meurtrehuisclos.fr/regles-du-jeu{% endblock %}
+{% block og_title %}Règles du jeu — Meurtre à Huis Clos{% endblock %}
+{% block og_description %}Comment jouer à Meurtre à Huis Clos : préparation, rôles, enquête, vote final et épilogue. Toutes les règles en un coup d'œil.{% endblock %}
+{% block canonical %}https://meurtrehuisclos.fr/regles-du-jeu{% endblock %}
 
-{% block canonical %}<link rel="canonical" href="https://meurtrehuisclos.fr/regles-du-jeu">{% endblock %}
+{% block schema_jsonld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Comment jouer à Meurtre à Huis Clos",
+    "description": "Guide complet pour organiser et jouer une murder party avec l'application Meurtre à Huis Clos.",
+    "step": [
+        {
+            "@type": "HowToStep",
+            "position": 1,
+            "name": "Préparation",
+            "text": "Un joueur choisit une Murder Party selon le nombre de joueurs, génère un code unique et tous les joueurs se connectent."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 2,
+            "name": "Déroulement de la partie",
+            "text": "Les personnages sont distribués aléatoirement. Chaque joueur incarne son rôle pendant le temps imparti et collecte des indices."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 3,
+            "name": "Votes et épilogue",
+            "text": "Quand le temps est écoulé, chaque joueur vote pour le coupable présumé, puis l'épilogue révèle la vérité."
+        }
+    ]
+}
+</script>
+{% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ asset('css/rules.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/rules.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -16,12 +46,8 @@
 <section class="rules-hero animate-block">
     <div class="container">
         <h2>Règles du jeu</h2>
-        <p>
-            Plongez dans l’univers de Meurtre à Huis Clos, un jeu d’enquête et de rôle où chaque joueur peut être complice, suspect ou détective. Collaborez avec vos amis pour démasquer le coupable… ou réussirez-vous à le cacher ?
-        </p>
-        <p class="small">
-            Le minimum de joueurs pour jouer à une Murder Party est de 4 joueurs.
-        </p>
+        <p>Plongez dans l'univers de Meurtre à Huis Clos, un jeu d'enquête et de rôle où chaque joueur peut être complice, suspect ou détective. Collaborez avec vos amis pour démasquer le coupable… ou réussirez-vous à le cacher ?</p>
+        <p class="small">Le minimum de joueurs pour jouer à une Murder Party est de 4 joueurs.</p>
     </div>
 </section>
 
@@ -41,7 +67,7 @@
             <ol>
                 <li>Les personnages sont distribués aléatoirement. Prenez 15 minutes pour découvrir votre rôle et vous imprégner de votre personnage.</li>
                 <li>Chaque joueur incarne son rôle : mentez (mais soyez cohérent avec les informations de votre fiche personnage), manipulez ou collaborez pour démasquer le vrai coupable.</li>
-                <li>Le chronomètre intégré indique le temps qu’il vous reste pour enquêter. Prenez des notes, échangez des indices, observez les autres joueurs… et percez les secrets pour résoudre le mystère.</li>
+                <li>Le chronomètre intégré indique le temps qu'il vous reste pour enquêter. Prenez des notes, échangez des indices, observez les autres joueurs… et percez les secrets pour résoudre le mystère.</li>
             </ol>
         </div>
         <div class="vote">
@@ -49,20 +75,13 @@
             <ol>
                 <li>Lorsque le temps est écoulé, votez pour celui que vous pensez être le coupable.</li>
                 <li>Découvrez ensuite si votre équipe a réussi, ou si le coupable a réussi à s'en tirer.</li>
-                <li>Lisez l’épilogue captivant qui conclut votre enquête.</li>
+                <li>Lisez l'épilogue captivant qui conclut votre enquête.</li>
             </ol>
         </div>
-
-        <p class="avertissement">
-            Ce jeu comporte des scènes et du contenu destinés à un public averti. Veuillez consulter nos <a href="{{ path('avertissement') }}">avertissements</a>.
-        </p>
-
+        <p class="avertissement">Ce jeu comporte des scènes et du contenu destinés à un public averti. Veuillez consulter nos <a href="{{ path('avertissement') }}">avertissements</a>.</p>
         <a href="{{ path('telechargement') }}" class="btn-primary">Télécharger l'application</a>
-        
     </div>
 </section>
-
-
 {% endblock %}
 
 {% block javascripts %}

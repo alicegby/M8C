@@ -1,6 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ scenario.title }} — Meurtre à Huis Clos{% endblock %}
+{% block page_title %}{{ scenario.title }} — Murder Party{% endblock %}
+{% block meta_description %}{{ scenario.synopsis|slice(0, 155)|striptags }}{% endblock %}
+{% block og_title %}{{ scenario.title }} — Meurtre à Huis Clos{% endblock %}
+{% block og_description %}{{ scenario.synopsis|slice(0, 200)|striptags }}{% endblock %}
+{% block og_type %}product{% endblock %}
+{% block canonical %}https://meurtrehuisclos.fr/scenarios/{{ scenario.slug }}{% endblock %}
+{% if scenario.coverImageUrl %}
+    {% block og_image %}{{ scenario.coverImageUrl }}{% endblock %}
+{% endif %}
+
+{% block schema_jsonld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": {{ scenario.title|json_encode|raw }},
+    "description": {{ scenario.synopsis|striptags|json_encode|raw }},
+    "url": "https://meurtrehuisclos.fr/scenarios/{{ scenario.slug }}",
+    {% if scenario.coverImageUrl %}
+    "image": {{ scenario.coverImageUrl|json_encode|raw }},
+    {% endif %}
+    "brand": {
+        "@type": "Brand",
+        "name": "Meurtre à Huis Clos"
+    },
+    "offers": {
+        "@type": "Offer",
+        "priceCurrency": "EUR",
+        "price": "{{ scenario.price }}",
+        "availability": "https://schema.org/InStock",
+        "url": "https://meurtrehuisclos.fr/scenarios/{{ scenario.slug }}"
+    }
+    {% if scenario.ratingsCount > 0 %}
+    ,
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ scenario.averageRating }}",
+        "reviewCount": "{{ scenario.ratingsCount }}",
+        "bestRating": "5",
+        "worstRating": "1"
+    }
+    {% endif %}
+}
+</script>
+{% endblock %}
 
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('css/scenarioshow.css') }}">
@@ -20,7 +64,7 @@
         <div class="scenario-left">
 
             <p class="scenario-meta">
-                ⏱︎ {{ scenario.duree }} min | {{ scenario.nbPlayers }} joueurs 
+                ⏱︎ {{ scenario.duree }} min | {{ scenario.nbPlayers }} joueurs
                 {% if scenario.averageRating %}
                     | {{ scenario.averageRating }}/5 ★
                 {% endif %}
@@ -40,7 +84,6 @@
 
         </div>
 
-
         {# COLONNE DROITE #}
         <div class="scenario-right">
 
@@ -58,11 +101,8 @@
             <div class="scenario-btns">
 
                 {% if scenario.isFree or isPurchased %}
-
                     <a href="https://apps.apple.com/fr/app/meurtre-%C3%A0-huis-clos/id6760702842" target="_blank" class="btn-jouer">Jouer</a>
-
                 {% else %}
-
                     <button
                         class="btn-primary btn-add-cart"
                         data-slug="{{ scenario.slug }}"
@@ -71,7 +111,6 @@
                         id="btn-add-cart">
                         Ajouter au panier
                     </button>
-
                 {% endif %}
 
             </div>
@@ -84,20 +123,17 @@
 
     </div>
 
-
     {# SECTION TELECHARGEMENT #}
-
     <div class="download-section">
 
         <h3>Téléchargez le jeu</h3>
 
         <div class="download-buttons">
             <a href="https://apps.apple.com/fr/app/meurtre-%C3%A0-huis-clos/id6760702842" target="_blank">
-                <img src="{{ asset('icones/apple_red.png') }}" alt="Téléchargement Apple">
+                <img src="{{ asset('icones/apple_red.png') }}" alt="Télécharger sur l'App Store">
             </a>
-
             <a href="#">
-                <img src="{{ asset('icones/android_red.png') }}" alt="Téléchargement Android">
+                <img src="{{ asset('icones/android_red.png') }}" alt="Télécharger sur Android">
             </a>
         </div>
 

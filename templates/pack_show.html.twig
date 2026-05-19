@@ -1,6 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ pack.name }} — Pack Meurtre à Huis Clos{% endblock %}
+{% block page_title %}{{ pack.name }} — Pack Murder Party{% endblock %}
+{% block meta_description %}{{ pack.description|slice(0, 155)|striptags }}{% endblock %}
+{% block og_title %}{{ pack.name }} — Pack Meurtre à Huis Clos{% endblock %}
+{% block og_description %}{{ pack.description|slice(0, 200)|striptags }}{% endblock %}
+{% block og_type %}product{% endblock %}
+{% block canonical %}https://meurtrehuisclos.fr/packs/{{ pack.id }}{% endblock %}
+
+{% block schema_jsonld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": {{ pack.name|json_encode|raw }},
+    {% if pack.description %}
+    "description": {{ pack.description|striptags|json_encode|raw }},
+    {% endif %}
+    "url": "https://meurtrehuisclos.fr/packs/{{ pack.id }}",
+    "brand": {
+        "@type": "Brand",
+        "name": "Meurtre à Huis Clos"
+    },
+    "offers": {
+        "@type": "Offer",
+        "priceCurrency": "EUR",
+        "price": "{{ pack.price }}",
+        "availability": "https://schema.org/InStock",
+        "url": "https://meurtrehuisclos.fr/packs/{{ pack.id }}"
+    },
+    "isRelatedTo": [
+        {% for scenario in pack.getMurderParties() %}
+        {
+            "@type": "Product",
+            "name": {{ scenario.title|json_encode|raw }},
+            "url": "https://meurtrehuisclos.fr/scenarios/{{ scenario.slug }}"
+        }{{ not loop.last ? ',' : '' }}
+        {% endfor %}
+    ]
+}
+</script>
+{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/pack.css') }}">
@@ -74,7 +113,7 @@
                         <h4>{{ scenario.title }}</h4>
                         <div class="mp-card-meta">
                             <span class="mp-meta-item">
-                                ⏱︎ {{ scenario.duree }} min | {{ scenario.nbPlayers }} joueurs 
+                                ⏱︎ {{ scenario.duree }} min | {{ scenario.nbPlayers }} joueurs
                                 {% if scenario.averageRating %}
                                     | {{ scenario.averageRating }}/5 ★
                                 {% endif %}

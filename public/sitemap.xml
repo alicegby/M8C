@@ -1,43 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{#
+    Template Twig pour le sitemap dynamique.
+    Route Symfony à créer : GET /sitemap.xml → SitemapController::index()
+    Le contrôleur passe : scenarios (liste d'entités Scenario), packs (liste d'entités Pack)
+    Penser à ajouter le header HTTP : Content-Type: application/xml
+#}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  {# ── Pages principales ────────────────────────────────────────── #}
+
   <url>
     <loc>https://meurtrehuisclos.fr/</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>{{ "now"|date("Y-m-d") }}</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <url>
+    <loc>https://meurtrehuisclos.fr/telechargement</loc>
+    <lastmod>{{ "now"|date("Y-m-d") }}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
   <url>
     <loc>https://meurtrehuisclos.fr/scenarios</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>{{ "now"|date("Y-m-d") }}</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+
   <url>
     <loc>https://meurtrehuisclos.fr/packs</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>{{ "now"|date("Y-m-d") }}</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-<url>
-    <loc>https://meurtrehuisclos.fr/telechargement</loc>
-    <lastmod>2026-03-17</lastmod>
-    <priority>0.9</priority>
-</url>
+
+  <url>
+    <loc>https://meurtrehuisclos.fr/regles-du-jeu</loc>
+    <lastmod>{{ "now"|date("Y-m-d") }}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <url>
     <loc>https://meurtrehuisclos.fr/a-propos</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>{{ "now"|date("Y-m-d") }}</lastmod>
+    <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
+
   <url>
     <loc>https://meurtrehuisclos.fr/contact</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>{{ "now"|date("Y-m-d") }}</lastmod>
+    <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
+
+  {# ── Pages scénarios individuelles (trafic long tail) ─────────── #}
+  {# Le contrôleur passe : murderParties = MurderPartyRepository::findAll() #}
+
+  {% for murderParty in murderParties %}
   <url>
-    <loc>https://meurtrehuisclos.fr/confidentialite</loc>
-    <lastmod>2026-03-17</lastmod>
-    <priority>0.3</priority>
+    <loc>https://meurtrehuisclos.fr/scenarios/{{ murderParty.slug }}</loc>
+    <lastmod>{{ murderParty.updatedAt is defined and murderParty.updatedAt ? murderParty.updatedAt|date("Y-m-d") : "now"|date("Y-m-d") }}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
   </url>
-<url>
-    <loc>https://meurtrehuisclos.fr/regles-du-jeu</loc>
-    <lastmod>2026-03-17</lastmod>
-    <priority>0.7</priority>
-</url>
+  {% endfor %}
+
+  {# ── Pages packs individuelles ─────────────────────────────────── #}
+
+  {% for pack in packs %}
+  <url>
+    <loc>https://meurtrehuisclos.fr/packs/{{ pack.slug }}</loc>
+    <lastmod>{{ pack.updatedAt ? pack.updatedAt|date("Y-m-d") : "now"|date("Y-m-d") }}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  {% endfor %}
+
+  {# ── Pages légales : exclues du sitemap (noindex ou crawl budget inutile) #}
+  {# /confidentialite, /cgv, /cgu, /mentions → à passer en noindex via robots meta #}
+
 </urlset>

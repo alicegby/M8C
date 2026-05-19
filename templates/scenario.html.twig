@@ -1,38 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Scénarios Murder Party — Meurtre à Huis Clos{% endblock %}
+{% block page_title %}Scénarios Murder Party{% endblock %}
 {% block meta_description %}Découvrez tous nos scénarios de Murder Party immersifs : thrillers, comédies, enquêtes historiques. Choisissez votre enquête et incarnez un suspect dès ce soir !{% endblock %}
-{% block og_title %}Nos Murder Parties - Meurtre à Huis Clos{% endblock %}
-{% block og_url %}https://meurtrehuisclos.fr/scenarios{% endblock %}
-{% block canonical %}<link rel="canonical" href="https://meurtrehuisclos.fr/scenarios">{% endblock %}
+{% block og_title %}Nos Murder Parties — Meurtre à Huis Clos{% endblock %}
+{% block og_description %}Tous nos scénarios de murder party immersifs jouables sur application. Thrillers, comédies, enquêtes historiques — pour 4 joueurs et plus.{% endblock %}
+{% block canonical %}https://meurtrehuisclos.fr/scenarios{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/scenario.css') }}">
 {% endblock %}
 
 {% block body %}
+{# … ton contenu existant, inchangé … #}
 <h1>Nos Scénarios de Murder Party</h1>
 
 <section class="scenarios-hero animate-block">
     <div class="container">
         <h2>Découvrez nos Murder Parties</h2>
-        <p>
-            Choisissez votre scénario et plongez dans l’enquête directement sur l'application. Chaque partie est unique ! 
-        </p>
+        <p>Choisissez votre scénario et plongez dans l'enquête directement sur l'application. Chaque partie est unique !</p>
     </div>
 </section>
 
 <p class="intro animate-block">
-    Toutes nos Murder Parties peuvent être commandées directement sur le site et se jouent exclusivement via l’application. Plongez dans l’enquête où que vous soyez ! 
+    Toutes nos Murder Parties peuvent être commandées directement sur le site et se jouent exclusivement via l'application. Plongez dans l'enquête où que vous soyez !
 </p>
 
 <section class="scenario-devis animate-block">
     <div class="container">
-        <h2>Murder Party personnalisé ?</h2>
-        <p>
-            Vous souhaitez organiser votre propre Murder Party sur mesure ? <br>
-            N'hésitez pas à nous <a href="{{ path('contact') }}">contacter</a>.
-        </p>
+        <h2>Murder Party personnalisée ?</h2>
+        <p>Vous souhaitez organiser votre propre Murder Party sur mesure ?<br>N'hésitez pas à nous <a href="{{ path('contact') }}">contacter</a>.</p>
     </div>
 </section>
 
@@ -53,36 +49,24 @@
                             {% if scenario.price > 0 %}
                                 {{ scenario.price|number_format(2, ',', ' ') }} €
                                 <br>
-                                <span class="price-per-player">
-                                    Seulement {{ (scenario.price / scenario.nbPlayers)|number_format(2, ',', ' ') }} € / joueur
-                                </span>
+                                <span class="price-per-player">Seulement {{ (scenario.price / scenario.nbPlayers)|number_format(2, ',', ' ') }} € / joueur</span>
                             {% else %}
                                 Gratuit
                             {% endif %}
                         </p>
                         <p class="scenario-synopsis">{{ scenario.synopsis }}</p>
-
                         <div class="scenario-buttons">
-                                <a href="{{ path('scenario_show', {'slug': scenario.slug}) }}" class="btn-primary">Voir la Murder Party</a>
-                                {% if scenario.price > 0 %}
-                                    {% if scenario.id in purchasedIds %}
-                                        <a href="https://apps.apple.com/fr/app/meurtre-%C3%A0-huis-clos/id6760702842" target="_blank" class="btn-cart">Jouer</a>
-                                    {% else %}
-                                        <button
-                                            class="btn-primary btn-add-cart"
-                                            data-slug="{{ scenario.slug }}"
-                                            data-name="{{ scenario.title }}"
-                                            data-price="{{ scenario.price }}"
-                                            id="btn-add-cart"
-                                        >
-                                            Ajouter au panier
-                                        </button>
-                                    {% endif %}
-                                {% else %}
+                            <a href="{{ path('scenario_show', {'slug': scenario.slug}) }}" class="btn-primary">Voir la Murder Party</a>
+                            {% if scenario.price > 0 %}
+                                {% if scenario.id in purchasedIds %}
                                     <a href="https://apps.apple.com/fr/app/meurtre-%C3%A0-huis-clos/id6760702842" target="_blank" class="btn-cart">Jouer</a>
+                                {% else %}
+                                    <button class="btn-primary btn-add-cart" data-slug="{{ scenario.slug }}" data-name="{{ scenario.title }}" data-price="{{ scenario.price }}" id="btn-add-cart">Ajouter au panier</button>
                                 {% endif %}
-                            </div>
-
+                            {% else %}
+                                <a href="https://apps.apple.com/fr/app/meurtre-%C3%A0-huis-clos/id6760702842" target="_blank" class="btn-cart">Jouer</a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             {% else %}
@@ -95,21 +79,12 @@
 <section class="seo-text animate-block">
     <div class="container">
         <h2>Pourquoi choisir Meurtre à Huis Clos ?</h2>
-        <p>
-            Meurtre à Huis Clos propose des scénarios de murder party uniques, jouables directement 
-            depuis votre téléphone grâce à <a href="{{ path('telechargement') }}">l'application</a>. Idéal pour une soirée entre amis, en famille, un anniversaire ou un team building, 
-            chaque enquête plonge les joueurs dans une histoire immersive où chacun incarne un personnage 
-            avec ses secrets et ses motivations. <br><br>
-        </p>
-        <p>
-            Nos scénarios sont conçus pour 4 joueurs et plus, avec des durées adaptées à tous les groupes. 
-            Pas de matériel à imprimer, tout se passe sur l'application.
-        </p>
+        <p>Meurtre à Huis Clos propose des scénarios de murder party uniques, jouables directement depuis votre téléphone grâce à <a href="{{ path('telechargement') }}">l'application</a>. Idéal pour une soirée entre amis, en famille, un anniversaire ou un team building, chaque enquête plonge les joueurs dans une histoire immersive où chacun incarne un personnage avec ses secrets et ses motivations.</p>
+        <p>Nos scénarios sont conçus pour 4 joueurs et plus, avec des durées adaptées à tous les groupes. Pas de matériel à imprimer, tout se passe sur l'application.</p>
     </div>
 </section>
 
 <a href="{{ path('packs_list') }}" class="btn-primary btn-packs">Découvrez les Murder Parties en packs</a>
-
 {% endblock %}
 
 {% block javascripts %}

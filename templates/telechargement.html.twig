@@ -1,18 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Télécharger Meurtre à Huis Clos{% endblock %}
+{% block page_title %}Télécharger l'application Murder Party{% endblock %}
 {% block meta_description %}Téléchargez gratuitement l'application Meurtre à Huis Clos sur iOS et Android. Lancez votre murder party en quelques minutes, sans matériel, entre amis ou en famille.{% endblock %}
-{% block og_title %}Télécharger l'application Murder Party - Meurtre à Huis Clos{% endblock %}
-{% block og_url %}https://meurtrehuisclos.fr/telechargement{% endblock %}
+{% block og_title %}Télécharger l'application Murder Party — Meurtre à Huis Clos{% endblock %}
+{% block og_description %}Téléchargez gratuitement l'application Meurtre à Huis Clos sur iOS et Android. Lancez votre murder party en quelques minutes, sans matériel.{% endblock %}
+{% block canonical %}https://meurtrehuisclos.fr/telechargement{% endblock %}
 
-{% block canonical %}<link rel="canonical" href="https://meurtrehuisclos.fr/telechargement">{% endblock %}
-
+{% block schema_jsonld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Meurtre à Huis Clos",
+    "operatingSystem": "iOS, Android",
+    "applicationCategory": "GameApplication",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+    },
+    "url": "https://meurtrehuisclos.fr/telechargement",
+    "downloadUrl": "https://apps.apple.com/fr/app/meurtre-%C3%A0-huis-clos/id6760702842",
+    "description": "Application mobile de murder party immersive. Scénarios d'enquête criminelle pour jouer entre amis, en famille ou entre collègues."
+}
+</script>
+{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/telechargement.css') }}">
 {% endblock %}
 
 {% block body %}
+{# … ton contenu existant, inchangé … #}
 <h1>Télécharger l'application Meurtre à Huis Clos</h1>
 
 <section class="telechargement-hero animate-block">
@@ -21,11 +40,8 @@
         <p>Disponible sur <a href="https://apps.apple.com/fr/app/meurtre-%C3%A0-huis-clos/id6760702842" target="_blank">iOS</a> et <a href="#">Android</a>. Jouez où vous voulez, quand vous voulez.</p>
         <div class="download-buttons">
             <a href="https://apps.apple.com/fr/app/meurtre-%C3%A0-huis-clos/id6760702842" target="_blank">
-                <img src="{{ asset('icones/apple_red.png') }}" alt="Téléchargement Apple">
-            </a> 
-            <!--<a href="#">
-                <img src="{{ asset('icones/android_red.png') }}" alt="Téléchargement Android">
-            </a>-->
+                <img src="{{ asset('icones/apple_red.png') }}" alt="Télécharger sur l'App Store">
+            </a>
         </div>
     </div>
 </section>
@@ -35,7 +51,7 @@
         <h2>Comment jouer à Meurtre à Huis Clos ?</h2>
         <div class="feature-grid">
             <div class="feature">
-                <h3>Choisissez votre Murder Pary</h3>
+                <h3>Choisissez votre Murder Party</h3>
                 <p>Trouvez le meilleur scénario pour votre soirée entre amis, selon le nombre de joueurs et les différents thèmes.</p>
             </div>
             <div class="feature">
@@ -48,7 +64,7 @@
             </div>
             <div class="feature">
                 <h3>Votez pour le coupable</h3>
-                <p>Votez pour votre coupable, et découvrez si votre travail d'équipe à fonctionné !</p>
+                <p>Votez pour votre coupable, et découvrez si votre travail d'équipe a fonctionné !</p>
             </div>
         </div>
         <p class="feature-conclusion">Alors, êtes vous un bon coupable ou un bon enquêteur ?</p>
@@ -59,10 +75,10 @@
     <div class="container">
         <h2>Aperçu du jeu</h2>
         <div class="screenshot-grid">
-            <img src="{{ asset('images/home.png') }}" alt="Page d'accueil">
-            <img src="{{ asset('images/choixMP.png')}}" alt="Choix des scénarios">
-            <img src="{{ asset('images/scenario.png')}}" alt="Synopsis">
-            <img src="{{ asset('images/jeu.png')}}" alt="Page de jeu">
+            <img src="{{ asset('images/home.png') }}" alt="Page d'accueil de l'application">
+            <img src="{{ asset('images/choixMP.png') }}" alt="Choix des scénarios de murder party">
+            <img src="{{ asset('images/scenario.png') }}" alt="Synopsis d'un scénario">
+            <img src="{{ asset('images/jeu.png') }}" alt="Interface de jeu en cours de partie">
         </div>
     </div>
 </section>
@@ -71,13 +87,13 @@
     <div class="container">
         <h2>L'application de Murder Party sans matériel</h2>
         <p>
-            Meurtre à Huis Clos est la seule application qui vous permet de vivre une Murder Party complète 
-            depuis votre téléphone. Fini les impressions de fiches personnages et les préparatifs compliqués : 
+            Meurtre à Huis Clos est la seule application qui vous permet de vivre une Murder Party complète
+            depuis votre téléphone. Fini les impressions de fiches personnages et les préparatifs compliqués :
             l'application gère tout, de la distribution des rôles au chronomètre, en passant par le vote final.
         </p>
         <p>
-            Compatible iOS et Android, l'application est gratuite au téléchargement. 
-            Consultez nos <a href="{{ path('scenarios_list') }}">scénarios disponibles</a> et lancez votre première 
+            Compatible iOS et Android, l'application est gratuite au téléchargement.
+            Consultez nos <a href="{{ path('scenarios_list') }}">scénarios disponibles</a> et lancez votre première
             murder party ce soir.
         </p>
     </div>
@@ -87,14 +103,10 @@
     <h2>Prêt à jouer ?</h2>
     <div class="download-buttons">
         <a href="https://apps.apple.com/fr/app/meurtre-%C3%A0-huis-clos/id6760702842" target="_blank">
-            <img src="{{ asset('icones/apple_white.png') }}" alt="Téléchargement Apple">
+            <img src="{{ asset('icones/apple_white.png') }}" alt="Télécharger sur l'App Store">
         </a>
-        <!--<a href="#">
-            <img src="{{ asset('icones/android_white.png') }}" alt="Téléchargement Android">
-        </a>-->
     </div>
 </section>
-
 {% endblock %}
 
 {% block javascripts %}

@@ -2,53 +2,86 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Meurtre à Huis Clos{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}Meurtre à Huis Clos - L'application murder party immersive. Vivez des enquêtes captivantes entre amis, en famille ou entre collègues.{% endblock %}">
-    <meta property="og:title" content="{% block og_title %}Meurtre à Huis Clos{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Le jeu de Murder Party ultime à vivre entre proches.{% endblock %}">
-    <meta property="og:image" content="https://meurtrehuisclos.fr/images/logo.JPG">
-    <meta property="og:url" content="{% block og_url %}https://meurtrehuisclos.fr{% endblock %}">
-    <meta property="og:type" content="website">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://meurtrehuisclos.fr/">
 
+    <title>{% block page_title %}Meurtre à Huis Clos — L'application murder party immersive{% endblock %} | Meurtre à Huis Clos</title>
+
+    <meta name="description" content="{% block meta_description %}Meurtre à Huis Clos - L'application de Murder Party immersive. Vivez des enquêtes captivantes entre amis, en famille ou entre collègues.{% endblock %}">
+    <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+
+    <link rel="canonical" href="{% block canonical %}{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}{% endblock %}">
+
+    {# Open Graph #}
+    <meta property="og:site_name" content="Meurtre à Huis Clos">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}Meurtre à Huis Clos — L'application murder party immersive{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Vivez des enquêtes captivantes en murder party entre amis, en famille ou entre collègues.{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}https://meurtrehuisclos.fr/images/logo.png{% endblock %}">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:locale" content="fr_FR">
+
+    {# Twitter/X Cards #}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}Meurtre à Huis Clos — L'application murder party immersive{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Vivez des enquêtes captivantes en murder party entre amis, en famille ou entre collègues.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}https://meurtrehuisclos.fr/images/logo.png{% endblock %}">
+
+    {# Schema.org Organization #}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Meurtre à Huis Clos",
+        "description": "Application mobile de murder party immersive. Scénarios d'enquête criminelle pour jouer entre amis, en famille ou entre collègues.",
+        "url": "https://meurtrehuisclos.fr",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://meurtrehuisclos.fr/images/logo.png",
+            "width": 512,
+            "height": 512
+        },
+        "sameAs": [
+            "https://www.instagram.com/meurtrehuisclos/"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer support",
+            "url": "https://meurtrehuisclos.fr/contact"
+        }
+    }
+    </script>
+
+    {# Block injectable pour JSON-LD spécifique aux pages enfants (scénario, FAQ…) #}
+    {% block schema_jsonld %}{% endblock %}
+
+    {# Google Tag Manager — conditionnel au consentement cookie #}
     {% if app.request.cookies.get('cookies_consent') == 'accepted' %}
-        <!-- Google Tag Manager -->
         <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-NPRXJ39H');</script>
-        <!-- End Google Tag Manager -->
     {% endif %}
 
     <link rel="stylesheet" href="{{ asset('css/base.css') }}">
-
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.png') }}">
     <link rel="shortcut icon" href="{{ asset('images/logo.png') }}">
-    <script type="application/ld+json">
-        {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "url": "https://meurtrehuisclos.fr",
-        "logo": "https://meurtrehuisclos.fr/images/logo.png"
-        }
-    </script>
+
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
     {% if app.request.cookies.get('cookies_consent') == 'accepted' %}
-        <!-- Google Tag Manager (noscript) -->
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NPRXJ39H"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-        <!-- End Google Tag Manager (noscript) -->
     {% endif %}
 
 <header class="site-header">
     <div class="container">
         <div class="logo">
             <a href="{{ path('app_home') }}">
-                <img src="{{ asset('images/logo.png')}}" alt="Logo Meurtre à Huis Clos">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo Meurtre à Huis Clos">
             </a>
         </div>
 
@@ -63,12 +96,7 @@
                 <div class="cart-icon-wrapper">
                     <img src="{{ asset('icones/panier.png') }}" alt="Panier" class="cart-img">
                     {% set cartCount = cartService.getCount() %}
-                    {% if cartCount > 0 %}
-                        <span class="cart-badge" id="cart-badge">{{ cartCount }}</span>
-                    {% else %}
-                        {% set cartCount = cartService.getCount() %}
-                        <span class="cart-badge" id="cart-badge" {% if cartCount == 0 %}style="display:none"{% endif %}>{{ cartCount }}</span>
-                    {% endif %}
+                    <span class="cart-badge" id="cart-badge" {% if cartCount == 0 %}style="display:none"{% endif %}>{{ cartCount }}</span>
                 </div>
             </a>
         </div>
@@ -81,17 +109,12 @@
             <a href="{{ path('rules') }}">Règles du jeu</a>
             <a href="{{ path('about') }}">À propos</a>
             <a href="{{ path('contact') }}">Contact</a>
-            <a href="{{ path('app_login')}}">Connexion</a>
+            <a href="{{ path('app_login') }}">Connexion</a>
             <a href="{{ path('cart_index') }}" class="cart-icon cart-icon-desktop">
                 <div class="cart-icon-wrapper">
                     <img src="{{ asset('icones/panier.png') }}" alt="Panier" class="cart-img">
                     {% set cartCount = cartService.getCount() %}
-                    {% if cartCount > 0 %}
-                        <span class="cart-badge" id="cart-badge">{{ cartCount }}</span>
-                    {% else %}
-                        {% set cartCount = cartService.getCount() %}
-                        <span class="cart-badge" id="cart-badge-desktop" {% if cartCount == 0 %}style="display:none"{% endif %}>{{ cartCount }}</span>
-                    {% endif %}
+                    <span class="cart-badge" id="cart-badge-desktop" {% if cartCount == 0 %}style="display:none"{% endif %}>{{ cartCount }}</span>
                 </div>
             </a>
         </nav>
@@ -118,16 +141,15 @@
 
         <div class="footer-credit">
             <p>
-                &copy; {{ "now"|date("Y") }} Meurtre à Huis Clos | Site conçu par 
-                <a href="https://www.alpha-portfolio.fr/" target="_blank">Alpha</a>.
+                &copy; {{ "now"|date("Y") }} Meurtre à Huis Clos | Site conçu par
+                <a href="https://www.alpha-portfolio.fr/" target="_blank" rel="noopener">Alpha</a>.
             </p>
             <p class="cookie-credit">
-                Paiement sécurisé par Stripe <br>
-
-                <a href="#" id="manage-cookies">Gérer mes cookies</a> 
+                Paiement sécurisé par Stripe<br>
+                <a href="#" id="manage-cookies">Gérer mes cookies</a>
             </p>
-            <a href="https://www.instagram.com/meurtrehuisclos/" target="_blank" class="instagram-link">
-                <img src="{{ asset('icones/instagram.png') }}" alt="Instagram">
+            <a href="https://www.instagram.com/meurtrehuisclos/" target="_blank" rel="noopener me" class="instagram-link">
+                <img src="{{ asset('icones/instagram.png') }}" alt="Meurtre à Huis Clos sur Instagram">
             </a>
         </div>
 

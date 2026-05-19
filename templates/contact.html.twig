@@ -1,23 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Contact — Meurtre à Huis Clos{% endblock %}
+{% block page_title %}Contact{% endblock %}
 {% block meta_description %}Contactez l'équipe Meurtre à Huis Clos pour toute question, demande de devis ou murder party sur mesure. Réponse rapide garantie.{% endblock %}
-{% block og_title %}Contact - Meurtre à Huis Clos{% endblock %}
-{% block og_url %}https://meurtrehuisclos.fr/contact{% endblock %}
-
-{% block canonical %}<link rel="canonical" href="https://meurtrehuisclos.fr/contact">{% endblock %}
+{% block og_title %}Contact — Meurtre à Huis Clos{% endblock %}
+{% block og_description %}Une question, un projet de murder party sur mesure ? Contactez l'équipe Meurtre à Huis Clos, nous vous répondons rapidement.{% endblock %}
+{% block canonical %}https://meurtrehuisclos.fr/contact{% endblock %}
+{% block meta_robots %}noindex, follow{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/contact.css') }}">
-{% endblock %} 
+{% endblock %}
 
 {% block body %}
-
 <h1>Contactez-nous</h1>
 <h2>Nous contacter</h2>
 
 <p class="contact-intro animate-block">
-    Vous souhaitez organiser une murder party personnalisée, vous avez une question sur nos scénarios 
+    Vous souhaitez organiser une murder party personnalisée, vous avez une question sur nos scénarios
     ou sur l'application ? Remplissez le formulaire ci-dessous, nous vous répondons rapidement.
 </p>
 
@@ -27,71 +26,55 @@
     {% endfor %}
 
     {{ form_start(contactForm, {'attr': {'id': 'contact-form'}}) }}
-
         <div class="form-group">
             {{ form_label(contactForm.nom) }}
             {{ form_widget(contactForm.nom, {'attr': {'placeholder': 'Votre nom'}}) }}
             {{ form_errors(contactForm.nom) }}
         </div>
-
         <div class="form-group">
             {{ form_label(contactForm.prenom) }}
             {{ form_widget(contactForm.prenom, {'attr': {'placeholder': 'Votre prénom'}}) }}
             {{ form_errors(contactForm.prenom) }}
         </div>
-
         <div class="form-group">
             {{ form_label(contactForm.email) }}
             {{ form_widget(contactForm.email, {'attr': {'placeholder': 'Votre email'}}) }}
             {{ form_errors(contactForm.email) }}
         </div>
-
         <div class="form-group">
             {{ form_label(contactForm.sujet) }}
             {{ form_widget(contactForm.sujet) }}
             {{ form_errors(contactForm.sujet) }}
         </div>
-
-        {# Sous-menu Murder Party — caché par défaut, affiché par JS #}
         <div id="sous-menu-container" style="display:none;">
-
             <p class="sous-menu-text">
-                Merci de nous donner quelques informations pour préparer votre Murder Party sur mesure. <br>
-                Pas d'inquiétude si vous n'avez pas encore tous les détails — indiquez simplement une approximation ! <br>
-                À partir de vos informations, nous pourrons discuter de votre Murder Party et vous établir un devis. <br>
+                Merci de nous donner quelques informations pour préparer votre Murder Party sur mesure.<br>
+                Pas d'inquiétude si vous n'avez pas encore tous les détails — indiquez simplement une approximation !<br>
+                À partir de vos informations, nous pourrons discuter de votre Murder Party et vous établir un devis.<br>
                 NB. Les Murder Parties commencent à partir de 4 joueurs.
             </p>
-
             <div class="form-group">
                 {{ form_label(contactForm.sousMenu) }}
                 {{ form_widget(contactForm.sousMenu) }}
             </div>
-
             <div class="form-group">
                 {{ form_label(contactForm.nombrePersonnes, 'Nombre de participants') }}
                 {{ form_widget(contactForm.nombrePersonnes) }}
             </div>
-
             <div class="form-group">
                 {{ form_label(contactForm.dateEvenement, 'Date de l\'événement') }}
                 {{ form_widget(contactForm.dateEvenement) }}
             </div>
-
         </div>
-
         <div class="form-group">
             {{ form_label(contactForm.message) }}
             {{ form_widget(contactForm.message, {'attr': {'placeholder': 'Votre message'}}) }}
             {{ form_errors(contactForm.message) }}
         </div>
-
         <button type="submit" class="btn-primary">Envoyer</button>
-
-        {# Empêche form_end de re-rendre les champs cachés en dehors du formulaire #}
         {{ form_widget(contactForm._token) }}
     </form>
 </div>
-
 {% endblock %}
 
 {% block javascripts %}

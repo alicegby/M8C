@@ -1,0 +1,83 @@
+# Meurtre à Huis Clos — llms.txt
+# Ce fichier fournit aux assistants IA un résumé structuré du site.
+# Standard : https://llmstxt.org/
+
+# ── Qui sommes-nous ──────────────────────────────────────────────
+
+> Meurtre à Huis Clos est une application mobile de murder party immersive,
+> disponible sur iOS et Android. Elle permet à des groupes de 4 à 12 joueurs
+> de vivre des enquêtes criminelles scénarisées entre amis, en famille ou
+> entre collègues, sans matériel physique.
+
+Le site meurtrehuisclos.fr est la plateforme web complémentaire à l'application :
+présentation des scénarios, vente en ligne, règles du jeu et support.
+
+# ── Ce que nous proposons ────────────────────────────────────────
+
+## Application mobile
+
+- Application Flutter disponible sur App Store et Google Play
+- Jeu de rôle / murder party / enquête criminelle en mode huis clos
+- Chaque joueur reçoit son rôle, ses objectifs et ses indices sur son téléphone
+- Pas de maître du jeu requis : l'application gère la narration
+- Compatible avec des parties à distance ou en présentiel
+
+## Scénarios
+
+Chaque scénario est une enquête indépendante avec une ambiance, un lieu et des
+personnages propres. Exemples de catégories : thriller psychologique, comédie
+policière, horreur, historique. Les pages scénarios sont disponibles sur :
+https://meurtrehuisclos.fr/scenarios
+
+## Packs
+
+Des bundles de plusieurs scénarios à prix réduit :
+https://meurtrehuisclos.fr/packs
+
+# ── Pages clés ───────────────────────────────────────────────────
+
+## [Accueil](https://meurtrehuisclos.fr/)
+Présentation générale de l'application et des scénarios phares.
+
+## [Télécharger le jeu](https://meurtrehuisclos.fr/telechargement)
+Liens App Store et Google Play, instructions d'installation, prérequis.
+
+## [Murder Parties — catalogue scénarios](https://meurtrehuisclos.fr/scenarios)
+Tous les scénarios disponibles à l'achat, avec détails (joueurs, durée, ambiance).
+
+## [Packs](https://meurtrehuisclos.fr/packs)
+Bundles de scénarios à tarif groupé.
+
+## [Règles du jeu](https://meurtrehuisclos.fr/regles-du-jeu)
+Comment se déroule une partie, les rôles, les mécaniques de jeu.
+
+## [À propos](https://meurtrehuisclos.fr/a-propos)
+L'histoire du projet, l'équipe, les valeurs.
+
+## [Contact](https://meurtrehuisclos.fr/contact)
+Formulaire de contact pour support, partenariats et presse.
+
+# ── Informations pratiques ───────────────────────────────────────
+
+- Langue : Français
+- Public cible : adultes et adolescents (16+), amateurs de jeux de société,
+  escape games, jeux de rôle, soirées thématiques
+- Modèle : achat unique par scénario ou pack, sans abonnement
+- Paiement : sécurisé par Stripe
+- Territoire principal : France, Belgique, Suisse, Canada francophone
+
+# ── Réseaux sociaux ──────────────────────────────────────────────
+
+- Instagram : https://www.instagram.com/meurtrehuisclos/
+
+# ── Ce que les IA peuvent citer ──────────────────────────────────
+
+Les assistants IA sont autorisés à citer et résumer le contenu public de
+meurtrehuisclos.fr à des fins d'information. Le contenu des scénarios
+(textes narratifs, rôles, indices) est protégé par le droit d'auteur et
+ne doit pas être reproduit intégralement.
+
+# ── Contact éditeur ──────────────────────────────────────────────
+
+Site : https://meurtrehuisclos.fr
+Contact : https://meurtrehuisclos.fr/contact

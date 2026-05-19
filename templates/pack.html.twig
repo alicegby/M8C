@@ -1,29 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Packs — Meurtre à Huis Clos{% endblock %}
-{% block meta_description %}
-Découvrez nos packs de murder party à prix réduit : plusieurs scénarios regroupés pour vivre des enquêtes immersives entre amis, en famille ou entre collègues. Jouables sur application.
-{% endblock %}
+{% block page_title %}Packs Murder Party{% endblock %}
+{% block meta_description %}Découvrez nos packs de murder party à prix réduit : plusieurs scénarios regroupés pour vivre des enquêtes immersives entre amis, en famille ou entre collègues. Jouables sur application.{% endblock %}
 {% block og_title %}Packs Murder Party — Meurtre à Huis Clos{% endblock %}
-{% block og_url %}https://meurtrehuisclos.fr/packs{% endblock %}
-
-{% block canonical %}
-<link rel="canonical" href="https://meurtrehuisclos.fr/packs">
-{% endblock %}
+{% block og_description %}Plusieurs scénarios de murder party regroupés à prix réduit. Idéal pour animer plusieurs soirées entre amis, en famille ou en team building.{% endblock %}
+{% block canonical %}https://meurtrehuisclos.fr/packs{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/pack.css') }}">
 {% endblock %}
 
 {% block body %}
+{# … ton contenu existant, inchangé … #}
 <h1>Nos Packs de Murder Party</h1>
 
 <section class="packs-hero animate-block">
     <div class="container">
         <h2>Découvrez nos Packs de Murder Parties</h2>
-        <p>
-            Chaque pack regroupe plusieurs scénarios pour vivre plusieurs enquêtes passionnantes. Tous les scénarios sont uniquement jouables sur l'application.
-        </p>
+        <p>Chaque pack regroupe plusieurs scénarios pour vivre plusieurs enquêtes passionnantes. Tous les scénarios sont uniquement jouables sur l'application.</p>
     </div>
 </section>
 
@@ -34,28 +28,24 @@ Découvrez nos packs de murder party à prix réduit : plusieurs scénarios regr
                 <div class="scenario-card">
                     <div class="scenario-content">
                         <h3>{{ pack.name }}</h3>
-
                         {% if pack.price > 0 %}
-                                {% set totalOriginal = 0 %}
-                                {% for scenario in pack.getMurderParties() %}
-                                    {% set totalOriginal = totalOriginal + scenario.price %}
-                                {% endfor %}
-                                
-                                {% if totalOriginal > pack.price %}
-                                    <p class="scenario-price">
-                                        <span class="price-original">{{ totalOriginal|number_format(2, ',', ' ') }} €</span>
-                                        {{ pack.price|number_format(2, ',', ' ') }} €
-                                        <span class="price-saving">Économisez {{ (totalOriginal - pack.price)|number_format(2, ',', ' ') }} €</span>
-                                    </p>
-                                {% else %}
-                                    <p class="scenario-price">{{ pack.price }} €</p>
-                                {% endif %}
+                            {% set totalOriginal = 0 %}
+                            {% for scenario in pack.getMurderParties() %}
+                                {% set totalOriginal = totalOriginal + scenario.price %}
+                            {% endfor %}
+                            {% if totalOriginal > pack.price %}
+                                <p class="scenario-price">
+                                    <span class="price-original">{{ totalOriginal|number_format(2, ',', ' ') }} €</span>
+                                    {{ pack.price|number_format(2, ',', ' ') }} €
+                                    <span class="price-saving">Économisez {{ (totalOriginal - pack.price)|number_format(2, ',', ' ') }} €</span>
+                                </p>
                             {% else %}
-                                <p class="scenario-price">Gratuit</p>
+                                <p class="scenario-price">{{ pack.price }} €</p>
                             {% endif %}
-
+                        {% else %}
+                            <p class="scenario-price">Gratuit</p>
+                        {% endif %}
                         <p class="scenario-description">{{ pack.description }}</p>
-
                         {% if pack.getMurderParties()|length > 0 %}
                             <ul class="pack-scenarios-list">
                                 {% for scenario in pack.getMurderParties() %}
@@ -63,19 +53,9 @@ Découvrez nos packs de murder party à prix réduit : plusieurs scénarios regr
                                 {% endfor %}
                             </ul>
                         {% endif %}
-
                         <a href="{{ path('pack_show', {'id': pack.id}) }}" class="btn-primary">Voir le pack</a>
-
                         {% if pack.price > 0 %}
-                            <button
-                                    class="btn-primary btn-add-cart"
-                                    data-id="{{ pack.id }}"
-                                    data-name="{{ pack.name }}"
-                                    data-price="{{ pack.price }}"
-                                    data-type="pack"
-                                >
-                                    Ajouter au panier
-                                </button>
+                            <button class="btn-primary btn-add-cart" data-id="{{ pack.id }}" data-name="{{ pack.name }}" data-price="{{ pack.price }}" data-type="pack">Ajouter au panier</button>
                         {% else %}
                             <a href="https://apps.apple.com/fr/app/meurtre-%C3%A0-huis-clos/id6760702842" target="_blank" class="btn-play">Jouer</a>
                         {% endif %}
@@ -91,19 +71,10 @@ Découvrez nos packs de murder party à prix réduit : plusieurs scénarios regr
 <section class="packs-seo-text">
     <div class="container">
         <h2>Pourquoi choisir un pack ?</h2>
-        <p>
-            Nos packs murder party vous permettent de profiter de plusieurs scénarios d'enquête 
-            à prix réduit. Idéal pour animer plusieurs soirées entre amis, en famille ou lors 
-            d'un team building entre collègues. Chaque enquête est scénarisée, immersive et 
-            entièrement guidée par l'application Meurtre à Huis Clos.
-        </p>
-        <p>
-            Vous aimez un scénario en particulier ? Consultez aussi notre 
-            <a href="{{ path('scenarios_list') }}">catalogue de Murder Party individuel</a>.
-        </p>
+        <p>Nos packs murder party vous permettent de profiter de plusieurs scénarios d'enquête à prix réduit. Idéal pour animer plusieurs soirées entre amis, en famille ou lors d'un team building entre collègues. Chaque enquête est scénarisée, immersive et entièrement guidée par l'application Meurtre à Huis Clos.</p>
+        <p>Vous aimez un scénario en particulier ? Consultez aussi notre <a href="{{ path('scenarios_list') }}">catalogue de Murder Party individuel</a>.</p>
     </div>
 </section>
-
 {% endblock %}
 
 {% block javascripts %}

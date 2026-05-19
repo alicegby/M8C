@@ -1,0 +1,70 @@
+# robots.txt — meurtrehuisclos.fr
+# Dernière mise à jour : 2026
+
+User-agent: *
+
+# Pages utiles à indexer — tout le reste par défaut autorisé
+# On bloque explicitement ce qui ne doit pas être crawlé
+
+# Espaces privés et fonctionnels
+Disallow: /admin/
+Disallow: /panier
+Disallow: /commande/
+Disallow: /paiement/
+Disallow: /connexion
+Disallow: /inscription
+Disallow: /compte/
+Disallow: /profil/
+
+# Pages légales (faible valeur SEO, pas de ban — juste on les retire du crawl budget)
+Disallow: /confidentialite
+Disallow: /cgv
+Disallow: /cgu
+Disallow: /mentions
+
+# Paramètres techniques Symfony à ne pas indexer
+Disallow: /_profiler/
+Disallow: /_wdt/
+Disallow: /api/
+
+# Crawl-delay pour les bots peu coopératifs
+Crawl-delay: 2
+
+# ── Agents IA / LLM ──────────────────────────────────────────────
+# On autorise les crawlers IA sur le contenu public.
+# Le fichier llms.txt leur donne un résumé structuré plus efficace.
+
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /panier
+Disallow: /commande/
+Disallow: /compte/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /admin/
+Disallow: /panier
+Disallow: /commande/
+Disallow: /compte/
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /admin/
+Disallow: /panier
+Disallow: /commande/
+Disallow: /compte/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+Disallow: /panier
+Disallow: /commande/
+Disallow: /compte/
+
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /icones/
+
+# ── Sitemap ──────────────────────────────────────────────────────
+Sitemap: https://meurtrehuisclos.fr/sitemap.xml
