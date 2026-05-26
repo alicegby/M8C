@@ -82,8 +82,8 @@ class Purchase
     public function setDiscountApplied(string $discountApplied): static { $this->discountApplied = $discountApplied; return $this; }
     public function getPaymentMethod(): string { return $this->paymentMethod; }
     public function setPaymentMethod(string $paymentMethod): static { $this->paymentMethod = $paymentMethod; return $this; }
-    public function getStripePaymentId(): string { return $this->stripePaymentId; }
-    public function setStripePaymentId(string $stripePaymentId): static { $this->stripePaymentId = $stripePaymentId; return $this; }
+    public function getStripePaymentId(): ?string { return $this->stripePaymentId; }
+    public function setStripePaymentId(?string $stripePaymentId): static { $this->stripePaymentId = $stripePaymentId; return $this; }
     public function getSource(): ?string { return $this->source; }
     public function setSource(?string $source): static { $this->source = $source; return $this; }
     public function getStatus(): string { return $this->status; }
