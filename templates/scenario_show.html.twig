@@ -93,7 +93,9 @@
                 {% else %}
                     {{ scenario.price|number_format(2, ',', ' ') }} €
                     <span class="price-per-player">
-                        Seulement {{ (scenario.price / scenario.nbPlayers)|number_format(2, ',', ' ') }} € / joueur
+                        {% if scenario.nbPlayers > 0 %}
+                            Seulement {{ (scenario.price / scenario.nbPlayers)|number_format(2, ',', ' ') }} € / joueur
+                        {% endif %}
                     </span>
                 {% endif %}
             </p>
