@@ -6,9 +6,9 @@
 {% block og_description %}{{ scenario.synopsis|slice(0, 200)|striptags }}{% endblock %}
 {% block og_type %}product{% endblock %}
 {% block canonical %}https://meurtrehuisclos.fr/scenarios/{{ scenario.slug }}{% endblock %}
-{% if scenario.coverImageUrl %}
-    {% block og_image %}{{ scenario.coverImageUrl }}{% endblock %}
-{% endif %}
+{% block og_image %}
+    {% if scenario.coverImageUrl %}{{ scenario.coverImageUrl }}{% endif %}
+{% endblock %}
 
 {% block schema_jsonld %}
 <script type="application/ld+json">
