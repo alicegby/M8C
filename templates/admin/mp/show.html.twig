@@ -48,6 +48,20 @@
                 <span class="show-label">Créée le</span>
                 <span class="show-value">{{ mp.createdAt|date('d/m/Y') }}</span>
             </div>
+            <div class="show-info-item">
+                <span class="show-label">Note moyenne</span>
+                <span class="show-value">
+                    {% if mp.ratingsCount > 0 %}
+                        ★ {{ mp.averageRating|number_format(1) }} / 5
+                    {% else %}
+                        Aucune note
+                    {% endif %}
+                </span>
+            </div>
+            <div class="show-info-item">
+                <span class="show-label">Nombre d'avis</span>
+                <span class="show-value">{{ mp.ratingsCount }}</span>
+            </div>
         </div>
 
         {% if mp.coverImageUrl %}
