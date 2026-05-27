@@ -36,19 +36,17 @@ h2 {
     padding: 0;
     margin: 0;
     display: flex;
-    flex-wrap: wrap; /* pour passer à la ligne si ça déborde */
-    gap: 20px; /* espace entre les avis */
+    flex-direction: column; /* ← colonne au lieu de wrap */
+    gap: 20px;
 }
 
 /* Chaque avis */
 .review-item {
-    background-color: #0E0E0E; /* box individuelle */
+    background-color: #1C1C1C; /* ← plus clair que #0E0E0E */
     border-radius: 10px;
     padding: 20px;
-    flex: 1 1 calc(33.333% - 20px); /* 3 par ligne max, avec gap pris en compte */
     box-sizing: border-box;
-    min-width: 250px; /* pour responsive */
-    border: 1px solid #2A2A2A;
+    width: 100%; /* ← prend toute la largeur */
 }
 
 .review-meta {
@@ -95,7 +93,7 @@ h2 {
 /* LAISSER UN AVIS */
 .review-form-container {
     flex: 1;
-    max-width: 1200px;
+    max-width: 700px;
     margin: 60px auto;
     padding: 50px 40px;
     background-color: #1C1C1C;
