@@ -52,4 +52,12 @@ class PagesController extends AbstractController
             'last_modified' => $this->getLastModified('avertissement.html.twig'),
         ]);
     }
+
+    #[Route('/faq', name: 'faq')]
+    public function faq()
+    {
+        return $this->render('faq.html.twig', [
+            'last_modified' => $this->getLastModified('faq.html.twig'),
+        ]);
+    }
 }
