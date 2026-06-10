@@ -228,3 +228,28 @@ h1 {
 .download-buttons img:hover{
     transform:scale(1.15);
 }
+
+@media (max-width: 768px) {
+
+    .scenario-layout {
+        flex-direction: column;
+        padding: 25px;
+        gap: 25px;
+    }
+
+    .scenario-right {
+        border-left: none;
+        border-top: 1px solid #333;
+        padding-left: 0;
+        padding-top: 25px;
+    }
+
+    .scenario-title {
+        font-size: 2rem;
+        margin-bottom: 25px;
+    }
+
+    .tarif {
+        font-size: 2.2rem;
+    }
+}
