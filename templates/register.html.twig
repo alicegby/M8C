@@ -8,7 +8,7 @@
 
 {% block body %}
 <h1>Meurtre à Huis Clos</h1>
-<h2>S'inscrire</h2>
+<h2>S'inscrire</h2> 
 
 <div class="auth-container">
     <div class="auth-box auth-box--wide">
@@ -110,6 +110,7 @@
             </div>
 
             <button type="submit" class="btn-auth">Créer mon compte</button>
+            <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
 
         {{ form_end(registrationForm) }}
 
@@ -125,4 +126,12 @@
 {% block javascripts %}
     <script src="{{ asset('js/scroll.js') }}"></script>
     <script src="{{ asset('js/auth.js') }}"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}"></script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('{{ recaptcha_site_key }}', {action: 'register'}).then(function(token) {
+                document.getElementById('g-recaptcha-response').value = token;
+            });
+        });
+    </script>
 {% endblock %}

@@ -37,8 +37,23 @@ class RegistrationFormType extends AbstractType
             ->add('dob', DateType::class, [
                 'label' => 'Date de naissance',
                 'widget' => 'single_text',
-                'required' => false,
-                'attr' => ['placeholder' => 'JJ/MM/AAAA'],
+                'required' => true,
+                'attr' => [
+                    'placeholder' => 'JJ/MM/AAAA',
+                    'max' => (new \DateTime())->modify('-13 years')->format('Y-m-d'),
+                    'min' => (new \DateTime())->modify('-120 years')->format('Y-m-d'),
+                ],
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'La date de naissance est obligatoire.']),
+                    new Assert\LessThanOrEqual([
+                        'value' => (new \DateTime())->modify('-13 years'),
+                        'message' => 'Vous devez avoir au moins 13 ans pour vous inscrire.',
+                    ]),
+                    new Assert\GreaterThan([
+                        'value' => (new \DateTime())->modify('-120 years'),
+                        'message' => 'La date de naissance saisie n\'est pas valide.',
+                    ]),
+                ],
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,

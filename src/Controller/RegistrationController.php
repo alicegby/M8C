@@ -20,11 +20,15 @@ class RegistrationController extends AbstractController
 {
     private string $supabaseUrl;
     private string $supabaseKey;
+    private string $recaptchaSecretKey;
+    private string $recaptchaSiteKey;
 
     public function __construct()
     {
         $this->supabaseUrl = $_ENV['SUPABASE_URL'];
         $this->supabaseKey = $_ENV['SUPABASE_SERVICE_ROLE_KEY'];
+        $this->recaptchaSecretKey = $_ENV['RECAPTCHA_SECRET_KEY'];
+        $this->recaptchaSiteKey = $_ENV['RECAPTCHA_SITE_KEY'];
     }
 
     #[Route('/inscription', name: 'app_register')]
@@ -44,6 +48,12 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // ── 0 Vérification reCAPTCHA ──────────────────────────
+            if (!$this->verifyCaptcha($request)) {
+                $this->addFlash('error', 'Échec de la vérification anti-robot. Réessayez.');
+                return $this->redirectToRoute('app_register');
+            }
 
             // Vérifie si email déjà utilisé
             $existing = $em->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
@@ -133,8 +143,34 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('register.html.twig', [
+        return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
+            'recaptcha_site_key' => $this->recaptchaSiteKey,
         ]);
+    }
+
+    private function verifyCaptcha(Request $request): bool
+    {
+        $token = $request->request->get('g-recaptcha-response');
+        if (!$token) {
+            return false;
+        }
+
+        try {
+            $client = new Client();
+            $response = $client->request('POST', 'https://www.google.com/recaptcha/api/siteverify', [
+                'form_params' => [
+                    'secret' => $this->recaptchaSecretKey,
+                    'response' => $token,
+                    'remoteip' => $request->getClientIp(),
+                ],
+            ]);
+
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            return ($data['success'] ?? false) && ($data['score'] ?? 0) >= 0.5;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

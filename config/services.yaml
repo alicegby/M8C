@@ -2,6 +2,8 @@ parameters:
     avatars_directory: '%kernel.project_dir%/public/uploads/avatars'
     avatar_mp_directory: '%kernel.project_dir%/public/uploads/avatar_mp'
     covers_directory: '%kernel.project_dir%/public/uploads/covers'
+    recaptcha_site_key: '%env(RECAPTCHA_SITE_KEY)%'
+    recaptcha_secret_key: '%env(RECAPTCHA_SECRET_KEY)%'
 
 services:
     _defaults:
