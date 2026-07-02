@@ -61,7 +61,7 @@ class RegistrationFormType extends AbstractType
                 'first_options' => [
                     'label' => 'Mot de passe',
                     'attr' => [
-                        'placeholder' => 'Minimum 8 caractères',
+                        'placeholder' => 'Minimum 12 caractères',
                         'autocomplete' => 'new-password',
                     ],
                 ],
@@ -75,7 +75,7 @@ class RegistrationFormType extends AbstractType
                 'invalid_message' => 'Les mots de passe ne correspondent pas.',
                 'constraints' => [
                     new Assert\NotBlank(),
-                    new Assert\Length(['min' => 8, 'minMessage' => 'Le mot de passe doit faire au moins 8 caractères.']),
+                    new Assert\Length(['min' => 12, 'minMessage' => 'Le mot de passe doit faire au moins 12 caractères.']),
                     new Assert\Regex([
                         'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/',
                         'message' => 'Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre.',
